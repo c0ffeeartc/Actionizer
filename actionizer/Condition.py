@@ -13,9 +13,9 @@ class Condition(object):
 
     def __init__(
             self,
-            a=Argument([None, None, None]),
+            a=Argument(),
             op="do",
-            b=Argument([None, None, None]),
+            b=Argument(),
     ):
         self.typename = "condition"
         self.stepA = None

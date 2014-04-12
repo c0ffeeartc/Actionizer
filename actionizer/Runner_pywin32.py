@@ -1,7 +1,7 @@
 from Action import Action
 from Step import Step
 from StepCollection import StepCollection
-from BuiltinSteps import builtinSteps
+from BuiltinSteps import builtinSteps, getBuiltinStep
 
 
 #def playAction(action):
@@ -40,16 +40,15 @@ from BuiltinSteps import builtinSteps
 #astep3 = Step(getBuiltinStep("activateLayerByIndex"))
 
 if __name__ == "__main__":
-    print("Hello world")
-    # astep4 = Step(getBuiltinStep("helloResult"))
-
+    builtinStep = getBuiltinStep("helloResult")
+    astep4 = Step()
     # stepCol = StepCollection(astep4)
     # stepCol.condition.a = 1
     # stepCol.condition.b = "le"
     # stepCol.condition.op = "le"
-    # action1 = Action()
+    action1 = Action()
 
     # action1.add(stepCol)
-    #action1.steps[0].steps[2].setArg("index", 0)
+    # action1.steps[0].steps[2].setArg("index", 0)
 
     # action1.play()

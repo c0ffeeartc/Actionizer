@@ -1,3 +1,5 @@
+from Condition import Condition
+
 __author__ = 'cfe'
 
 
