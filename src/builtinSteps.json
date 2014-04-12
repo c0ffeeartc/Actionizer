@@ -1,0 +1,98 @@
+[
+    {
+        "preRequisites": [null],
+        "typename": "step",
+        "script": "alert ('nullStep');",
+        "Uid": "nullStep",
+        "arguments": [null]
+    },
+    {
+        "Uid": "newLayer",
+        "script": "\n        var idMk = charIDToTypeID( \"Mk  \" );\n            var desc5 = new ActionDescriptor();\n            var idnull = charIDToTypeID( \"null\" );\n                var ref3 = new ActionReference();\n                var idLyr = charIDToTypeID( \"Lyr \" );\n                ref3.putClass( idLyr );\n            desc5.putReference( idnull, ref3 );\n            var idbelow = stringIDToTypeID( \"below\" );\n            desc5.putBoolean( idbelow, args.argValues[0] );\n        executeAction( idMk, desc5, DialogModes.NO );",
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "argNames": ["below"],
+        "argTypenames": ["bool"],
+        "typename": "step",
+        "arguments": [false]
+    },
+    {
+        "Uid": "helloResult",
+        "script": "\n        result[1][1] = 102;\n        alert(result);\n    ",
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "returns": true,
+        "result": [
+            ["Hello, Result!", "string", "result"],
+            [4, "number", "result2"]
+        ],
+        "arguments": [
+            [null, null, null]
+        ]
+    },
+    {
+        "Uid": "renameLayer",
+        "script": "\nif (arguments[0]){\n    newName = arguments[0];\n    activeDocument.activeLayer.name = newName;\n}\n    ",
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "argNames": ["name"],
+        "argTypenames": ["string"],
+        "typename": "step",
+        "arguments": [null]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\n    makeVisible = arguments[0]\n\nvar idslct = charIDToTypeID( \"slct\" );\n    var desc13 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref15 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idFrwr = charIDToTypeID( \"Frwr\" );\n        ref15.putEnumerated( idLyr, idOrdn, idFrwr );\n    desc13.putReference( idnull, ref15 );\n    var idMkVs = charIDToTypeID( \"MkVs\" );\n    desc13.putBoolean( idMkVs, makeVisible );\nexecuteAction( idslct, desc13, DialogModes.NO );",
+        "Uid": "selectNextLayer",
+        "arguments": [false]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\n    makeVisible = arguments[0]\n\nvar idslct = charIDToTypeID( \"slct\" );\n    var desc12 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref14 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idBckw = charIDToTypeID( \"Bckw\" );\n        ref14.putEnumerated( idLyr, idOrdn, idBckw );\n    desc12.putReference( idnull, ref14 );\n    var idMkVs = charIDToTypeID( \"MkVs\" );\n    desc12.putBoolean( idMkVs, false );\nexecuteAction( idslct, desc12, DialogModes.NO );",
+        "Uid": "selectPreviousLayer",
+        "arguments": [false]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\nvar idmove = charIDToTypeID( \"move\" );\n    var desc10 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref10 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idTrgt = charIDToTypeID( \"Trgt\" );\n        ref10.putEnumerated( idLyr, idOrdn, idTrgt );\n    desc10.putReference( idnull, ref10 );\n    var idT = charIDToTypeID( \"T   \" );\n        var ref11 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idNxt = charIDToTypeID( \"Nxt \" );\n        ref11.putEnumerated( idLyr, idOrdn, idNxt );\n    desc10.putReference( idT, ref11 );\nexecuteAction( idmove, desc10, DialogModes.NO );",
+        "Uid": "bringForward",
+        "arguments": [null]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\nvar idmove = charIDToTypeID( \"move\" );\n    var desc11 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref12 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idTrgt = charIDToTypeID( \"Trgt\" );\n        ref12.putEnumerated( idLyr, idOrdn, idTrgt );\n    desc11.putReference( idnull, ref12 );\n    var idT = charIDToTypeID( \"T   \" );\n        var ref13 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idFrnt = charIDToTypeID( \"Frnt\" );\n        ref13.putEnumerated( idLyr, idOrdn, idFrnt );\n    desc11.putReference( idT, ref13 );\nexecuteAction( idmove, desc11, DialogModes.NO );\n",
+        "Uid": "bringToFront",
+        "arguments": [null]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\nvar idmove = charIDToTypeID( \"move\" );\n    var desc8 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref6 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idTrgt = charIDToTypeID( \"Trgt\" );\n        ref6.putEnumerated( idLyr, idOrdn, idTrgt );\n    desc8.putReference( idnull, ref6 );\n    var idT = charIDToTypeID( \"T   \" );\n        var ref7 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idPrvs = charIDToTypeID( \"Prvs\" );\n        ref7.putEnumerated( idLyr, idOrdn, idPrvs );\n    desc8.putReference( idT, ref7 );\nexecuteAction( idmove, desc8, DialogModes.NO );\n",
+        "Uid": "sendBackward",
+        "arguments": [null]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\nvar idmove = charIDToTypeID( \"move\" );\n    var desc9 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref8 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idTrgt = charIDToTypeID( \"Trgt\" );\n        ref8.putEnumerated( idLyr, idOrdn, idTrgt );\n    desc9.putReference( idnull, ref8 );\n    var idT = charIDToTypeID( \"T   \" );\n        var ref9 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idBack = charIDToTypeID( \"Back\" );\n        ref9.putEnumerated( idLyr, idOrdn, idBack );\n    desc9.putReference( idT, ref9 );\nexecuteAction( idmove, desc9, DialogModes.NO );",
+        "Uid": "sendToBack",
+        "arguments": [null]
+    },
+    {
+        "preRequisites": ["activeLayer", "activeDocument"],
+        "typename": "step",
+        "script": "\nvar idDlt = charIDToTypeID( \"Dlt \" );\n    var desc5 = new ActionDescriptor();\n    var idnull = charIDToTypeID( \"null\" );\n        var ref4 = new ActionReference();\n        var idLyr = charIDToTypeID( \"Lyr \" );\n        var idOrdn = charIDToTypeID( \"Ordn\" );\n        var idTrgt = charIDToTypeID( \"Trgt\" );\n        ref4.putEnumerated( idLyr, idOrdn, idTrgt );\n    desc5.putReference( idnull, ref4 );\nexecuteAction( idDlt, desc5, DialogModes.NO );",
+        "Uid": "deleteActiveLayer",
+        "arguments": [null]
+    },
+    {
+        "Uid": "activateLayerByIndex",
+        "script": "\n    argLayerIndex = arguments[0]\n    activeDocument.activeLayer=activeDocument.layers[argLayerIndex];\n",
+        "preRequisites": ["activeDocument"],
+        "argNames": ["index"],
+        "typename": "step",
+        "arguments": [0]
+    }
+]
