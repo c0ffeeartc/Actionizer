@@ -6,35 +6,36 @@ __author__ = 'cfe'
 class Step(object):
     """
     Step is script that mimics function - has changeable arguments,
-    preRequisites, may return result.etc.
+    pre_conditions, may return result.etc.
     """
 
     def __init__(self):
-        self.__makeEmpty()
+        self.__make_empty()
 
-    def __makeEmpty(self):
-        self.typename = "step"
-        self.Uid = ""
+    def __make_empty(self):
+        self.type_name = "step"
+        self.uid = ""
         self.returns = False  # returns value
         self.arguments = Arguments()
         self.result = Arguments()
-        self.preConditions = [None]
+        self.pre_conditions = [None]
         self.script = ";"
         # ==================
-        self.argScript = """
+        self.arg_script = """
+            alert(arguments[0]);
             args = arguments[1];
-            result = arguments[2];
+            result = arguments[0];
         """
         # ==================
-        self.returnScript = """
+        self.return_script = """
             //var returnStr = result[0].toString() + ";";  // quantity;
             var returnStr = "";
-            //index, value, name, typename; i times, ending with '%'
+            //index, value, name, type_name; i times, ending with '%'
             for (i = 0; i<result[0] ;i++){
                 returnStr = returnStr.concat(
                     result[1][i].toString() + "," +
                     result[2][i].toString() + "," +
-                    result[3][i].toString() + ";";
+                    result[3][i].toString()
                 )
             }
             returnStr = returnStr + "%"
@@ -43,63 +44,67 @@ class Step(object):
         """
         # ==================
 
-    def fromDict(self, stepDict):
+    def from_dict(self, stepDict):
         """
         Clears step and Copies stepDict's values to self
         """
-        self.__makeEmpty()
+        self.__make_empty()
         for key, value in stepDict.items():
             if hasattr(self, key):
-                if key != "arguments" or \
+                if key != "arguments" and \
                                 key != "result":
                     setattr(self, key, value)
                 else:
-                    setattr(self, key, Arguments().fromList(value))
+                    attr_value = Arguments()
+                    attr_value.from_list(value)
+                    setattr(self, key, attr_value)
             else:
-                print ("Wrong argument '" +
-                       key + "' in step '" + stepDict["Uid"] + "'")
+                print("Wrong argument '" +
+                      key + "' in step '" + stepDict["uid"] + "'")
 
     def setArg(self, searchName, value):
         for arg in self.arguments:
             if arg.name == searchName:
                 arg.value = value
                 return
-        print ("No such argument: " + searchName)
+        print("No such argument: " + searchName)
 
     def getArg(self, searchName):
         for arg in self.arguments:
             if arg.name == searchName:
                 return arg.value
-        print ("No such argument: " + searchName)
+        print("No such argument: " + searchName)
 
 
     def play(self, psApp):
-        arguments = self.__prepareArguments()
+        # arguments = self.__prepareArguments()
 
-        if self.returns:  # returns value
+        if self.returns:
             # play action with return value
             psApp.DoJavaScript(
-                self.argScript + self.script + self.returnScript,
-                arguments
+                self.arg_script + self.script + self.return_script,
+                self.arguments.as_ps_arguments()
             )
 
-            # get returnStr and restore temp string
-            returnStr, newName = psApp.activeDocument.layers[0].name.split('%', 1)
-            psApp.activeDocument.layers[0].name = newName
+            # get return_str and restore temp string
+            return_str, new_name = psApp.activeDocument.layers[0].name.split('%', 1)
+            psApp.activeDocument.layers[0].name = new_name
 
-            result = self.__returnStrToResult(returnStr)
+            result = self.__return_str_to_result(return_str)
             return result
 
         else:  # play action without return value
             psApp.DoJavaScript(
-                self.argScript + self.script,
-                [self.returns, self.arguments.asList(), self.result.asList()]
+                self.arg_script + self.script,
+                [self.returns, self.arguments.as_list(), self.result.as_list()]
             )
             return 0
 
-    # move to Arguments as def fromPsReturnStr(self, returnStr):
-    def __returnStrToResult(self, returnStr):
-        b = returnStr.split(";")
+    def __return_str_to_result(self, return_str):
+        """
+        move to Arguments as def fromPsReturnStr(self, returnStr):
+        """
+        b = return_str.split(";")
         c = [int(b[0]), [], [], []]
         for i in xrange(c[0]):
             if (b[i + 1].split(",")[2] == "string"):
@@ -111,4 +116,4 @@ class Step(object):
         return c
 
     def __repr__(self):
-        return self.Uid
+        return self.uid

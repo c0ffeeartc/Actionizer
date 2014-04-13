@@ -6,7 +6,7 @@ class ConditionCollection(object):
     def __init__(self, *args):
         self.conditions = []
         for arg in args:
-            if arg.typename == "condition":
+            if arg.type_name == "condition":
                 self.conditions.append(arg)
 
     def evaluate(self):

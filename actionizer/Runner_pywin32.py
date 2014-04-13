@@ -1,15 +1,7 @@
 from Action import Action
 from Step import Step
 from StepCollection import StepCollection
-from BuiltinSteps import builtinSteps, getBuiltinStep
-
-
-#def playAction(action):
-#    import win32com.client
-#    psApp = win32com.client.Dispatch('Photoshop.Application')
-
-#    for step in action:
-#        psApp.DoJavaScript(step["script"], step["arguments"])
+from BuiltinSteps import builtinSteps, get_builtin_step
 
 
 # Init========================================
@@ -29,26 +21,26 @@ from BuiltinSteps import builtinSteps, getBuiltinStep
 # =============================
 # playAction(action)
 # =============================
-#astep1 = Step(getBuiltinStep("newLayer"))
+#astep1 = Step(get_builtin_step("newLayer"))
 #step = {
-#    "Uid": "alertStep",
-#    "typename": "step",
+#    "uid": "alertStep",
+#    "type_name": "step",
 #    "script": 'alert(arguments[1]+" :");if (arguments.length>10){alert (arguments[0]);alert (arguments[1])}',
-#    "arguments": ["one", astep1.Uid, "third"]
+#    "arguments": ["one", astep1.uid, "third"]
 #}
-#astep2 = Step(step)
-#astep3 = Step(getBuiltinStep("activateLayerByIndex"))
 
 if __name__ == "__main__":
-    builtinStep = getBuiltinStep("helloResult")
+    builtinStep = get_builtin_step("helloResult")
     astep4 = Step()
-    # stepCol = StepCollection(astep4)
+    astep4.from_dict(builtinStep)
+    stepCol = StepCollection(astep4)
     # stepCol.condition.a = 1
     # stepCol.condition.b = "le"
     # stepCol.condition.op = "le"
     action1 = Action()
 
-    # action1.add(stepCol)
+    action1.add(stepCol)
     # action1.steps[0].steps[2].setArg("index", 0)
 
-    # action1.play()
+    print ("helloWorld")
+    action1.play()

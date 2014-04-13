@@ -17,7 +17,7 @@ class Condition(object):
             op="do",
             b=Argument(),
     ):
-        self.typename = "condition"
+        self.type_name = "condition"
         self.stepA = None
         self.stepB = None
         self.a = a  # Arguments
@@ -27,13 +27,13 @@ class Condition(object):
         #    "quantity": True,
         #    "value": True,
         #    "name": False,
-        #    "typename": True,
+        #    "type_name": True,
         #    }
         self.resultFlags = {
             "quantity": None,
             "value": None,
             "name": None,
-            "typename": None,
+            "type_name": None,
         }
 
     def __initResultFlags(self):
@@ -60,12 +60,12 @@ class Condition(object):
         #    self.b = self.stepB.play()
 
         ## check A to B validity
-        #if self.a.typeName != self.b.typename:
+        #if self.a.type_name != self.b.type_name:
         #    print ("Quantity mismatch in condition.")
         #    return None
         #else:
-        #    for i, typenameA in enumerate(self.a[2]):
-        #        if typenameA != self.b[2][i]:
+        #    for i, type_nameA in enumerate(self.a[2]):
+        #        if type_nameA != self.b[2][i]:
         #            print ("Type mismatch in condition.")
         #            return None
 

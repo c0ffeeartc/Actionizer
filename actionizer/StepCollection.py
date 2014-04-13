@@ -9,7 +9,7 @@ class StepCollection(object):
     """
 
     def __init__(self, *args):
-        self.typename = "stepCollection"
+        self.type_name = "stepCollection"
         self.name = ""
         self.steps = []
 
@@ -17,14 +17,14 @@ class StepCollection(object):
         self.condition = Condition(None, "do", None)
 
         for arg in args:
-            if arg.typename == "step":
+            if arg.type_name == "step":
                 self.steps.append(arg)
 
     def add(self, *args):
         for arg in args:
-            if arg.typename == "step":
+            if arg.type_name == "step":
                 self.steps.append(arg)
-            if arg.typename == "stepCollection":
+            if arg.type_name == "stepCollection":
                 self.steps.append(arg)
 
     def play(self, psApp):

@@ -10,29 +10,38 @@ class Arguments(object):
     """
 
     def __init__(self):
-        self.__makeEmpty()
+        self.__make_empty()
 
-    def __makeEmpty(self):
-        self.argObjs = []
-        self.typename = "argumentsClass"
+    def __make_empty(self):
+        self.arg_objs = []
+        self.type_name = "arguments"
 
-    def add(self, *argObjs):
-        for argObj in argObjs:
-            if argObj.typename == "number" or \
-                            argObj.typename == "string" or \
-                            argObj.typename == "bool":
-                self.argObjs.append(argObj)
+    def add(self, *arg_objs):
+        for arg_obj in arg_objs:
+            if arg_obj.type_name == "number" or \
+                    arg_obj.type_name == "string" or \
+                    arg_obj.type_name == "bool":
+                self.arg_objs.append(arg_obj)
 
-    def fromList(self, argPlainList):
-        self.argObjs = [Argument().fromList(arg) for arg in argPlainList]
+    def from_list(self, arg_plain_list):
+        self.__make_empty()
+        for argPlain in arg_plain_list:
+            arg_obj = Argument()
+            arg_obj.from_list(argPlain)
+            self.arg_objs.append(arg_obj)
 
-    def asList(self):
-        if self.argObjs:
-            return [argObj.asList() for argObj in self.argObjs]
+    def as_list(self):
+        if self.arg_objs:
+            arguments = [len(self.arg_objs)]
+            for argObj in self.arg_objs:
+                arguments.append(argObj.value)
+                arguments.append(argObj.type_name)
+                arguments.append(argObj.name)
+            return arguments
         else:
             return []
 
-    def asPsArguments(self):
-        psArguments = [len(self.args)]
-        psArguments.extend([arg.asList() for arg in self.args])
-        return psArguments
+    def as_ps_arguments(self):
+        ps_args = [len(self.arg_objs)]
+        ps_args.append([argObj.to_list() for argObj in self.arg_objs])
+        return ps_args

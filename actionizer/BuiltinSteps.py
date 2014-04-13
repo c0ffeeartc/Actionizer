@@ -1,28 +1,30 @@
 import json
 
 
-def getBuiltinStep(Uid):
+def get_builtin_step(uid):
     for step in builtinSteps:
-        if step["Uid"] == Uid:
+        if step["uid"] == uid:
             return step
-    print ("No such builtin step")
+    print("No such builtin step")
     return builtinSteps[0]
 
 # Step list
-builtinSteps = [{
-                    "typename": "step",
-                    "Uid": "nullStep",
-                    "arguments": [None], # None
-                    "preRequisites": [None],
-                    "script": "alert ('nullStep');"
-                }, {
-                    "typename": "step",
-                    "Uid": "newLayer",
-                    "arguments": [False], # below
-                    "argNames": ["below"],
-                    "argTypenames": ["bool"],
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+builtinSteps = [
+    {
+        "type_name": "step",
+        "uid": "nullStep",
+        "arguments": [None, None, None],  # None
+        "pre_conditions": [None],
+        "script": "alert ('nullStep');"
+    },
+    {
+        "type_name": "step",
+        "uid": "newLayer",
+        "arguments": [
+            [False, "bool", "below"]  # [argValue, argtype_name, argName]
+        ],
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
         var idMk = charIDToTypeID( "Mk  " );
             var desc5 = new ActionDescriptor();
             var idnull = charIDToTypeID( "null" );
@@ -33,41 +35,44 @@ builtinSteps = [{
             var idbelow = stringIDToTypeID( "below" );
             desc5.putBoolean( idbelow, args.argValues[0] );
         executeAction( idMk, desc5, DialogModes.NO );"""
-                }, {
-                    "typename": "step",
-                    "Uid": "helloResult",
-                    "returns": True, # returns value
-                    "arguments": [
-                        [None, None, None]  # [argValue, argTypename, argName]
-                    ],
-                    "result": [
-                        ["Hello, Result!", "string", "result"],
-                        [4, "number", "result2"],
-                    ],
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "helloResult",
+        "returns": True,  # returns value
+        "arguments": [
+            [None, None, None]  # [argValue, argtype_name, argName]
+        ],
+        "result": [
+            ["Hello, Result!", "string", "result"],
+            [4, "number", "result2"],
+        ],
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
         result[1][1] = 102;
         alert(result);
     """
-                }, {
-                    "typename": "step",
-                    "Uid": "renameLayer",
-                    "arguments": [None], # name
-                    "argNames": ["name"],
-                    "argTypenames": ["string"],
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "renameLayer",
+        "arguments": [None],  # name
+        "argNames": ["name"],
+        "argtype_names": ["string"],
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
 if (arguments[0]){
     newName = arguments[0];
     activeDocument.activeLayer.name = newName;
 }
     """
-                }, {
-                    "typename": "step",
-                    "Uid": "selectNextLayer",
-                    "arguments": [False], # makeVisible:boolean
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "selectNextLayer",
+        "arguments": [False],  # makeVisible:boolean
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
     makeVisible = arguments[0]
 
 var idslct = charIDToTypeID( "slct" );
@@ -82,12 +87,13 @@ var idslct = charIDToTypeID( "slct" );
     var idMkVs = charIDToTypeID( "MkVs" );
     desc13.putBoolean( idMkVs, makeVisible );
 executeAction( idslct, desc13, DialogModes.NO );"""
-                }, {
-                    "typename": "step",
-                    "Uid": "selectPreviousLayer",
-                    "arguments": [False], # makeVisible:boolean  # does nothing
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "selectPreviousLayer",
+        "arguments": [False],  # makeVisible:boolean  # does nothing
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
     makeVisible = arguments[0]
 
 var idslct = charIDToTypeID( "slct" );
@@ -102,12 +108,13 @@ var idslct = charIDToTypeID( "slct" );
     var idMkVs = charIDToTypeID( "MkVs" );
     desc12.putBoolean( idMkVs, false );
 executeAction( idslct, desc12, DialogModes.NO );"""
-                }, {
-                    "typename": "step",
-                    "Uid": "bringForward",
-                    "arguments": [None], # None
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "bringForward",
+        "arguments": [None],  # None
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
 var idmove = charIDToTypeID( "move" );
     var desc10 = new ActionDescriptor();
     var idnull = charIDToTypeID( "null" );
@@ -125,12 +132,12 @@ var idmove = charIDToTypeID( "move" );
         ref11.putEnumerated( idLyr, idOrdn, idNxt );
     desc10.putReference( idT, ref11 );
 executeAction( idmove, desc10, DialogModes.NO );"""
-                }, {
-                    "typename": "step",
-                    "Uid": "bringToFront",
-                    "arguments": [None], # None
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    }, {
+        "type_name": "step",
+        "uid": "bringToFront",
+        "arguments": [None],  # None
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
 var idmove = charIDToTypeID( "move" );
     var desc11 = new ActionDescriptor();
     var idnull = charIDToTypeID( "null" );
@@ -149,12 +156,13 @@ var idmove = charIDToTypeID( "move" );
     desc11.putReference( idT, ref13 );
 executeAction( idmove, desc11, DialogModes.NO );
 """
-                }, {
-                    "typename": "step",
-                    "Uid": "sendBackward",
-                    "arguments": [None],
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "sendBackward",
+        "arguments": [None],
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
 var idmove = charIDToTypeID( "move" );
     var desc8 = new ActionDescriptor();
     var idnull = charIDToTypeID( "null" );
@@ -173,12 +181,13 @@ var idmove = charIDToTypeID( "move" );
     desc8.putReference( idT, ref7 );
 executeAction( idmove, desc8, DialogModes.NO );
 """
-                }, {
-                    "typename": "step",
-                    "Uid": "sendToBack",
-                    "arguments": [None], # None
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "sendToBack",
+        "arguments": [None],  # None
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
 var idmove = charIDToTypeID( "move" );
     var desc9 = new ActionDescriptor();
     var idnull = charIDToTypeID( "null" );
@@ -196,12 +205,13 @@ var idmove = charIDToTypeID( "move" );
         ref9.putEnumerated( idLyr, idOrdn, idBack );
     desc9.putReference( idT, ref9 );
 executeAction( idmove, desc9, DialogModes.NO );"""
-                }, {
-                    "typename": "step",
-                    "Uid": "deleteActiveLayer",
-                    "arguments": [None], # None
-                    "preRequisites": ["activeLayer", "activeDocument"],
-                    "script": """
+    },
+    {
+        "type_name": "step",
+        "uid": "deleteActiveLayer",
+        "arguments": [None],  # None
+        "pre_conditions": ["activeLayer", "activeDocument"],
+        "script": """
 var idDlt = charIDToTypeID( "Dlt " );
     var desc5 = new ActionDescriptor();
     var idnull = charIDToTypeID( "null" );
@@ -212,17 +222,17 @@ var idDlt = charIDToTypeID( "Dlt " );
         ref4.putEnumerated( idLyr, idOrdn, idTrgt );
     desc5.putReference( idnull, ref4 );
 executeAction( idDlt, desc5, DialogModes.NO );"""
-                }, {
-                    "typename": "step",
-                    "Uid": "activateLayerByIndex",
-                    "arguments": [0], # index
-                    "argNames": ["index"],
-                    "preRequisites": ["activeDocument"],
-                    "script": """
+    }, {
+        "type_name": "step",
+        "uid": "activateLayerByIndex",
+        "arguments": [0],  # index
+        "argNames": ["index"],
+        "pre_conditions": ["activeDocument"],
+        "script": """
     argLayerIndex = arguments[0]
     activeDocument.activeLayer=activeDocument.layers[argLayerIndex];
 """
-                },
+    },
 ]
 
 if __name__ == "__main__":

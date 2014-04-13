@@ -2,25 +2,26 @@ __author__ = 'cfe'
 
 
 class Argument(object):
-    # Argument is an overhead for [value, typename, name] list
-    # and its probable changes in future
-
+    """
+    Argument is an overhead for [value, name] list
+    and its probable changes in future
+    """
     def __init__(self):
-        self.__makeEmpty()
+        self.__make_empty()
 
-    def __makeEmpty(self):
+    def __make_empty(self):
         self.value = None
         self.name = None
-        self.typename = None
+        self.type_name = None
 
-    def fromList(self, argumentAsList):
+    def from_list(self, argumentAsList):
         self.value = argumentAsList[0]
-        self.typename = argumentAsList[1]
+        self.type_name = argumentAsList[1]
         self.name = argumentAsList[2]
 
-    def asList(self):
+    def to_list(self):
         return [
             self.value,
-            self.typename,
+            self.type_name,
             self.name,
         ]

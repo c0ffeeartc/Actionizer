@@ -1,4 +1,5 @@
 __author__ = 'cfe'
+import win32com.client
 
 
 class Action(object):
@@ -22,9 +23,9 @@ class Action(object):
 
     def add(self, *args):
         for arg in args:
-            if arg.typename == "step":
+            if arg.type_name == "step":
                 self.steps.append(arg)
-            if arg.typename == "stepCollection":
+            if arg.type_name == "stepCollection":
                 self.steps.append(arg)
 
     def metPreConditions(self):  # not done
@@ -34,7 +35,6 @@ class Action(object):
         return True
 
     def play(self):
-        import win32com.client
 
         psApp = win32com.client.Dispatch('Photoshop.Application')
 
