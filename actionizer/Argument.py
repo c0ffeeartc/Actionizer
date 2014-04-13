@@ -15,9 +15,10 @@ class Argument(object):
         self.type_name = None
 
     def from_list(self, argumentAsList):
-        self.value = argumentAsList[0]
-        self.type_name = argumentAsList[1]
-        self.name = argumentAsList[2]
+        if argumentAsList:
+            self.value = argumentAsList[0]
+            self.type_name = argumentAsList[1]
+            self.name = argumentAsList[2]
 
     def to_list(self):
         return [

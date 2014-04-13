@@ -18,10 +18,10 @@ class Condition(object):
             b=Argument(),
     ):
         self.type_name = "condition"
-        self.stepA = None
-        self.stepB = None
-        self.a = a  # Arguments
-        self.b = b  # Arguments
+        self.step_a = None
+        self.step_b = None
+        self.a = a  # ArgumentCollection
+        self.b = b  # ArgumentCollection
         self.op = op
         #self.compareFlags = {
         #    "quantity": True,
@@ -32,8 +32,8 @@ class Condition(object):
         self.resultFlags = {
             "quantity": None,
             "value": None,
-            "name": None,
             "type_name": None,
+            "name": None,
         }
 
     def __initResultFlags(self):
@@ -53,11 +53,11 @@ class Condition(object):
     def evaluate(self):
         return True
         ## Getting returns from steps
-        #if self.stepA:
-        #    self.a = self.stepA.play()
+        #if self.step_a:
+        #    self.a = self.step_a.play()
 
-        #if self.stepB:
-        #    self.b = self.stepB.play()
+        #if self.step_b:
+        #    self.b = self.step_b.play()
 
         ## check A to B validity
         #if self.a.type_name != self.b.type_name:

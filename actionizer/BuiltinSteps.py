@@ -13,14 +13,14 @@ builtinSteps = [
     {
         "type_name": "step",
         "uid": "nullStep",
-        "arguments": [None, None, None],  # None
+        "ArgumentCollection": [None],  # None
         "pre_conditions": [None],
-        "script": "alert ('nullStep');"
+        "script": "alert ('nullStep', arguments[0]);"
     },
     {
         "type_name": "step",
         "uid": "newLayer",
-        "arguments": [
+        "ArgumentCollection": [
             [False, "bool", "below"]  # [argValue, argtype_name, argName]
         ],
         "pre_conditions": ["activeLayer", "activeDocument"],
@@ -40,7 +40,7 @@ builtinSteps = [
         "type_name": "step",
         "uid": "helloResult",
         "returns": True,  # returns value
-        "arguments": [
+        "ArgumentCollection": [
             [None, None, None]  # [argValue, argtype_name, argName]
         ],
         "result": [
@@ -56,7 +56,7 @@ builtinSteps = [
     {
         "type_name": "step",
         "uid": "renameLayer",
-        "arguments": [None],  # name
+        "ArgumentCollection": [None],  # name
         "argNames": ["name"],
         "argtype_names": ["string"],
         "pre_conditions": ["activeLayer", "activeDocument"],
@@ -70,10 +70,10 @@ if (arguments[0]){
     {
         "type_name": "step",
         "uid": "selectNextLayer",
-        "arguments": [False],  # makeVisible:boolean
+        "ArgumentCollection": [False],  # makeVisible:boolean
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
-    makeVisible = arguments[0]
+    makeVisible = ArgumentCollection[0]
 
 var idslct = charIDToTypeID( "slct" );
     var desc13 = new ActionDescriptor();
@@ -91,7 +91,7 @@ executeAction( idslct, desc13, DialogModes.NO );"""
     {
         "type_name": "step",
         "uid": "selectPreviousLayer",
-        "arguments": [False],  # makeVisible:boolean  # does nothing
+        "ArgumentCollection": [False],  # makeVisible:boolean  # does nothing
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
     makeVisible = arguments[0]
@@ -112,7 +112,7 @@ executeAction( idslct, desc12, DialogModes.NO );"""
     {
         "type_name": "step",
         "uid": "bringForward",
-        "arguments": [None],  # None
+        "ArgumentCollection": [None],  # None
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
 var idmove = charIDToTypeID( "move" );
@@ -135,7 +135,7 @@ executeAction( idmove, desc10, DialogModes.NO );"""
     }, {
         "type_name": "step",
         "uid": "bringToFront",
-        "arguments": [None],  # None
+        "ArgumentCollection": [None],  # None
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
 var idmove = charIDToTypeID( "move" );
@@ -160,7 +160,7 @@ executeAction( idmove, desc11, DialogModes.NO );
     {
         "type_name": "step",
         "uid": "sendBackward",
-        "arguments": [None],
+        "ArgumentCollection": [None],
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
 var idmove = charIDToTypeID( "move" );
@@ -185,7 +185,7 @@ executeAction( idmove, desc8, DialogModes.NO );
     {
         "type_name": "step",
         "uid": "sendToBack",
-        "arguments": [None],  # None
+        "ArgumentCollection": [None],  # None
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
 var idmove = charIDToTypeID( "move" );
@@ -209,7 +209,7 @@ executeAction( idmove, desc9, DialogModes.NO );"""
     {
         "type_name": "step",
         "uid": "deleteActiveLayer",
-        "arguments": [None],  # None
+        "ArgumentCollection": [None],  # None
         "pre_conditions": ["activeLayer", "activeDocument"],
         "script": """
 var idDlt = charIDToTypeID( "Dlt " );
@@ -225,7 +225,7 @@ executeAction( idDlt, desc5, DialogModes.NO );"""
     }, {
         "type_name": "step",
         "uid": "activateLayerByIndex",
-        "arguments": [0],  # index
+        "ArgumentCollection": [0],  # index
         "argNames": ["index"],
         "pre_conditions": ["activeDocument"],
         "script": """

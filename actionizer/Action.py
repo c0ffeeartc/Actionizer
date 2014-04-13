@@ -18,7 +18,7 @@ class Action(object):
             reprStr += repr(step)
         return reprStr
 
-    def removeStepByIndex(self, index):
+    def remove_step_by_index(self, index):
         pass
 
     def add(self, *args):
@@ -36,7 +36,7 @@ class Action(object):
 
     def play(self):
 
-        psApp = win32com.client.Dispatch('Photoshop.Application')
+        ps_app = win32com.client.Dispatch('Photoshop.Application')
 
         for step in self.steps:
-            step.play(psApp)
+            step.play(ps_app)

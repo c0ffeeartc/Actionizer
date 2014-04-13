@@ -30,7 +30,7 @@ from BuiltinSteps import builtinSteps, get_builtin_step
 #}
 
 if __name__ == "__main__":
-    builtinStep = get_builtin_step("helloResult")
+    builtinStep = get_builtin_step("nullStep")
     astep4 = Step()
     astep4.from_dict(builtinStep)
     stepCol = StepCollection(astep4)
