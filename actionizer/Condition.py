@@ -20,8 +20,8 @@ class Condition(object):
         self.type_name = "condition"
         self.step_a = None
         self.step_b = None
-        self.a = a  # ArgumentCollection
-        self.b = b  # ArgumentCollection
+        self.a = a  # argument_collection
+        self.b = b  # argument_collection
         self.op = op
         #self.compareFlags = {
         #    "quantity": True,
@@ -52,7 +52,7 @@ class Condition(object):
     # TODO: add typeMatch(a,b) quantityMatch(a, b)
     def evaluate(self):
         return True
-        ## Getting returns from steps
+        ## Getting hasReturn from steps
         #if self.step_a:
         #    self.a = self.step_a.play()
 

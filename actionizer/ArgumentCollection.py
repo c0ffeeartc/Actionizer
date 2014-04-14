@@ -14,7 +14,7 @@ class ArgumentCollection(object):
 
     def __make_empty(self):
         self.arg_collection = []
-        self.type_name = "ArgumentCollection"
+        self.type_name = "argument_collection"
 
     def add(self, *arg_objs):
         for arg_obj in arg_objs:

@@ -1,0 +1,39 @@
+from Step import Step
+
+__author__ = 'cfe'
+
+
+class StepUids(object):
+    NULL_STEP = "NULL_STEP"
+    TEST_STEP = "TEST_STEP"
+
+
+class StepFactory(object):
+    @staticmethod
+    def new_step(step_uid):
+        step = Step()
+        step.uid = step_uid
+        if step_uid == StepUids.NULL_STEP:
+            step.script = "alert ('nullStep');"
+            return step
+        elif step_uid == StepUids.TEST_STEP:
+            step = Step()
+            step.arg_dict = {
+                "isOk": True,
+                "numLines": 4,
+                "portion": 0.1234567890,
+                "portion2": 1,
+                "hello": "HelloWorld",
+                "hasReturn": True
+            }
+            step.script = """
+                var result = args
+                alert ('testStep');
+                if (args.isOk){
+                    alert(result)
+                }
+            """
+            return step
+        else:
+            print("StepFactory.new_step no step with such uid")
+            return step

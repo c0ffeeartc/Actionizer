@@ -6,6 +6,7 @@ class Argument(object):
     Argument is an overhead for [value, name] list
     and its probable changes in future
     """
+
     def __init__(self):
         self.__make_empty()
 

@@ -1,11 +1,12 @@
 from ArgumentCollection import ArgumentCollection
+import json
 
 __author__ = 'cfe'
 
 
 class Step(object):
     """
-    Step is script that mimics function - has changeable ArgumentCollection,
+    Step is script that mimics function - has changeable argument_collection,
     pre_conditions, may return result.etc.
     """
 
@@ -15,97 +16,82 @@ class Step(object):
     def __make_empty(self):
         self.type_name = "step"
         self.uid = ""
-        self.returns = False  # returns value
-        self.ArgumentCollection = ArgumentCollection()
-        self.result = ArgumentCollection()
+        self.arg_dict = {"hasReturn": False}
         self.pre_conditions = [None]
         self.script = ";"
-        # ==================
+        # =================================================================
         self.unpack_args_script = """
-            alert(arguments);
-            args = arguments[0];
-            result = arguments[1];
+        var num_args = arguments[0];
+        var num_arg_parts = 2; //(arguments.length-1)/num_args;
+        args = {}
+        for (var i = 0; i < arguments.length - num_arg_parts; i +=  num_arg_parts ){
+            var key = arguments[i+1];
+            var value = arguments[i+2];
+            args[key] = value;
+        }
         """
-        # ==================
+        # =================================================================
         self.return_script = """
-            //var returnStr = result[0].toString() + ";";  // quantity;
-            var returnStr = "";
-            //index, value, name, type_name; i times, ending with '%'
-            for (i = 0; i<result[0] ;i++){
-                returnStr = returnStr.concat(
-                    result[1][i].toString() + "," +
-                    result[2][i].toString() + "," +
-                    result[3][i].toString()
-                )
+            //alert(activeDocument.layers[0].name)
+            if(args.hasReturn){
+                returnStr = result.toSource() + "%"
+                activeDocument.layers[0].name = returnStr + activeDocument.layers[0].name;
+                alert(activeDocument.layers[0].name)
             }
-            returnStr = returnStr + "%"
-            activeDocument.layers[0].name = returnStr + activeDocument.layers[0].name;
-            alert(activeDocument.layers[0].name)
         """
         # ==================
 
-    def from_dict(self, stepDict):
+    def from_builtin(self, stepDict):
         """
         Clears step and Copies stepDict's values to self
         """
         self.__make_empty()
         for key, value in stepDict.items():
             if hasattr(self, key):
-                if key != "ArgumentCollection" and \
-                                key != "result":
-                    setattr(self, key, value)
-                else:
+                if key == "argument_collection" or key == "result":
                     attr_value = ArgumentCollection()
                     attr_value.from_list(value)
                     setattr(self, key, attr_value)
+                else:
+                    setattr(self, key, value)
             else:
                 print("Wrong argument '" +
                       key + "' in step '" + stepDict["uid"] + "'")
 
-    def setArg(self, searchName, value):
-        for arg in self.ArgumentCollection:
-            if arg.name == searchName:
-                arg.value = value
-                return
-        print("No such argument: " + searchName)
+    def set_arg(self, key, value):
+        if key in self.arg_dict.keys():
+            self.arg_dict[key] = value
+            return
+        print("No such argument: " + key)
 
-    def getArg(self, searchName):
-        for arg in self.ArgumentCollection:
-            if arg.name == searchName:
-                return arg.value
-        print("No such argument: " + searchName)
+    def get_arg(self, key):
+        if key in self.arg_dict.keys:
+            return self.arg_dict[key]
+        print("No such argument: " + key)
 
+    def arg_dict_to_ps_args(self):
+        ps_args = [len(self.arg_dict)]
+        for key, value in self.arg_dict.items():
+            ps_args.append(key)
+            ps_args.append(value)
+        return ps_args
 
     def play(self, ps_app):
-        # ArgumentCollection = self.__prepareArguments()
-
-        if self.returns:
-            # play action with return value
-            ps_args = []
-            ps_args.extend(self.ArgumentCollection.to_ps_arguments())
-            ps_args.extend(self.result.to_ps_arguments())
-            ps_app.DoJavaScript(
-                self.unpack_args_script + self.script + self.return_script,
-                ps_args
-            )
-
-            # get return_str and restore temp string
-            return_str, new_name = ps_app.activeDocument.layers[0].name.split('%', 1)
-            ps_app.activeDocument.layers[0].name = new_name
-
-            result = self.__return_str_to_result(return_str)
-            return result
-
-        else:  # play action without return value
-            ps_app.DoJavaScript(
-                self.unpack_args_script + self.script,
-                [self.returns, self.ArgumentCollection.to_list(), self.result.to_list()]
-            )
-            return 0
+        ps_app.DoJavaScript(
+            self.unpack_args_script + self.script + self.return_script,
+            self.arg_dict_to_ps_args()
+        )
+        if self.arg_dict["hasReturn"]:
+            # print(ps_app.activeDocument.layers[0].name)
+            obj_str = ps_app.activeDocument.layers[0].name.split("%", 1)[0]
+            layer_name = ps_app.activeDocument.layers[0].name.split("%", 1)[1]
+            ps_app.activeDocument.layers[0].name = layer_name
+            print(obj_str)
+        return 0
 
     def __return_str_to_result(self, return_str):
         """
-        move to ArgumentCollection as def fromPsReturnStr(self, returnStr):
+        move to argument_collection as def fromPsReturnStr(self, returnStr):
         """
         b = return_str.split(";")
         c = [int(b[0]), [], [], []]
