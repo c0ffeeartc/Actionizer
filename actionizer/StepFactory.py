@@ -23,17 +23,16 @@ class StepFactory(object):
                 "numLines": 4,
                 "portion": 0.1234567890,
                 "portion2": 1,
+                "none": None,
                 "hello": "HelloWorld",
                 "hasReturn": True
             }
             step.script = """
-                var result = args
+                var step_result = args
+                args.hello = "byeBye!!"
                 alert ('testStep');
-                if (args.isOk){
-                    alert(result)
-                }
             """
             return step
         else:
             print("StepFactory.new_step no step with such uid")
-            return step
+            return StepFactory.new_step(StepUids.NULL_STEP)

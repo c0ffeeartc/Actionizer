@@ -1,5 +1,3 @@
-from Argument import Argument
-
 __author__ = 'cfe'
 
 # str can be compared with str
@@ -13,9 +11,9 @@ class Condition(object):
 
     def __init__(
             self,
-            a=Argument(),
+            a=0,
             op="do",
-            b=Argument(),
+            b=0,
     ):
         self.type_name = "condition"
         self.step_a = None
@@ -105,5 +103,5 @@ class Condition(object):
         #        result = False
         #    else:
         #        result = True
-        print ("Wrong conditional operation.")
+        print("Wrong conditional operation.")
         return None
