@@ -7,6 +7,12 @@ class Step(object):
     pre_conditions, may return result.etc.
     """
 
+    type_name = ""
+    uid = ""
+    arg_dict = ""
+    script = ""
+    pre_conditions = []
+
     def __init__(self):
         self.__make_empty()
 
