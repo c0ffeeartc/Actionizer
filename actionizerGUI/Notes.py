@@ -1,0 +1,2 @@
+__author__ = 'cfe'
+STARTUP_COMMAND = "STARTUP_COMMAND"
