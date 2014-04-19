@@ -47,15 +47,14 @@ class Step(object):
             }
         """
         # convert strings to fix bug
-        a = ("".join(["".join([line, "\\\n"]) for line in py_args_to_javascript_script.split("\n")])).replace("'", '"')
-        b = ("".join(["".join([line, "\\\n"]) for line in self.script.split("\n")])).replace("'", '"')
-        c = ("".join(["".join([line, "\\\n"]) for line in return_script.split("\n")])).replace("'", '"')
+        a = py_args_to_javascript_script.encode('string_escape')
+        b = self.script.encode('string_escape')
+        c = return_script.encode('string_escape')
         ps_source_str = ps_app.DoJavaScript(
             "app.activeDocument.suspendHistory('" + self.uid + "', '" + a + b + c + "'), returnStr;",
             self.__ps_args_array_from_arg_dict()
         )
         result_py_dict = Step.__py_dict_from_ps_source_str(ps_source_str)
-        print(result_py_dict)
         return result_py_dict
 
     def __ps_args_array_from_arg_dict(self):
