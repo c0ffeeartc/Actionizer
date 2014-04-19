@@ -32,7 +32,7 @@ class Step(object):
         py_args_to_javascript_script = """
         var num_args = arguments[0];
         var num_arg_parts = (arguments.length-1)/num_args;
-        args = {}
+        args = {};
         for (var i = 0; i < arguments.length - num_arg_parts; i +=  num_arg_parts ){
             var key = arguments[i+1];
             var value = arguments[i+2];
@@ -40,36 +40,25 @@ class Step(object):
         }
         """
         return_script = """
-            if(args.hasReturn)
-            {
-                if (step_result!=null && typeof (step_result) === 'object')
-                {
-                    returnStr = step_result.toSource() + "%";
-                }
-                else
-                {
-                    returnStr = {none:null}.toSource() + "%";
-                }
-                activeDocument.layers[0].name = returnStr + activeDocument.layers[0].name;
+            if(typeof (step_result)!= "undefined" && typeof (step_result) === "object") {
+                returnStr = step_result.toSource();
+            } else {
+                returnStr = {}.toSource();
             }
         """
-        # TODO: think how to suspend history into one history step ps_app.suspendHistory(self.uid, javascript_str)
-        # ps_app.SuspendHistory(self.uid,
-        #                       py_args_to_javascript_script +
-        #                       ";app.DoJavaScript(" + self.script + return_script +
-        #                       ", args);")
-        ps_app.DoJavaScript(
-            py_args_to_javascript_script + self.script + return_script,
-            self.__ps_args_from_arg_dict()
+        # convert strings to fix bug
+        a = ("".join(["".join([line, "\\\n"]) for line in py_args_to_javascript_script.split("\n")])).replace("'", '"')
+        b = ("".join(["".join([line, "\\\n"]) for line in self.script.split("\n")])).replace("'", '"')
+        c = ("".join(["".join([line, "\\\n"]) for line in return_script.split("\n")])).replace("'", '"')
+        ps_source_str = ps_app.DoJavaScript(
+            "app.activeDocument.suspendHistory('" + self.uid + "', '" + a + b + c + "'), returnStr;",
+            self.__ps_args_array_from_arg_dict()
         )
-        if self.arg_dict["hasReturn"]:
-            result_source_str = ps_app.activeDocument.layers[0].name.split("%", 1)[0]
-            print(self.__py_dict_from_ps_source_str(result_source_str))
-            layer_name = ps_app.activeDocument.layers[0].name.split("%", 1)[1]
-            ps_app.activeDocument.layers[0].name = layer_name
-        return 0
+        result_py_dict = Step.__py_dict_from_ps_source_str(ps_source_str)
+        print(result_py_dict)
+        return result_py_dict
 
-    def __ps_args_from_arg_dict(self):
+    def __ps_args_array_from_arg_dict(self):
         ps_args = [len(self.arg_dict)]
         for key, value in self.arg_dict.items():
             ps_args.append(key)
@@ -83,6 +72,10 @@ class Step(object):
         """
         py_dict = {}
         keys_values_str = ps_obj_to_source_str[2:-2]
+
+        if not keys_values_str:
+            return py_dict
+
         key_semicolon_value_array = keys_values_str.split(',')
 
         for key_semicolon_value_str in key_semicolon_value_array:

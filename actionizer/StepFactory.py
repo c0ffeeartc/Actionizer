@@ -13,11 +13,10 @@ class StepFactory(object):
     def new_step(step_uid):
         step = Step()
         step.uid = step_uid
-        if step_uid == StepUids.NULL_STEP:
+        if step.uid == StepUids.NULL_STEP:
             step.script = "alert ('nullStep');"
             return step
-        elif step_uid == StepUids.TEST_STEP:
-            step = Step()
+        elif step.uid == StepUids.TEST_STEP:
             step.arg_dict = {
                 "isOk": True,
                 "numLines": 4,
