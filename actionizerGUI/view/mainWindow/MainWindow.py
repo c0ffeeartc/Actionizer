@@ -37,15 +37,16 @@ class MainWindow(QtGui.QWidget):
         self.setGeometry(300, 300, 250, 450)
         self.setWindowTitle('Actionizer')
 
+        self.btn_layout.addStretch(0)
         self.btn_quit = QtGui.QPushButton("Quit")
         self.btn_layout.addWidget(self.btn_quit)
         self.btn_play = QtGui.QPushButton("Play")
         self.btn_layout.addWidget(self.btn_play)
         self.btn_play.clicked.connect(self.play_selected_action)
-        self.btn_new = QtGui.QPushButton("New")
+        self.btn_new = QtGui.QPushButton(QtGui.QIcon("../assets/new_file_16x16.png"), "")
         self.btn_new.clicked.connect(self.add_clicked)
         self.btn_layout.addWidget(self.btn_new)
-        self.btn_remove = QtGui.QPushButton("Remove")
+        self.btn_remove = QtGui.QPushButton(QtGui.QIcon("../assets/trash_16x16.png"), "")
         self.btn_remove.clicked.connect(self.remove_selected)
         self.btn_layout.addWidget(self.btn_remove)
 

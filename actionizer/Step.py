@@ -35,6 +35,7 @@ class Step(object):
         print("No such argument: " + key)
 
     def play(self, ps_app):
+        # TODO: hide code from error message
         py_args_to_javascript_script = """
         var num_args = arguments[0];
         var num_arg_parts = (arguments.length-1)/num_args;
