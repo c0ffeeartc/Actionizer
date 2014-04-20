@@ -8,9 +8,8 @@ __author__ = 'cfe'
 class AppMain(object):
     @staticmethod
     def main():
-        facade = AppFacade.getInstance()
         app = QtGui.QApplication(sys.argv)
-        facade.startup()
+        AppFacade.getInstance().startup()
         sys.exit(app.exec_())
 
 
