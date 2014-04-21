@@ -17,7 +17,6 @@ class MainWindow(QtGui.QWidget):
     main_layout = QtGui.QVBoxLayout()
     tree = None
     btn_layout = QtGui.QHBoxLayout()
-    btn_quit = None
     btn_play = None
     btn_new = None
     btn_remove = None
@@ -28,23 +27,24 @@ class MainWindow(QtGui.QWidget):
         QtGui.QToolTip.setFont(QtGui.QFont('SansSerif', 10))
         self.setToolTip('This is a <b>QWidget</b> widget')
 
-        self.play_hotkey = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.ALT + QtCore.Qt.Key_L), self, self.add_clicked)
+        self.play_hotkey = QtGui.QShortcut(
+            QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.ALT + QtCore.Qt.Key_L),
+            self,
+            self.add_clicked
+        )
         self.play_hotkey.setContext(QtCore.Qt.ApplicationShortcut)
 
         self.tree = QtGui.QTreeWidget()
         self.tree.setHeaderItem(QtGui.QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
-        self.tree.setColumnCount(2)
+        self.tree.setColumnCount(3)
         self.tree.addTopLevelItem(QTreeWidgetItem(None, ["anyName", StepUids.NULL_STEP]))
         self.tree.addTopLevelItem(QTreeWidgetItem(None, ["anyName2", StepUids.TEST_STEP]))
-        # self.tree.childAt(0).setData()
 
         self.setGeometry(300, 300, 250, 450)
         self.setWindowTitle('Actionizer')
 
-        self.btn_layout.addStretch(0)
-        self.btn_quit = QtGui.QPushButton("Quit")
-        self.btn_layout.addWidget(self.btn_quit)
-        self.btn_play = QtGui.QPushButton("Play")
+        self.btn_layout.addStretch(1)
+        self.btn_play = QtGui.QPushButton(QtGui.QIcon("../assets/play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
         self.btn_play.clicked.connect(self.play_selected_action)
         self.btn_new = QtGui.QPushButton(QtGui.QIcon("../assets/new_file_16x16.png"), "")
@@ -65,9 +65,9 @@ class MainWindow(QtGui.QWidget):
         if cur_item.text(1) == UI.STEP:
             step_uid = cur_item.text(2)
             a_step = StepFactory.new_step(step_uid)  # StepUids.TEST_STEP)
-            stepCol = StepCollection(a_step)
+            step_col = StepCollection(a_step)
             action1 = Action()
-            action1.add(stepCol)
+            action1.add(step_col)
             action1.play()
 
     def add_clicked(self):
