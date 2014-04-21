@@ -1,4 +1,4 @@
-from PySide import QtGui
+from PySide import QtGui, QtCore
 from PySide.QtGui import QTreeWidgetItem
 from Action import Action
 from StepCollection import StepCollection
@@ -21,11 +21,15 @@ class MainWindow(QtGui.QWidget):
     btn_play = None
     btn_new = None
     btn_remove = None
+    play_hotkey = None
 
     def __init__(self):
         super(MainWindow, self).__init__()
         QtGui.QToolTip.setFont(QtGui.QFont('SansSerif', 10))
         self.setToolTip('This is a <b>QWidget</b> widget')
+
+        self.play_hotkey = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.ALT + QtCore.Qt.Key_L), self, self.add_clicked)
+        self.play_hotkey.setContext(QtCore.Qt.ApplicationShortcut)
 
         self.tree = QtGui.QTreeWidget()
         self.tree.setHeaderItem(QtGui.QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
@@ -57,15 +61,14 @@ class MainWindow(QtGui.QWidget):
         self.show()
 
     def play_selected_action(self):
-        i = 0
-        while i < self.tree.topLevelItemCount():
-            step_uid = self.tree.topLevelItem(i).text(1)
+        cur_item = self.tree.currentItem()
+        if cur_item.text(1) == UI.STEP:
+            step_uid = cur_item.text(2)
             a_step = StepFactory.new_step(step_uid)  # StepUids.TEST_STEP)
             stepCol = StepCollection(a_step)
             action1 = Action()
             action1.add(stepCol)
             action1.play()
-            i += 1
 
     def add_clicked(self):
         cur_item = self.tree.currentItem()
@@ -77,12 +80,14 @@ class MainWindow(QtGui.QWidget):
     def add_action_to_group(self):
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.ACTION_GROUP:
+            cur_item.setExpanded(True)
             new_action = QTreeWidgetItem(None, ["New Action", UI.ACTION])
             cur_item.addChild(new_action)
 
     def add_step_to_action(self):
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.ACTION:
+            cur_item.setExpanded(True)
             test_step = QTreeWidgetItem(None, ["anyName2", UI.STEP, StepUids.TEST_STEP])
             cur_item.addChild(test_step)
 
