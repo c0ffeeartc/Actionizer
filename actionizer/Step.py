@@ -1,3 +1,6 @@
+import sys
+import pywintypes
+
 __author__ = 'cfe'
 
 
@@ -35,7 +38,6 @@ class Step(object):
         print("No such argument: " + key)
 
     def play(self, ps_app):
-        # TODO: hide code from error message
         py_args_to_javascript_script = """
         var num_args = arguments[0];
         var num_arg_parts = (arguments.length-1)/num_args;
@@ -57,12 +59,24 @@ class Step(object):
         a = py_args_to_javascript_script.encode('string_escape')
         b = self.script.encode('string_escape')
         c = return_script.encode('string_escape')
-        ps_source_str = ps_app.DoJavaScript(
-            "app.activeDocument.suspendHistory('" + self.uid + "', '" + a + b + c + "'), returnStr;",
-            self.__ps_args_array_from_arg_dict()
-        )
-        result_py_dict = Step.__py_dict_from_ps_source_str(ps_source_str)
-        return result_py_dict
+
+        ps_source_str = "({})"
+        display_dialogs_backup = ps_app.DisplayDialogs
+        ps_app.DisplayDialogs = 1
+        try:
+
+            ps_source_str = ps_app.DoJavaScript(
+                "returnStr = {}.toSource();\nif(app.documents.length != 0)\n{app.activeDocument.suspendHistory('" + self.uid + "', '" + a + b + c + "'), returnStr;}",
+                self.__ps_args_array_from_arg_dict(),
+                1
+            )
+
+        except pywintypes.com_error:
+            ps_app.DoJavaScript("alert('Error in script:" + b + "');")
+        finally:
+            ps_app.DisplayDialogs = display_dialogs_backup
+            result_py_dict = Step.__py_dict_from_ps_source_str(ps_source_str)
+            return result_py_dict
 
     def __ps_args_array_from_arg_dict(self):
         ps_args = [len(self.arg_dict)]
