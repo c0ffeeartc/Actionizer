@@ -61,20 +61,18 @@ class Step(object):
         c = return_script.encode('string_escape')
 
         ps_source_str = "({})"
-        display_dialogs_backup = ps_app.DisplayDialogs
-        ps_app.DisplayDialogs = 1
         try:
 
             ps_source_str = ps_app.DoJavaScript(
-                "returnStr = {}.toSource();\nif(app.documents.length != 0)\n{app.activeDocument.suspendHistory('" + self.uid + "', '" + a + b + c + "'), returnStr;}",
+                "returnStr = {}.toSource();\nif(app.documents.length != 0)\n{app.activeDocument.suspendHistory(\n'" +
+                self.uid + "', '" + a + b + c + "'),\n returnStr;}",
                 self.__ps_args_array_from_arg_dict(),
-                1
+                1  # PsJavaScriptExecutionMode: 1 (psNeverShowDebugger), 2 (psDebuggerOnError), 3 (psBeforeRunning)
             )
 
-        except pywintypes.com_error:
-            ps_app.DoJavaScript("alert('Error in script:" + b + "');")
+        # except pywintypes.com_error:
+        #     ps_app.DoJavaScript("alert('Error in script:" + b + "');")
         finally:
-            ps_app.DisplayDialogs = display_dialogs_backup
             result_py_dict = Step.__py_dict_from_ps_source_str(ps_source_str)
             return result_py_dict
 
