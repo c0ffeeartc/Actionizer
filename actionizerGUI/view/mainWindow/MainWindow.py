@@ -1,8 +1,13 @@
-from PySide import QtGui, QtCore
+from PySide import QtGui
+from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidgetItem
+
 from Action import Action
+import Notes
 from StepCollection import StepCollection
 from StepFactory import StepFactory, StepUids
+from puremvc.patterns.facade import Facade
+
 
 __author__ = 'cfe'
 
@@ -21,6 +26,7 @@ class MainWindow(QtGui.QWidget):
     btn_new = None
     btn_remove = None
     play_hotkey = None
+    timer = None
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -28,11 +34,11 @@ class MainWindow(QtGui.QWidget):
         self.setToolTip('This is a <b>QWidget</b> widget')
 
         self.play_hotkey = QtGui.QShortcut(
-            QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.ALT + QtCore.Qt.Key_L),
+            QtGui.QKeySequence(Qt.CTRL + Qt.ALT + Qt.Key_A),
             self,
-            self.add_clicked
+            self.play_selected_action
         )
-        self.play_hotkey.setContext(QtCore.Qt.ApplicationShortcut)
+        self.play_hotkey.setContext(Qt.ApplicationShortcut)
 
         self.tree = QtGui.QTreeWidget()
         self.tree.setHeaderItem(QtGui.QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
@@ -60,7 +66,21 @@ class MainWindow(QtGui.QWidget):
         self.add_action_group()
         self.show()
 
+    def handle_key(self, key_event):
+        if (key_event.Key == "P"):
+            self.play_selected_action()
+        elif (key_event.Key == "Q"):
+            self.stop_global_hotkeys()
+        print(key_event.Key + " " +key_event.MessageName)
+
+    def stop_global_hotkeys(self):
+        Facade.getInstance().sendNotification(Notes.STOP_LISTEN_GLOBAL_HOTKEYS)
+
+    def start_global_hotkeys(self):
+        Facade.getInstance().sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
+
     def play_selected_action(self):
+        print("playing")
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.STEP:
             step_uid = cur_item.text(2)

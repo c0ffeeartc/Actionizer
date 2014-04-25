@@ -1,23 +1,40 @@
+from PySide.QtCore import QEvent, Qt, QTimer
 import pyHook
 
 __author__ = 'c0ffee'
 
 
 class Hotkey(object):
-    hm = None
-    def __init__(self):
-        self.hm = pyHook.HookManager()
-        self.hm.HookKeyboard()
-        self.hm.KeyUp = self.on_key_up
+    hotkey_manager = None
+    key_que = []
+    timer = None
+    main_window = None
+    is_listening = False
 
-    def on_key_up(self, event):
-        isCtrl = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_CONTROL")))
-        isAlt = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_MENU")))
-        # isAlt = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_ALT")))
-        if isCtrl and isAlt and event.Key == "P":
-            print("Pressed Ctrl+Alt+P")
-        # print(isCtrl)
-        # print(isAlt)
+    def __init__(self, main_window):
+        self.hotkey_manager = pyHook.HookManager()
+        self.hotkey_manager.HookKeyboard()
+        self.hotkey_manager.KeyUp = self.on_key
+        self.hotkey_manager.KeyDown = self.on_key
+        self.is_listening = True
+
+        self.main_window = main_window
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.process_key_events)
+        self.timer.start(1000)
+
+    def process_key_events(self):
+        while self.key_que:
+            self.main_window.handle_key(self.key_que.pop(0))
+
+    def on_key(self, event):
+        if self.is_listening:
+            self.key_que.append(event)
+        return True
+
+        # is_ctrl = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_CONTROL")))
+        # is_alt = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_MENU")))
         # print 'MessageName:', event.MessageName
         # print 'Message:', event.Message
         # print 'Time:', event.Time
@@ -32,4 +49,3 @@ class Hotkey(object):
         # print 'Alt', event.Alt
         # print 'Transition', event.Transition
         # print '---'
-        return True
