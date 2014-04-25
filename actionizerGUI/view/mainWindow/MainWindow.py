@@ -1,5 +1,5 @@
-from PySide import QtGui
-from PySide.QtCore import Qt
+from PySide import QtGui, QtCore
+from PySide.QtCore import Qt, QEventLoop
 from PySide.QtGui import QTreeWidgetItem
 
 from Action import Action
@@ -27,24 +27,22 @@ class MainWindow(QtGui.QWidget):
     btn_remove = None
     play_hotkey = None
     timer = None
+    act = None
 
     def __init__(self):
         super(MainWindow, self).__init__()
         QtGui.QToolTip.setFont(QtGui.QFont('SansSerif', 10))
         self.setToolTip('This is a <b>QWidget</b> widget')
 
-        self.play_hotkey = QtGui.QShortcut(
-            QtGui.QKeySequence(Qt.CTRL + Qt.ALT + Qt.Key_A),
-            self,
-            self.play_selected_action
-        )
-        self.play_hotkey.setContext(Qt.ApplicationShortcut)
+        self.act = QtGui.QAction(self)
+        self.act.setShortcut(QtGui.QKeySequence(Qt.CTRL + Qt.ALT + Qt.Key_L))
+        self.act.setShortcutContext(Qt.ApplicationShortcut)
+        self.act.triggered.connect(self.add_clicked)
+        self.addAction(self.act)
 
         self.tree = QtGui.QTreeWidget()
         self.tree.setHeaderItem(QtGui.QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
         self.tree.setColumnCount(3)
-        self.tree.addTopLevelItem(QTreeWidgetItem(None, ["anyName", StepUids.NULL_STEP]))
-        self.tree.addTopLevelItem(QTreeWidgetItem(None, ["anyName2", StepUids.TEST_STEP]))
 
         self.setGeometry(300, 300, 250, 450)
         self.setWindowTitle('Actionizer')
@@ -70,13 +68,15 @@ class MainWindow(QtGui.QWidget):
         if (key_event.Key == "P"):
             self.play_selected_action()
         elif (key_event.Key == "Q"):
-            self.stop_global_hotkeys()
-        print(key_event.Key + " " +key_event.MessageName)
+            self.disable_global_hotkeys()
+        elif (key_event.Key == "A"):
+            self.act.activate(QtGui.QAction.Trigger)
+        print(key_event.Key + " " + key_event.MessageName)
 
-    def stop_global_hotkeys(self):
+    def disable_global_hotkeys(self):
         Facade.getInstance().sendNotification(Notes.STOP_LISTEN_GLOBAL_HOTKEYS)
 
-    def start_global_hotkeys(self):
+    def enable_global_hotkeys(self):
         Facade.getInstance().sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
 
     def play_selected_action(self):
@@ -122,6 +122,3 @@ class MainWindow(QtGui.QWidget):
         self.tree.addTopLevelItem(action_group)
         action_group.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
         action_group.setIcon(0, QtGui.QIcon("../assets/folder_16x16.png"))
-
-        action_group.addChild(self.tree.takeTopLevelItem(0))
-        action_group.addChild(self.tree.takeTopLevelItem(0))
