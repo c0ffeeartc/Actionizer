@@ -1,11 +1,12 @@
-from PySide import QtGui, QtCore
-from PySide.QtCore import Qt, QEventLoop
+from PySide import QtGui
+from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidgetItem
 
 from Action import Action
 import Notes
 from StepCollection import StepCollection
-from StepFactory import StepFactory, StepUids
+from StepFactory import StepUids
+from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
 
 
@@ -31,13 +32,11 @@ class MainWindow(QtGui.QWidget):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        QtGui.QToolTip.setFont(QtGui.QFont('SansSerif', 10))
-        self.setToolTip('This is a <b>QWidget</b> widget')
 
         self.act = QtGui.QAction(self)
         self.act.setShortcut(QtGui.QKeySequence(Qt.CTRL + Qt.ALT + Qt.Key_L))
         self.act.setShortcutContext(Qt.ApplicationShortcut)
-        self.act.triggered.connect(self.add_clicked)
+        self.act.triggered.connect(self.print_step_files)
         self.addAction(self.act)
 
         self.tree = QtGui.QTreeWidget()
@@ -64,6 +63,7 @@ class MainWindow(QtGui.QWidget):
         self.add_action_group()
         self.show()
 
+    # TODO: Move my scripts into program
     def handle_key(self, key_event):
         if (key_event.Key == "P"):
             self.play_selected_action()
@@ -79,12 +79,17 @@ class MainWindow(QtGui.QWidget):
     def enable_global_hotkeys(self):
         Facade.getInstance().sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
 
+    def print_step_files(self):
+        print(Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).data.step_files)
+
     def play_selected_action(self):
         print("playing")
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.STEP:
             step_uid = cur_item.text(2)
-            a_step = StepFactory.new_step(step_uid)  # StepUids.TEST_STEP)
+            # a_step = StepFactory.new_step(step_uid)  # StepUids.TEST_STEP)
+            step_pool = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).get_step_pool()
+            a_step = step_pool.get_step(file_path_name='../../scripts/createGroupNamedAsLayer.jsx')
             step_col = StepCollection(a_step)
             action1 = Action()
             action1.add(step_col)

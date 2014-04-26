@@ -1,3 +1,4 @@
+from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
 from view.hotkeyManager.HotkeyMediator import HotkeyMediator
 from view.mainWindow.MainWindowMediator import MainWindowMediator
@@ -13,6 +14,7 @@ class StartupCommand(SimpleCommand):
         # ...
 
         # registerProxies
+        self.facade.registerProxy(StepPoolProxy())
         # ...
 
         # registerMediator

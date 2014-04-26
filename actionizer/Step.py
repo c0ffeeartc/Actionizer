@@ -1,6 +1,3 @@
-import sys
-import pywintypes
-
 __author__ = 'cfe'
 
 
@@ -14,6 +11,7 @@ class Step(object):
     uid = ""
     arg_dict = ""
     script = ""
+    file_path_name = ""
     pre_conditions = []
 
     def __init__(self):
