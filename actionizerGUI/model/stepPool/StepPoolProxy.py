@@ -11,5 +11,11 @@ class StepPoolProxy(Proxy):
         super(StepPoolProxy, self).onRegister()
         self.setData(StepPool())
 
-    def get_step_pool(self):
+    def __get_step_pool(self):
         return self.getData()
+
+    def get_step_files(self):
+        return self.__get_step_pool().step_files
+
+    def get_step(self, step_uid):
+        return self.__get_step_pool().get_step(file_path_name=step_uid)

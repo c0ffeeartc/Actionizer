@@ -1,13 +1,13 @@
 from PySide import QtGui
 from PySide.QtCore import Qt
-from PySide.QtGui import QTreeWidgetItem
+from PySide.QtGui import QTreeWidgetItem, QCursor
 
 from Action import Action
 import Notes
-from StepCollection import StepCollection
 from StepFactory import StepUids
 from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
+from view.contextMenu.StepContextMenu import StepContextMenu
 
 
 __author__ = 'cfe'
@@ -17,6 +17,7 @@ class UI(object):
     ACTION = "ACTION"
     ACTION_GROUP = "ACTION_GROUP"
     STEP = "STEP"
+    ROOT = "ROOT"
 
 
 class MainWindow(QtGui.QWidget):
@@ -40,6 +41,8 @@ class MainWindow(QtGui.QWidget):
         self.addAction(self.act)
 
         self.tree = QtGui.QTreeWidget()
+        self.tree.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.tree.customContextMenuRequested.connect(self.show_menu)
         self.tree.setHeaderItem(QtGui.QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
         self.tree.setColumnCount(3)
 
@@ -49,7 +52,7 @@ class MainWindow(QtGui.QWidget):
         self.btn_layout.addStretch(1)
         self.btn_play = QtGui.QPushButton(QtGui.QIcon("../assets/play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
-        self.btn_play.clicked.connect(self.play_selected_action)
+        self.btn_play.clicked.connect(self.play_action)
         self.btn_new = QtGui.QPushButton(QtGui.QIcon("../assets/new_file_16x16.png"), "")
         self.btn_new.clicked.connect(self.add_clicked)
         self.btn_layout.addWidget(self.btn_new)
@@ -63,9 +66,14 @@ class MainWindow(QtGui.QWidget):
         self.add_action_group()
         self.show()
 
+    def show_menu(self, point):
+        tree_item = self.tree.itemAt(point)
+        if tree_item.text(1) == UI.STEP:
+            StepContextMenu(self).popup(QCursor().pos())
+
     def handle_key(self, key_event):
         if (key_event.Key == "P"):
-            self.play_selected_action()
+            self.play_action()
         elif (key_event.Key == "Q"):
             self.disable_global_hotkeys()
         elif (key_event.Key == "A"):
@@ -81,23 +89,27 @@ class MainWindow(QtGui.QWidget):
     def print_step_files(self):
         print(Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).data.step_files)
 
-    def play_selected_action(self):
+    def play_action(self, start_index = 0):
         print("playing")
+        step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
         cur_item = self.tree.currentItem()
-        if cur_item.text(1) == UI.STEP:
-            step_uid = cur_item.text(2)
-            # a_step = StepFactory.new_step(step_uid)  # StepUids.TEST_STEP)
-            step_pool = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).get_step_pool()
-            a_step = step_pool.get_step(file_path_name='../../scripts/createGroupNamedAsLayer.jsx')
-            step_col = StepCollection(a_step)
-            action1 = Action()
-            action1.add(step_col)
-            action1.play()
+        if cur_item.text(1) == UI.ACTION or cur_item.text(1) == UI.STEP:
+            gui_action = None
+            if cur_item.text(1) == UI.ACTION:
+                gui_action = cur_item
+            elif cur_item.text(1) == UI.STEP:
+                gui_action = cur_item.parent()
+                start_index = cur_item.parent().indexOfChild(cur_item)
+            action = Action()
+            for i in xrange(gui_action.childCount()):
+                step_uid = gui_action.child(i).text(2)
+                action.add(step_pool_proxy.get_step(step_uid))
+            action.play(start_index)
 
     def add_clicked(self):
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.ACTION or cur_item.text(1) == UI.STEP:
-            self.add_step_to_action()
+            self.add_step()
         elif cur_item.text(1) == UI.ACTION_GROUP:
             self.add_action_to_group()
 
@@ -108,17 +120,23 @@ class MainWindow(QtGui.QWidget):
             new_action = QTreeWidgetItem(None, ["New Action", UI.ACTION])
             cur_item.addChild(new_action)
 
-    def add_step_to_action(self):
-        cur_item = self.tree.currentItem()
-        if cur_item.text(1) == UI.ACTION:
-            cur_item.setExpanded(True)
-            null_step = QTreeWidgetItem(None, ["Null", UI.STEP, StepUids.NULL_STEP])
-            cur_item.insertChild(0, null_step)
-        if cur_item.text(1) == UI.STEP:
-            cur_index = cur_item.parent().indexOfChild(cur_item)
-            null_step = QTreeWidgetItem(None, ["Null", UI.STEP, StepUids.NULL_STEP])
-            cur_item.parent().insertChild(cur_index + 1, null_step)
-            pass
+    def add_step(self, step_uid=StepUids.NULL_STEP, parent=None, index=0):
+        step_item = QTreeWidgetItem(None, ["Step", UI.STEP, step_uid])
+        if parent:
+            if parent.text(1) != UI.ACTION:
+                print("Can't add step to not action")
+                return
+            print("index == " + str(index))
+            parent.insertChild(index, step_item)
+        else:
+            cur_item = self.tree.currentItem()
+            parent = cur_item.parent()
+            if cur_item.text(1) == UI.ACTION:
+                cur_item.setExpanded(True)
+                cur_item.insertChild(0, step_item)
+            if cur_item.text(1) == UI.STEP:
+                cur_index = parent.indexOfChild(cur_item)
+                cur_item.parent().insertChild(cur_index + 1, step_item)
 
     def remove_selected(self):
         cur_item = self.tree.currentItem()
@@ -128,6 +146,6 @@ class MainWindow(QtGui.QWidget):
 
     def add_action_group(self):
         action_group = QTreeWidgetItem(self.tree, ["ActionGroup", UI.ACTION_GROUP])
-        self.tree.addTopLevelItem(action_group)
+        self.tree.invisibleRootItem().addChild(action_group)
         action_group.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
         action_group.setIcon(0, QtGui.QIcon("../assets/folder_16x16.png"))

@@ -34,9 +34,9 @@ class Action(object):
             pass
         return True
 
-    def play(self):
-
+    def play(self, start_index=0):
         ps_app = win32com.client.Dispatch('Photoshop.Application')
-
-        for step in self.steps:
-            step.play(ps_app)
+        for i in xrange(len(self.steps)):
+            if i < start_index:
+                continue
+            self.steps[i].play(ps_app)

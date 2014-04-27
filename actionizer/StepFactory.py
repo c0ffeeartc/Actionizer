@@ -37,7 +37,7 @@ class StepFactory(object):
             return step
         elif step.uid == StepUids.FROM_JSX:
             if "file_path_name" in kwargs.keys():
-                step_pool = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).get_step_pool()
+                step_pool = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).__get_step_pool()
                 step = step_pool.get_step(file_path_name=kwargs["file_path_name"])
             return step
         else:
