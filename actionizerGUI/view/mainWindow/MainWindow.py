@@ -63,7 +63,6 @@ class MainWindow(QtGui.QWidget):
         self.add_action_group()
         self.show()
 
-    # TODO: Move my scripts into program
     def handle_key(self, key_event):
         if (key_event.Key == "P"):
             self.play_selected_action()
@@ -97,7 +96,7 @@ class MainWindow(QtGui.QWidget):
 
     def add_clicked(self):
         cur_item = self.tree.currentItem()
-        if cur_item.text(1) == UI.ACTION:
+        if cur_item.text(1) == UI.ACTION or cur_item.text(1) == UI.STEP:
             self.add_step_to_action()
         elif cur_item.text(1) == UI.ACTION_GROUP:
             self.add_action_to_group()
@@ -113,8 +112,13 @@ class MainWindow(QtGui.QWidget):
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.ACTION:
             cur_item.setExpanded(True)
-            test_step = QTreeWidgetItem(None, ["anyName2", UI.STEP, StepUids.TEST_STEP])
-            cur_item.addChild(test_step)
+            null_step = QTreeWidgetItem(None, ["Null", UI.STEP, StepUids.NULL_STEP])
+            cur_item.insertChild(0, null_step)
+        if cur_item.text(1) == UI.STEP:
+            cur_index = cur_item.parent().indexOfChild(cur_item)
+            null_step = QTreeWidgetItem(None, ["Null", UI.STEP, StepUids.NULL_STEP])
+            cur_item.parent().insertChild(cur_index + 1, null_step)
+            pass
 
     def remove_selected(self):
         cur_item = self.tree.currentItem()
