@@ -5,19 +5,12 @@ from PySide.QtGui import QTreeWidgetItem, QCursor
 from Action import Action
 import Notes
 from StepFactory import StepUids
+from model.UI import UI
 from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
-from view.contextMenu.StepContextMenu import StepContextMenu
-
+from view.actionTree.ActionTree import ActionTree
 
 __author__ = 'cfe'
-
-
-class UI(object):
-    ACTION = "ACTION"
-    ACTION_GROUP = "ACTION_GROUP"
-    STEP = "STEP"
-    ROOT = "ROOT"
 
 
 class MainWindow(QtGui.QWidget):
@@ -40,11 +33,12 @@ class MainWindow(QtGui.QWidget):
         self.act.triggered.connect(self.print_step_files)
         self.addAction(self.act)
 
-        self.tree = QtGui.QTreeWidget()
-        self.tree.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.tree.customContextMenuRequested.connect(self.show_menu)
-        self.tree.setHeaderItem(QtGui.QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
-        self.tree.setColumnCount(3)
+        self.tree = ActionTree()
+
+        self.setWindowIcon(QtGui.QIcon("../assets/flash_16x16.png"))
+        self.tray_icon = QtGui.QSystemTrayIcon()
+        self.tray_icon.setIcon(QtGui.QIcon("../assets/flash_16x16.png"))
+        self.tray_icon.show()
 
         self.setGeometry(300, 300, 250, 450)
         self.setWindowTitle('Actionizer')
@@ -66,11 +60,6 @@ class MainWindow(QtGui.QWidget):
         self.add_action_group()
         self.show()
 
-    def show_menu(self, point):
-        tree_item = self.tree.itemAt(point)
-        if tree_item.text(1) == UI.STEP:
-            StepContextMenu(self).popup(QCursor().pos())
-
     def handle_key(self, key_event):
         if (key_event.Key == "P"):
             self.play_action()
@@ -89,7 +78,7 @@ class MainWindow(QtGui.QWidget):
     def print_step_files(self):
         print(Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).data.step_files)
 
-    def play_action(self, start_index = 0):
+    def play_action(self, start_index=0):
         print("playing")
         step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
         cur_item = self.tree.currentItem()
