@@ -19,6 +19,3 @@ class ActionTree(QTreeWidget):
         tree_item = self.itemAt(point)
         if tree_item.text(1) == UI.STEP:
             StepContextMenu(self).popup(QCursor().pos())
-
-    def load(self):
-        self.clear()

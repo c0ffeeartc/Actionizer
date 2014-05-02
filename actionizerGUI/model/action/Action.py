@@ -1,14 +1,10 @@
+import json
 from model.action.StepItemVO import StepItemVO
 from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
-
-__author__ = 'cfe'
 import win32com.client
 
-STEP_ARGS = "STEP_ARGS"
-STEP_UID = "STEP_UID"
-STEP = "STEP"
-RESULT_LINKS = "RESULT_LINKS"
+__author__ = 'cfe'
 
 
 class Action(object):
@@ -84,3 +80,32 @@ class Action(object):
                 continue
             for key in result_keys:
                 step_item.step_args[key] = self.results[src_i][key]
+
+    # reimplement method to ActionTree
+    @staticmethod
+    def __to_json(o):
+        if isinstance(o, Action):
+            return o.__dict__
+        elif isinstance(o, StepItemVO):
+            return {
+                "step": o.step.script_path_name,
+                "args": o.args,
+                "result_links": o.result_links
+            }
+
+    @staticmethod
+    def __from_json(o):
+        if '__class__' in o:
+            if '__class__' == "Action":
+                pass
+            if '__class__' == "StepItem":
+                pass
+
+    def save(self):
+        with open("../../scripts/action.json", "w") as f:
+            json.dump(self, f, default=Action.__to_json, indent=2)
+
+    def load(self):
+        with open("../../scripts/action.json", "r") as f:
+            a = json.load(f, object_hook=Action.__from_json)
+            print a

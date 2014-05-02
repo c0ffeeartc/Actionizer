@@ -8,3 +8,10 @@ class StepItemVO(object):
     step = None
     args = {}
     result_links = {}  # i:[key1, key2, etc]
+
+    def __dict__(self):
+        return {
+            self.step.uid,
+            self.args,
+            self.result_links,
+        }

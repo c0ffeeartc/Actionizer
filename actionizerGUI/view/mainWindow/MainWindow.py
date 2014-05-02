@@ -7,7 +7,6 @@ import Notes
 from StepFactory import StepUids
 from model.UI import UI
 from model.action.Action import Action
-from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
 from view.actionTree.ActionTree import ActionTree
 
@@ -32,7 +31,6 @@ class MainWindow(QtGui.QWidget):
         self.act = QtGui.QAction(self)
         self.act.setShortcut(QtGui.QKeySequence(Qt.CTRL + Qt.ALT + Qt.Key_L))
         self.act.setShortcutContext(Qt.ApplicationShortcut)
-        self.act.triggered.connect(self.print_step_files)
         self.addAction(self.act)
 
         self.tree = ActionTree()
@@ -77,12 +75,8 @@ class MainWindow(QtGui.QWidget):
     def enable_global_hotkeys(self):
         Facade.getInstance().sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
 
-    def print_step_files(self):
-        print(Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).data.step_files)
-
     def play_action(self, start_index=0):
         print("playing")
-        step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.ACTION or cur_item.text(1) == UI.STEP:
             gui_action = None
@@ -94,8 +88,10 @@ class MainWindow(QtGui.QWidget):
             action = Action()
             for i in xrange(gui_action.childCount()):
                 step_uid = gui_action.child(i).text(2)
-                action.add_step(step_pool_proxy.get_step(step_uid))
-            action.play(start_index)
+                action.add_step(step_uid)
+            # action.play(start_index)
+            action.save()
+            action.load()
 
     def add_clicked(self):
         cur_item = self.tree.currentItem()

@@ -25,6 +25,9 @@ class Step(object):
         self.script = "alert('def');"
         self.script_path_name = ""
 
+    def getUid(self):
+        return self.name + self.script_path_name
+
     def set_arg(self, key, value):
         if key in self.default_args_dict.keys():
             self.default_args_dict[key] = value
