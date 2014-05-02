@@ -12,7 +12,6 @@ class Step(object):
     arg_dict = ""
     script = ""
     file_path_name = ""
-    pre_conditions = []
 
     def __init__(self):
         self.__make_empty()
@@ -20,7 +19,6 @@ class Step(object):
     def __make_empty(self):
         self.type_name = "step"
         self.uid = ""
-        self.pre_conditions = [None]
         self.arg_dict = {"hasReturn": False}
         self.script = ";"
 
