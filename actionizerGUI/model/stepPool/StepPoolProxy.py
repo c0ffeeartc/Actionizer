@@ -1,3 +1,4 @@
+from Step import Step
 from model.stepPool.StepPool import StepPool
 from puremvc.patterns.proxy import Proxy
 
@@ -18,4 +19,7 @@ class StepPoolProxy(Proxy):
         return self.__get_step_pool().step_files
 
     def get_step(self, step_uid):
-        return self.__get_step_pool().get_step(file_path_name=step_uid)
+        step = self.__get_step_pool().get_step(script_path_name=step_uid)
+        if not step:
+            step = Step()
+        return step

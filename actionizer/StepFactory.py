@@ -20,7 +20,7 @@ class StepFactory(object):
             step.script = "alert ('nullStep');"
             return step
         elif step.uid == StepUids.TEST_STEP:
-            step.arg_dict = {
+            step.default_args_dict = {
                 "isOk": True,
                 "numLines": 4,
                 "portion": 0.1234567890,
@@ -36,9 +36,9 @@ class StepFactory(object):
             """
             return step
         elif step.uid == StepUids.FROM_JSX:
-            if "file_path_name" in kwargs.keys():
+            if "script_path_name" in kwargs.keys():
                 step_pool = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME).__get_step_pool()
-                step = step_pool.get_step(file_path_name=kwargs["file_path_name"])
+                step = step_pool.get_step(file_path_name=kwargs["script_path_name"])
             return step
         else:
             print("StepFactory.new_step no step with such uid")

@@ -1,14 +1,16 @@
 from PySide import QtGui
-from PySide.QtCore import Qt
-from PySide.QtGui import QTreeWidgetItem, QCursor
 
-from Action import Action
+from PySide.QtCore import Qt
+from PySide.QtGui import QTreeWidgetItem
+
 import Notes
 from StepFactory import StepUids
 from model.UI import UI
+from model.action.Action import Action
 from model.stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
 from view.actionTree.ActionTree import ActionTree
+
 
 __author__ = 'cfe'
 
@@ -40,7 +42,7 @@ class MainWindow(QtGui.QWidget):
         self.tray_icon.setIcon(QtGui.QIcon("../assets/flash_16x16.png"))
         self.tray_icon.show()
 
-        self.setGeometry(300, 300, 250, 450)
+        self.setGeometry(300, 300, 400, 600)
         self.setWindowTitle('Actionizer')
 
         self.btn_layout.addStretch(1)
@@ -92,7 +94,7 @@ class MainWindow(QtGui.QWidget):
             action = Action()
             for i in xrange(gui_action.childCount()):
                 step_uid = gui_action.child(i).text(2)
-                action.add(step_pool_proxy.get_step(step_uid))
+                action.add_step(step_pool_proxy.get_step(step_uid))
             action.play(start_index)
 
     def add_clicked(self):

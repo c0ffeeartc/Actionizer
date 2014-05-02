@@ -8,10 +8,11 @@ class Step(object):
     """
 
     type_name = ""
-    uid = ""
-    arg_dict = ""
+    uid = ""  # name + script_path_name
+    name = ""
+    default_args_dict = {}
     script = ""
-    file_path_name = ""
+    script_path_name = ""
 
     def __init__(self):
         self.__make_empty()
@@ -19,21 +20,28 @@ class Step(object):
     def __make_empty(self):
         self.type_name = "step"
         self.uid = ""
-        self.arg_dict = {"hasReturn": False}
-        self.script = ";"
+        self.name = ""
+        self.default_args_dict = {}
+        self.script = "alert('def');"
+        self.script_path_name = ""
 
     def set_arg(self, key, value):
-        if key in self.arg_dict.keys():
-            self.arg_dict[key] = value
+        if key in self.default_args_dict.keys():
+            self.default_args_dict[key] = value
             return
         print("No such argument: " + key)
 
     def get_arg(self, key):
-        if key in self.arg_dict.keys:
-            return self.arg_dict[key]
+        if key in self.default_args_dict.keys:
+            return self.default_args_dict[key]
         print("No such argument: " + key)
 
-    def play(self, ps_app):
+    def play(self, ps_app, args):
+        # replace default_args_dict with arguments
+        for key in args:
+            if key in self.default_args_dict:
+                self.default_args_dict[key] = args[key]
+
         py_args_to_javascript_script = """
         var num_args = arguments[0];
         var num_arg_parts = (arguments.length-1)/num_args;
@@ -61,7 +69,7 @@ class Step(object):
 
             ps_source_str = ps_app.DoJavaScript(
                 "returnStr = {}.toSource();\nif(app.documents.length != 0)\n{app.activeDocument.suspendHistory(\n'" +
-                self.uid + "', '" + a + b + c + "'),\n returnStr;}",
+                self.name + "', '" + a + b + c + "'),\n returnStr;}",
                 self.__ps_args_array_from_arg_dict(),
                 1  # PsJavaScriptExecutionMode: 1 (psNeverShowDebugger), 2 (psDebuggerOnError), 3 (psBeforeRunning)
             )
@@ -73,8 +81,8 @@ class Step(object):
             return result_py_dict
 
     def __ps_args_array_from_arg_dict(self):
-        ps_args = [len(self.arg_dict)]
-        for key, value in self.arg_dict.items():
+        ps_args = [len(self.default_args_dict)]
+        for key, value in self.default_args_dict.items():
             ps_args.append(key)
             ps_args.append(value)
         return ps_args
