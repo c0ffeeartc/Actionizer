@@ -5,7 +5,8 @@ from view.contextMenu.StepContextMenu import StepContextMenu
 
 __author__ = 'c0ffee'
 
-# TODO: should represent action model tree
+
+# TODO: create mediator and sync with actionRoot
 class ActionTree(QTreeWidget):
     def __init__(self):
         super(ActionTree, self).__init__()

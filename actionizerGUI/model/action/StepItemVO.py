@@ -1,3 +1,6 @@
+from model.stepPool.StepPoolProxy import StepPoolProxy
+from puremvc.patterns.facade import Facade
+
 __author__ = 'cfe'
 
 
@@ -22,3 +25,14 @@ class StepItemVO(object):
                 "result_links": self.result_links,
             },
         }
+
+    @classmethod
+    def dejsonify(cls, json_item):
+        if "__class__" == StepItemVO.NAME:
+            step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
+            step = step_pool_proxy.get_step(json_item["__value__"]["script_path_name"])
+            step_item = StepItemVO()
+            step_item.step = step
+            step_item.args = json_item["value"]["args"]
+            step_item.result_links = json_item["value"]["result_links"]
+            return step_item

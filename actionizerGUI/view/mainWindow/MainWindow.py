@@ -7,6 +7,8 @@ import Notes
 from StepFactory import StepUids
 from model.UI import UI
 from model.action.Action import Action
+from model.action.ActionGroup import ActionGroup
+from model.action.ActionRoot import ActionRoot
 from puremvc.patterns.facade import Facade
 from view.actionTree.ActionTree import ActionTree
 
@@ -90,8 +92,11 @@ class MainWindow(QtGui.QWidget):
                 step_uid = gui_action.child(i).text(2)
                 action.add_step(step_uid)
             # action.play(start_index)
-            action.save()
-            action.load()
+            action_root = ActionRoot()
+            action_group = ActionGroup()
+            action_root.add(action_group)
+            action_root.save()
+            action_root.load()
 
     def add_clicked(self):
         cur_item = self.tree.currentItem()
