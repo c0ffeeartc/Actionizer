@@ -3,6 +3,9 @@ __author__ = 'cfe'
 # str can be compared with str
 # bool comparison with others is not decided yet
 # Note: doesn't work yet
+
+
+# TODO: fit conditions into existing script capabilities, with two arguments and step_result
 class Condition(object):
     """
     if statement specifier for conditinal execution of stepCollections

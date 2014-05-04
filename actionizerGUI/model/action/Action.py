@@ -14,8 +14,20 @@ class Action(object):
 
     def __init__(self):
         self.name = ""
-        self.results = []
         self.items = []  # StepItems
+        self.results = []
+
+    def clear(self):
+        self.name = ""
+        del self.items[:]
+        del self.results[:]
+
+    def reinit(self, action):
+        self.clear()
+        if action:
+            self.name = action.name
+            self.items = action.items
+            self.results = action.results
 
     def add_step(self, step_uid, i=None):
         if not i:
@@ -81,25 +93,44 @@ class Action(object):
             for key in result_keys:
                 step_item.step_args[key] = self.results[src_i][key]
 
+    def jsonify(self):
+        return {
+            "__class__": "Action",
+            "__value__":
+            {
+                "name": self.name,
+                "items": [each.jsonify() for each in self.items],
+                "results": self.results,
+            }
+        }
+
     # reimplement method to ActionTree
     @staticmethod
     def __to_json(o):
         if isinstance(o, Action):
-            return o.__dict__
+            return o.jsonify()
         elif isinstance(o, StepItemVO):
-            return {
-                "step": o.step.script_path_name,
-                "args": o.args,
-                "result_links": o.result_links
-            }
+            return o.jsonify()
+        raise TypeError(repr(o) + ' is not JSON serializable')
 
     @staticmethod
     def __from_json(o):
         if '__class__' in o:
-            if '__class__' == "Action":
-                pass
-            if '__class__' == "StepItem":
-                pass
+            if o['__class__'] == "Action":
+                action = Action()
+                action.name = o["__value__"]["name"]
+                action.items = o["__value__"]["items"]
+                action.results = o["__value__"]["results"]
+                return action
+            if o['__class__'] == StepItemVO.NAME:
+                step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
+                step = step_pool_proxy.get_step(o["__value__"]["script_path_name"])
+                step_item = StepItemVO()
+                step_item.step = step
+                step_item.args = step_pool_proxy.get_step(o["__value__"]["args"])
+                step_item.result_links = step_pool_proxy.get_step(o["__value__"]["result_links"])
+                return step_item
+        return o
 
     def save(self):
         with open("../../scripts/action.json", "w") as f:
@@ -108,4 +139,4 @@ class Action(object):
     def load(self):
         with open("../../scripts/action.json", "r") as f:
             a = json.load(f, object_hook=Action.__from_json)
-            print a
+            self.reinit(a)

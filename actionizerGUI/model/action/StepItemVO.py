@@ -5,13 +5,20 @@ class StepItemVO(object):
     """
     StepItem has Step from Pool, its arguments, and links to results from previous steps.
     """
-    step = None
-    args = {}
-    result_links = {}  # i:[key1, key2, etc]
+    NAME = "StepItemVO"
 
-    def __dict__(self):
+    def __init__(self):
+        self.step = None
+        self.args = {}
+        self.result_links = {}  # i:[key1, key2, etc]
+
+    def jsonify(self):
         return {
-            self.step.uid,
-            self.args,
-            self.result_links,
+            "__class__": StepItemVO.NAME,
+            "__value__":
+            {
+                "script_path_name": self.step.script_path_name,
+                "args": self.args,
+                "result_links": self.result_links,
+            },
         }

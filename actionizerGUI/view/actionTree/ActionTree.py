@@ -5,7 +5,7 @@ from view.contextMenu.StepContextMenu import StepContextMenu
 
 __author__ = 'c0ffee'
 
-
+# TODO: should represent action model tree
 class ActionTree(QTreeWidget):
     def __init__(self):
         super(ActionTree, self).__init__()
@@ -17,5 +17,5 @@ class ActionTree(QTreeWidget):
 
     def show_menu(self, point):
         tree_item = self.itemAt(point)
-        if tree_item.text(1) == UI.STEP:
+        if tree_item and tree_item.text(1) == UI.STEP:
             StepContextMenu(self).popup(QCursor().pos())
