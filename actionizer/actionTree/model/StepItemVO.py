@@ -1,4 +1,4 @@
-from model.stepPool.StepPoolProxy import StepPoolProxy
+from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
 
 __author__ = 'cfe'

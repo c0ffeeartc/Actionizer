@@ -1,7 +1,7 @@
-from model.stepPool.StepPoolProxy import StepPoolProxy
+from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
-from view.hotkeyManager.HotkeyMediator import HotkeyMediator
-from view.mainWindow.MainWindowMediator import MainWindowMediator
+from hotkeyManager.HotkeyMediator import HotkeyMediator
+from mainWindow.MainWindowMediator import MainWindowMediator
 
 __author__ = 'cfe'
 

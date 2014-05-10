@@ -1,8 +1,6 @@
 from PySide import QtGui
 import sys
-
-from main import AppFacade
-
+from main.AppFacade import AppFacade
 
 __author__ = 'cfe'
 

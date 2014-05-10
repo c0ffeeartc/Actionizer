@@ -1,4 +1,4 @@
-from model.actionTree.view import TreeView
+from treeView.view.TreeView import TreeView
 from notifications import Notes
 from puremvc.patterns.mediator import Mediator
 

@@ -1,4 +1,4 @@
-from model.actionTree.model.vo import ActionRoot
+from actionTree.model.ActionRoot import ActionRoot
 from puremvc.patterns.proxy import Proxy
 
 __author__ = 'cfe'

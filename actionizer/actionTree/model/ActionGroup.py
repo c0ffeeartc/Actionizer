@@ -1,4 +1,5 @@
-from model.actionTree.model.vo import TypedContainer, Action
+from actionTree.model.TypedContainer import TypedContainer
+from actionTree.model.Action import Action
 
 __author__ = 'cfe'
 

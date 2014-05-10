@@ -1,8 +1,8 @@
 from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QCursor
 
-from actionTree.model import UI
-from view.contextMenu.StepContextMenu import StepContextMenu
+from actionTree.model.UI import UI
+from contextMenu.StepContextMenu import StepContextMenu
 
 
 __author__ = 'c0ffee'

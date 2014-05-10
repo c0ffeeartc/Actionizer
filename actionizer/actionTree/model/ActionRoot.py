@@ -1,7 +1,7 @@
 import json
 
-from model.actionTree.ActionGroup import ActionGroup
-from model.actionTree.model.vo import TypedContainer
+from actionTree.model.ActionGroup import ActionGroup
+from actionTree.model.TypedContainer import TypedContainer
 
 
 __author__ = 'cfe'

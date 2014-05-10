@@ -1,5 +1,5 @@
-from model.actionTree.model.vo import Step
-from model.stepPool.StepPool import StepPool
+from stepPool.model.Step import Step
+from stepPool.model.StepPool import StepPool
 from puremvc.patterns.proxy import Proxy
 
 __author__ = 'c0ffee'

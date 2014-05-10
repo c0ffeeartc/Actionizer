@@ -1,8 +1,8 @@
 import win32com.client
 
-from model.actionTree.StepItemVO import StepItemVO
-from model.actionTree.model.vo import TypedContainer
-from model.stepPool.StepPoolProxy import StepPoolProxy
+from actionTree.model.StepItemVO import StepItemVO
+from actionTree.model.TypedContainer import TypedContainer
+from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
 
 

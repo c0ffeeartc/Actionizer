@@ -1,4 +1,4 @@
-from main import StartupCommand
+from main.StartupCommand import StartupCommand
 from notifications import Notes
 
 __author__ = 'cfe'

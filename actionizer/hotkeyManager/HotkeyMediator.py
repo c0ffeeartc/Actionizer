@@ -1,7 +1,7 @@
 from notifications import Notes
 from puremvc.patterns.mediator import Mediator
-from view.hotkeyManager.Hotkey import Hotkey
-from view.mainWindow.MainWindowMediator import MainWindowMediator
+from hotkeyManager import Hotkey
+from mainWindow.MainWindowMediator import MainWindowMediator
 
 __author__ = 'c0ffee'
 

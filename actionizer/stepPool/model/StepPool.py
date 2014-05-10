@@ -1,7 +1,7 @@
 import os
 
-from model.actionTree.model.vo import Step
-from model.options.Options import Options
+from stepPool.model.Step import Step
+from options.OptionsVO import Options
 
 
 __author__ = 'c0ffee'
@@ -17,7 +17,7 @@ class StepPool(object):
     def reinit(self):
         self.steps = []
         self.step_files = []
-        for root, dirnames, filenames in os.walk(Options.path_to_steps):
+        for root, dirnames, filenames in os.walk(Options.steps_path):
             for filename in filenames:
                 if filename.endswith(".jsx"):
                     self.step_files.append(os.path.join(root, filename))

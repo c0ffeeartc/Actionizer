@@ -1,7 +1,6 @@
 from notifications import Notes
 from puremvc.patterns.mediator import Mediator
-from view.mainWindow.MainWindow import MainWindow
-
+from mainWindow.MainWindow import MainWindow
 __author__ = 'cfe'
 
 

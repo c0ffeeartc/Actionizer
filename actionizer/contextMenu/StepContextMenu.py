@@ -1,6 +1,6 @@
 from PySide.QtGui import QMenu
 
-from model.stepPool.StepPoolProxy import StepPoolProxy
+from stepPool.StepPoolProxy import StepPoolProxy
 from notifications import Notes
 from puremvc.patterns.facade import Facade
 

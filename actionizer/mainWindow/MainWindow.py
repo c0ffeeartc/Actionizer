@@ -3,12 +3,12 @@ from PySide import QtGui
 from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidgetItem
 
-from actionTree.model import UI
-from actionTree.stepPool.StepFactory import StepUids
-from model.actionTree.Action import Action
-from model.actionTree.ActionGroup import ActionGroup
-from model.actionTree.model.vo import ActionRoot
-from model.actionTree.view import TreeView
+from actionTree.model.UI import UI
+from stepPool.model.StepFactory import StepUids
+from actionTree.model.Action import Action
+from actionTree.model.ActionGroup import ActionGroup
+from actionTree.model.ActionRoot import ActionRoot
+from treeView.view.TreeView import TreeView
 from notifications import Notes
 from puremvc.patterns.facade import Facade
 
@@ -37,7 +37,7 @@ class MainWindow(QtGui.QWidget):
 
         self.tree = TreeView()
 
-        self.setWindowIcon(QtGui.QIcon("../assets/flash_16x16.png"))
+        self.setWindowIcon(QtGui.QIcon("flash_16x16.png"))
         self.tray_icon = QtGui.QSystemTrayIcon()
         self.tray_icon.setIcon(QtGui.QIcon("../assets/flash_16x16.png"))
         self.tray_icon.show()
@@ -46,13 +46,13 @@ class MainWindow(QtGui.QWidget):
         self.setWindowTitle('Actionizer')
 
         self.btn_layout.addStretch(1)
-        self.btn_play = QtGui.QPushButton(QtGui.QIcon("../assets/play_16x16.png"), "")
+        self.btn_play = QtGui.QPushButton(QtGui.QIcon("assets/play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
         self.btn_play.clicked.connect(self.play_action)
         self.btn_new = QtGui.QPushButton(QtGui.QIcon("../assets/new_file_16x16.png"), "")
         self.btn_new.clicked.connect(self.add_clicked)
         self.btn_layout.addWidget(self.btn_new)
-        self.btn_remove = QtGui.QPushButton(QtGui.QIcon("../assets/trash_16x16.png"), "")
+        self.btn_remove = QtGui.QPushButton(QtGui.QIcon("../../assets/trash_16x16.png"), "")
         self.btn_remove.clicked.connect(self.remove_selected)
         self.btn_layout.addWidget(self.btn_remove)
 

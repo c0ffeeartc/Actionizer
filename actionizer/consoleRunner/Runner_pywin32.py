@@ -1,6 +1,6 @@
 from actionTree.model import Action
-from actionTree.stepPool.StepFactory import StepUids
-from actionTree.stepPool import StepFactory
+from stepPool.model.StepFactory import StepUids
+from stepPool.model.StepFactory import StepFactory
 
 if __name__ == "__main__":
     a_step = StepFactory.new_step(StepUids.TEST_STEP)

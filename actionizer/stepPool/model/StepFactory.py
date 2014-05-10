@@ -1,5 +1,5 @@
-from model.actionTree.model.vo import Step
-from model.stepPool.StepPoolProxy import StepPoolProxy
+from stepPool.model.Step import Step
+from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.facade import Facade
 
 __author__ = 'cfe'
