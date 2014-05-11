@@ -4,6 +4,7 @@ from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidgetItem
 
 from actionTree.model.UI import UI
+from options.OptionsVO import Options
 from stepPool.model.StepFactory import StepUids
 from actionTree.model.Action import Action
 from actionTree.model.ActionGroup import ActionGroup
@@ -37,22 +38,25 @@ class MainWindow(QtGui.QWidget):
 
         self.tree = TreeView()
 
-        self.setWindowIcon(QtGui.QIcon("flash_16x16.png"))
+        self.setWindowIcon(QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
         self.tray_icon = QtGui.QSystemTrayIcon()
-        self.tray_icon.setIcon(QtGui.QIcon("../assets/flash_16x16.png"))
+        self.tray_icon.setIcon(QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
         self.tray_icon.show()
 
-        self.setGeometry(300, 300, 400, 600)
+        self.setGeometry(700, 300, 400, 600)
         self.setWindowTitle('Actionizer')
 
-        self.btn_layout.addStretch(1)
-        self.btn_play = QtGui.QPushButton(QtGui.QIcon("assets/play_16x16.png"), "")
+        self.btn_save = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
+        self.btn_save.clicked.connect(self.on_save_clicked)
+        self.btn_layout.addWidget(self.btn_save)
+        self.btn_layout.addStretch(2)
+        self.btn_play = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
         self.btn_play.clicked.connect(self.play_action)
-        self.btn_new = QtGui.QPushButton(QtGui.QIcon("../assets/new_file_16x16.png"), "")
+        self.btn_new = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "new_file_16x16.png"), "")
         self.btn_new.clicked.connect(self.add_clicked)
         self.btn_layout.addWidget(self.btn_new)
-        self.btn_remove = QtGui.QPushButton(QtGui.QIcon("../../assets/trash_16x16.png"), "")
+        self.btn_remove = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "trash_16x16.png"), "")
         self.btn_remove.clicked.connect(self.remove_selected)
         self.btn_layout.addWidget(self.btn_remove)
 
@@ -61,6 +65,9 @@ class MainWindow(QtGui.QWidget):
         self.main_layout.addLayout(self.btn_layout)
         self.add_action_group()
         self.show()
+
+    def on_save_clicked(self):
+        Facade.getInstance().sendNotification(Notes.TREE_MODEL_SAVE)
 
     def handle_key(self, key_event):
         if (key_event.Key == "P"):
@@ -90,7 +97,6 @@ class MainWindow(QtGui.QWidget):
             action = Action()
             for i in xrange(gui_action.childCount()):
                 step_uid = gui_action.child(i).text(2)
-                action.add_step(step_uid)
             # actionTree.play(start_index)
             action_root = ActionRoot()
             action_group = ActionGroup()
@@ -140,4 +146,4 @@ class MainWindow(QtGui.QWidget):
         action_group = QTreeWidgetItem(self.tree, ["ActionGroup", UI.ACTION_GROUP])
         self.tree.invisibleRootItem().addChild(action_group)
         action_group.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
-        action_group.setIcon(0, QtGui.QIcon("../assets/folder_16x16.png"))
+        action_group.setIcon(0, QtGui.QIcon(Options.assets_path + "folder_16x16.png"))

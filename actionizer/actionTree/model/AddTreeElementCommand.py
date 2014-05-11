@@ -11,7 +11,7 @@ class AddTreeElementCommand(SimpleCommand):
         """
         Accepts
         note.body = {
-            "index_path":[i,j,k,etc], depth index
+            "index_path":[i,j,k,etc], # depth index
             "element": obj,
         }
         """
@@ -19,4 +19,4 @@ class AddTreeElementCommand(SimpleCommand):
         element = note.body["element"]
 
         # put element into tree
-        Facade.getInstance().sendNotification(Notes.TREE_MODEL_CHANGED)
+        Facade.getInstance().sendNotification(Notes.TREE_MODEL_ADD)

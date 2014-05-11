@@ -1,3 +1,4 @@
+from actionTree.TreeModelProxy import TreeModelProxy
 from notifications import Notes
 from puremvc.patterns.mediator import Mediator
 from mainWindow.MainWindow import MainWindow
@@ -25,6 +26,9 @@ class MainWindowMediator(Mediator):
             old_item_index = old_item.parent().indexOfChild(old_item)
             item_parent.removeChild(old_item)
             self.get_main_window().add_step(step_uid, item_parent, old_item_index)
+        elif note.name == Notes.TREE_MODEL_SAVE:
+            tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
+            tree_model_proxy.save()
 
     def get_main_window(self):
         return self.viewComponent

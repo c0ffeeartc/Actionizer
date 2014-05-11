@@ -2,6 +2,7 @@ import json
 
 from actionTree.model.ActionGroup import ActionGroup
 from actionTree.model.TypedContainer import TypedContainer
+from options.OptionsVO import Options
 
 
 __author__ = 'cfe'
@@ -15,27 +16,18 @@ class ActionRoot(object):
     NAME = "ActionRoot"
 
     def __init__(self):
-        self.groups = TypedContainer(ActionGroup.NAME)
+        self.type_name = ActionRoot.NAME
+        self.children = TypedContainer(ActionGroup.NAME)
 
-    def clear(self):
-        self.groups.clear()
-
-    def reinit(self, action_root):
-        self.clear()
-        self.groups = action_root.groups
-
-    def add(self, group, i=None):
-        self.groups.insert(group, i)
-
-    def pop(self, i):
-        return self.groups.pop(i)
+    def __getitem__(self, i):
+        return self.children[i]
 
     def jsonify(self):
         return {
             "__class__": ActionRoot.NAME,
             "__value__":
             {
-                "groups": self.groups.jsonify()
+                "children": self.children.jsonify()
             }
         }
 
@@ -43,7 +35,8 @@ class ActionRoot(object):
     def dejsonify(cls, json_root):
         if json_root["__class__"] == ActionRoot.NAME:
             action_root = ActionRoot()
-            action_root.groups = ActionGroup.dejsonify(json_root["__value__"]["groups"])
+
+            action_root.children = TypedContainer.dejsonify(json_root["__value__"]["children"])
             return action_root
 
     def __to_json(self, o):
@@ -58,10 +51,12 @@ class ActionRoot(object):
         return o
 
     def save(self):
-        with open("../../scripts/action_root.json", "w") as f:
+        with open(Options.steps_path + "action_root.json", "w") as f:
             json.dump(self, f, default=self.__to_json, indent=2)
 
     def load(self):
-        with open("../../scripts/action_root.json", "r") as f:
+        with open(Options.steps_path + "action_root.json", "r") as f:
             a_root = json.load(f, object_hook=self.__from_json)
-            self.reinit(a_root)
+            self.children.clear()
+            for child in a_root.children:
+                self.children.add(child)

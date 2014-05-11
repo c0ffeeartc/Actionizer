@@ -10,9 +10,8 @@ __author__ = 'c0ffee'
 
 # TODO: create mediator and sync with actionRoot
 class TreeView(QTreeWidget):
-    def __init__(self, actionRoot):
+    def __init__(self):
         super(TreeView, self).__init__()
-        self.__actionRoot = actionRoot
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_menu)
 
@@ -24,10 +23,12 @@ class TreeView(QTreeWidget):
         if tree_item and tree_item.text(1) == UI.STEP:
             StepContextMenu(self).popup(QCursor().pos())
 
-    def load(self):
-        for action_group in self.__actionRoot.groups:
+    def update(self, action_root, *indexes):
+        self.clear()
+        print("update")
+        for action_group in action_root.children:
             print(action_group)
-            for action in action_group.actions:
+            for action in action_group.children:
                 print(action)
-                for step in action_group.step:
+                for step in action.children:
                     print(step)

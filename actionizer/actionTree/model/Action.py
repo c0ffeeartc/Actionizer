@@ -1,10 +1,7 @@
 import win32com.client
 
-from actionTree.model.StepItemVO import StepItemVO
+from actionTree.model.StepItem import StepItem
 from actionTree.model.TypedContainer import TypedContainer
-from stepPool.StepPoolProxy import StepPoolProxy
-from puremvc.patterns.facade import Facade
-
 
 __author__ = 'cfe'
 
@@ -16,72 +13,34 @@ class Action(object):
     NAME = "Action"
 
     def __init__(self):
+        self.type_name = Action.NAME
         self.name = ""
-        self.step_items = TypedContainer(StepItemVO.NAME)
         self.results = []
+        self.children = TypedContainer(StepItem.NAME)
 
-    def clear(self):
-        self.name = ""
-        self.step_items.clear()
-        del self.results[:]
-
-    def reinit(self, action):
-        self.clear()
-        if action:
-            self.name = action.name
-            self.step_items = action.items
-            self.results = action.results
-
-    def add_step(self, step_uid, i=None):
-        step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
-        item = StepItemVO()
-        item.step = step_pool_proxy.get_step(step_uid)
-        item.args = {}
-        item.result_links = {}
-        self.step_items.insert(item, i)
-
-    def remove_step(self, i):
-        self.step_items.pop(i)
-
-    def replace_step(self, step_uid, i):
-        if self.step_items[i]:
-            self.remove_step(i)
-            self.add_step(step_uid, i)
+    def __getitem__(self, i):
+        return self.children[i]
 
     def set_args(self, args, i):
         if args is dict:
-            self.step_items[i].args = args
-
-    def move_step(self, from_i, to_i):
-        if to_i < len(self.step_items) and from_i <= len(self.step_items):
-            self.step_items.insert(to_i, self.step_items.pop(from_i))
-
-    def move_step_up(self, i):
-        last = len(self.step_items) - 1
-        if last >= i > 0:
-            self.move_step(i, i - 1)
-
-    def move_step_down(self, i):
-        last = len(self.step_items) - 1
-        if last > i >= 0:
-            self.move_step(i, i + 1)
+            self.children[i].args = args
 
     def play(self, start_i=0):
         del self.results[:]
         ps_app = win32com.client.Dispatch('Photoshop.Application')
-        for cur_i in xrange(len(self.step_items)):
+        for cur_i in xrange(len(self.children)):
             if cur_i < start_i:
                 continue
             self.__inject_results(cur_i)
-            result = self.step_items[cur_i].step.play(ps_app, self.step_items[cur_i].args)
+            result = self.children[cur_i].step.play(ps_app, self.children[cur_i].args)
             self.results.append(result)
         del self.results[:]
 
     def __inject_results(self, into_step_i):
         """
-        Places results from previously played step_items into arguments of step with index
+        Places results from previously played children into arguments of step with index
         """
-        step_item = self.step_items[into_step_i]
+        step_item = self.children[into_step_i]
         for src_i, result_keys in step_item.result_links.iteritems():
             if src_i > into_step_i:
                 continue
@@ -94,7 +53,7 @@ class Action(object):
             "__value__":
             {
                 "name": self.name,
-                "step_items": self.step_items.jsonify(),
+                "children": self.children.jsonify(),
                 "results": self.results,
             }
         }
@@ -104,6 +63,6 @@ class Action(object):
         if o['__class__'] == Action.NAME:
             action = Action()
             action.name = o["__value__"]["name"]
-            action.step_items = [StepItemVO.dejsonify(step_item) for step_item in o["__value__"]["step_items"]]
+            action.children = [StepItem.dejsonify(step_item) for step_item in o["__value__"]["children"]]
             action.results = o["__value__"]["results"]
             return action
