@@ -35,7 +35,7 @@ class TreeModelProxy(Proxy):
         self.__tree.load()
         self.sendNotification(
             Notes.TREE_MODEL_CHANGED,
-            {"action_root": self.__tree.action_root}
+            {"root": self.__tree.root}
         )
 
     def __getitem__(self, i):

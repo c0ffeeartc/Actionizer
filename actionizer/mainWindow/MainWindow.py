@@ -4,6 +4,7 @@ from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidgetItem
 
 from actionTree.model.UI import UI
+from mainWindow.OnClickedNewCommand import OnClickedNewCommand
 from options.OptionsVO import Options
 from stepPool.model.StepFactory import StepUids
 from actionTree.model.Action import Action
@@ -54,7 +55,7 @@ class MainWindow(QtGui.QWidget):
         self.btn_layout.addWidget(self.btn_play)
         self.btn_play.clicked.connect(self.play_action)
         self.btn_new = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "new_file_16x16.png"), "")
-        self.btn_new.clicked.connect(self.add_clicked)
+        self.btn_new.clicked.connect(self.on_add_clicked)
         self.btn_layout.addWidget(self.btn_new)
         self.btn_remove = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "trash_16x16.png"), "")
         self.btn_remove.clicked.connect(self.remove_selected)
@@ -98,18 +99,9 @@ class MainWindow(QtGui.QWidget):
             for i in xrange(gui_action.childCount()):
                 step_uid = gui_action.child(i).text(2)
             # actionTree.play(start_index)
-            action_root = ActionRoot()
-            action_group = ActionGroup()
-            action_root.add(action_group)
-            action_root.save()
-            action_root.load()
 
-    def add_clicked(self):
-        cur_item = self.tree.currentItem()
-        if cur_item.text(1) == UI.ACTION or cur_item.text(1) == UI.STEP:
-            self.add_step()
-        elif cur_item.text(1) == UI.ACTION_GROUP:
-            self.add_action_to_group()
+    def on_add_clicked(self):
+        Facade.getInstance().sendNotification(OnClickedNewCommand.NAME)
 
     def add_action_to_group(self):
         cur_item = self.tree.currentItem()

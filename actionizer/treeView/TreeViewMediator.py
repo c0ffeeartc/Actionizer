@@ -1,3 +1,4 @@
+from actionTree.TreeModelProxy import TreeModelProxy
 from treeView.view.TreeView import TreeView
 from notifications import Notes
 from puremvc.patterns.mediator import Mediator
@@ -15,8 +16,28 @@ class TreeViewMediator(Mediator):
     def listNotificationInterests(self):
         return [
             Notes.TREE_MODEL_CHANGED,
+            Notes.TREE_MODEL_SAVE,
+            Notes.TREE_MODEL_ADD,
+            Notes.TREE_MODEL_REMOVE,
         ]
 
     def handleNotification(self, note):
+
+        tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
+
         if note.name == Notes.TREE_MODEL_CHANGED:
-            self.__tree_view.update(note.body["action_root"])
+            self.__tree_view.update(note.body["root"])
+        elif note.name == Notes.TREE_MODEL_SAVE:
+            tree_model_proxy.save()
+        elif note.name == Notes.TREE_MODEL_ADD:
+            child = []
+            if "child" in note.body.keys():
+                child = note.body["child"]
+            indexes = []
+            if "indexes" in note.body.keys():
+                indexes = note.body["indexes"]
+            tree_model_proxy.add(child, *indexes)
+        elif note.name == Notes.TREE_MODEL_REMOVE:
+            if "indexes" in note.body.keys():
+                indexes = note.body["indexes"]
+                tree_model_proxy.remove(*indexes)

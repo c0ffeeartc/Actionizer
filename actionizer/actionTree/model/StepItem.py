@@ -11,19 +11,21 @@ class StepItem(object):
     NAME = "StepItem"
 
     def __init__(self):
-        self.type_name = StepItem.NAME
-        self.step = None
+        self.step_uid = None
         self.args = {}
         self.result_links = {}  # i:[key1, key2, etc]
 
-    def from_uid(self, step_path_name):
-        return
+    def play(self, ps_app):
+        step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
+        step = step_pool_proxy.get_step(self.step_uid)
+        return step.play(ps_app, self.args)
+
     def jsonify(self):
         return {
             "__class__": StepItem.NAME,
             "__value__":
             {
-                "script_path_name": self.step.script_path_name,
+                "script_path_name": self.step_uid,
                 "args": self.args,
                 "result_links": self.result_links,
             },
@@ -32,10 +34,8 @@ class StepItem(object):
     @classmethod
     def dejsonify(cls, json_item):
         if "__class__" == StepItem.NAME:
-            step_pool_proxy = Facade.getInstance().retrieveProxy(StepPoolProxy.NAME)
-            step = step_pool_proxy.get_step(json_item["__value__"]["script_path_name"])
             step_item = StepItem()
-            step_item.step = step
+            step_item.step_uid = json_item["value"]["script_path_name"]
             step_item.args = json_item["value"]["args"]
             step_item.result_links = json_item["value"]["result_links"]
             return step_item

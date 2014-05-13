@@ -1,8 +1,4 @@
 import win32com.client
-
-from actionTree.model.StepItem import StepItem
-from actionTree.model.TypedContainer import TypedContainer
-
 __author__ = 'cfe'
 
 
@@ -13,34 +9,28 @@ class Action(object):
     NAME = "Action"
 
     def __init__(self):
-        self.type_name = Action.NAME
         self.name = ""
         self.results = []
-        self.children = TypedContainer(StepItem.NAME)
 
-    def __getitem__(self, i):
-        return self.children[i]
-
-    def set_args(self, args, i):
-        if args is dict:
-            self.children[i].args = args
-
-    def play(self, start_i=0):
+    def play(self, step_items, start_i=0):
+        """
+        Plays steps in action starting from i
+        """
         del self.results[:]
         ps_app = win32com.client.Dispatch('Photoshop.Application')
-        for cur_i in xrange(len(self.children)):
+        for cur_i in xrange(len(step_items)):
             if cur_i < start_i:
                 continue
-            self.__inject_results(cur_i)
-            result = self.children[cur_i].step.play(ps_app, self.children[cur_i].args)
+            self.__inject_results(step_items, cur_i)
+            result = step_items[cur_i].play(ps_app)
             self.results.append(result)
         del self.results[:]
 
-    def __inject_results(self, into_step_i):
+    def __inject_results(self, step_items, into_step_i):
         """
         Places results from previously played children into arguments of step with index
         """
-        step_item = self.children[into_step_i]
+        step_item = step_items[into_step_i]
         for src_i, result_keys in step_item.result_links.iteritems():
             if src_i > into_step_i:
                 continue
@@ -49,13 +39,8 @@ class Action(object):
 
     def jsonify(self):
         return {
-            "__class__": "Action",
-            "__value__":
-            {
-                "name": self.name,
-                "children": self.children.jsonify(),
-                "results": self.results,
-            }
+            "__class__": Action.NAME,
+            "__value__": {"name": self.name}
         }
 
     @classmethod
@@ -63,6 +48,4 @@ class Action(object):
         if o['__class__'] == Action.NAME:
             action = Action()
             action.name = o["__value__"]["name"]
-            action.children = [StepItem.dejsonify(step_item) for step_item in o["__value__"]["children"]]
-            action.results = o["__value__"]["results"]
             return action
