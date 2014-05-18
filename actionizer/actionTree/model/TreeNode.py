@@ -1,5 +1,4 @@
 from actionTree.model.Action import Action
-from actionTree.model.StepItem import StepItem
 
 __author__ = 'cfe'
 
@@ -24,7 +23,7 @@ class TreeNode(object):
         """
         Insert child within container bounds
         """
-        if child.NAME in self.children_type_names:
+        if child.leaf.NAME in self.children_type_names:
             # fix i
             len_items = len(self.children)
             if i is None or i > len_items:
@@ -65,6 +64,21 @@ class TreeNode(object):
 
     def __getitem__(self, i):
         return self.children[i]
+
+    def get_index(self):
+        if self.parent:
+            return self.parent.children.index(self)
+        else:
+            return None  # root node
+
+    def get_indexes(self):
+        target = self
+        indexes = []
+        while target.parent:
+            i = target.get_index()
+            indexes.insert(0, i)
+            target = target.parent
+        return indexes
 
     def jsonify(self):
         return {

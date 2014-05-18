@@ -28,7 +28,8 @@ class Action(object):
 
     def __inject_results(self, step_items, into_step_i):
         """
-        Places results from previously played children into arguments of step with index
+        Places results from previously played children into arguments of
+        step with index
         """
         step_item = step_items[into_step_i]
         for src_i, result_keys in step_item.result_links.iteritems():

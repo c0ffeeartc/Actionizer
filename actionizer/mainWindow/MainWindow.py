@@ -4,13 +4,10 @@ from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidgetItem
 
 from actionTree.model.UI import UI
-from mainWindow.OnClickedNewCommand import OnClickedNewCommand
+from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from options.OptionsVO import Options
 from stepPool.model.StepFactory import StepUids
 from actionTree.model.Action import Action
-from actionTree.model.ActionGroup import ActionGroup
-from actionTree.model.ActionRoot import ActionRoot
-from treeView.view.TreeView import TreeView
 from notifications import Notes
 from puremvc.patterns.facade import Facade
 
@@ -29,7 +26,7 @@ class MainWindow(QtGui.QWidget):
     timer = None
     act = None
 
-    def __init__(self):
+    def __init__(self, treeView):
         super(MainWindow, self).__init__()
 
         self.act = QtGui.QAction(self)
@@ -37,27 +34,32 @@ class MainWindow(QtGui.QWidget):
         self.act.setShortcutContext(Qt.ApplicationShortcut)
         self.addAction(self.act)
 
-        self.tree = TreeView()
+        self.tree = treeView
 
         self.setWindowIcon(QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
         self.tray_icon = QtGui.QSystemTrayIcon()
-        self.tray_icon.setIcon(QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
+        self.tray_icon.setIcon(
+            QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
         self.tray_icon.show()
 
         self.setGeometry(700, 300, 400, 600)
         self.setWindowTitle('Actionizer')
 
-        self.btn_save = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
+        self.btn_save = QtGui.QPushButton(
+            QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
         self.btn_save.clicked.connect(self.on_save_clicked)
         self.btn_layout.addWidget(self.btn_save)
         self.btn_layout.addStretch(2)
-        self.btn_play = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
+        self.btn_play = QtGui.QPushButton(
+            QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
         self.btn_play.clicked.connect(self.play_action)
-        self.btn_new = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "new_file_16x16.png"), "")
-        self.btn_new.clicked.connect(self.on_add_clicked)
+        self.btn_new = QtGui.QPushButton(
+            QtGui.QIcon(Options.assets_path + "new_file_16x16.png"), "")
+        self.btn_new.clicked.connect(self.on_new_btn_clicked)
         self.btn_layout.addWidget(self.btn_new)
-        self.btn_remove = QtGui.QPushButton(QtGui.QIcon(Options.assets_path + "trash_16x16.png"), "")
+        self.btn_remove = QtGui.QPushButton(
+            QtGui.QIcon(Options.assets_path + "trash_16x16.png"), "")
         self.btn_remove.clicked.connect(self.remove_selected)
         self.btn_layout.addWidget(self.btn_remove)
 
@@ -71,11 +73,11 @@ class MainWindow(QtGui.QWidget):
         Facade.getInstance().sendNotification(Notes.TREE_MODEL_SAVE)
 
     def handle_key(self, key_event):
-        if (key_event.Key == "P"):
+        if key_event.Key == "P":
             self.play_action()
-        elif (key_event.Key == "Q"):
+        elif key_event.Key == "Q":
             self.disable_global_hotkeys()
-        elif (key_event.Key == "A"):
+        elif key_event.Key == "A":
             self.act.activate(QtGui.QAction.Trigger)
         print(key_event.Key + " " + key_event.MessageName)
 
@@ -98,10 +100,13 @@ class MainWindow(QtGui.QWidget):
             action = Action()
             for i in xrange(gui_action.childCount()):
                 step_uid = gui_action.child(i).text(2)
-            # actionTree.play(start_index)
+                # actionTree.play(start_index)
 
-    def on_add_clicked(self):
-        Facade.getInstance().sendNotification(OnClickedNewCommand.NAME)
+    def on_new_btn_clicked(self):
+        Facade.getInstance().sendNotification(
+            NewTreeElementCommand.NAME,
+            {"child": None, "indexes": None},
+        )
 
     def add_action_to_group(self):
         cur_item = self.tree.currentItem()
@@ -135,7 +140,9 @@ class MainWindow(QtGui.QWidget):
             cur_item.parent().removeChild(cur_item)
 
     def add_action_group(self):
-        action_group = QTreeWidgetItem(self.tree, ["ActionGroup", UI.ACTION_GROUP])
+        action_group = QTreeWidgetItem(self.tree,
+                                       ["ActionGroup", UI.ACTION_GROUP])
         self.tree.invisibleRootItem().addChild(action_group)
         action_group.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
-        action_group.setIcon(0, QtGui.QIcon(Options.assets_path + "folder_16x16.png"))
+        action_group.setIcon(0, QtGui.QIcon(
+            Options.assets_path + "folder_16x16.png"))

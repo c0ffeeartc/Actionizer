@@ -1,9 +1,5 @@
-from actionTree.model import Action
-from stepPool.model.StepFactory import StepUids
-from stepPool.model.StepFactory import StepFactory
+from actionTree.model.Action import Action
 
 if __name__ == "__main__":
-    a_step = StepFactory.new_step(StepUids.TEST_STEP)
+    print ("hello")
     action1 = Action()
-    action1.add_step(a_step)
-    action1.play()

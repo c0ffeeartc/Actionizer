@@ -14,7 +14,7 @@ class TreeManager(object):
     Provides unified interface for tree nodes
     """
     def __init__(self):
-        self.root = TreeNode(ActionRoot(), ActionGroup.NAME)
+        self.root_node = TreeNode(ActionRoot(), ActionGroup.NAME)
         self.save()
 
     def play(self, *indexes):
@@ -22,22 +22,25 @@ class TreeManager(object):
 
     def add(self, child, *indexes):
         if indexes:
-            i_path = indexes[0:-1]
-            i_target = indexes[-1]
-            self.__get_target(*i_path).add(child, i_target)
+            i_parent = indexes[0:-1]
+            i_child = indexes[-1]
+            self.__get_target(*i_parent).add(child, i_child)
         else:
-            self.root.add(child)
+            self.root_node.add(child)
 
     def remove(self, *indexes):
-        i_path = indexes[0:-1]
+        i_parent = indexes[0:-1]
         i_target = indexes[-1]
-        return self.__get_target(*i_path).pop(i_target)
+        return self.__get_target(*i_parent).pop(i_target)
+
+    def get_indexes(self, tree_node):
+        return tree_node.get_indexes()
 
     def __getitem__(self, i):
-        return self.root[i]
+        return self.root_node[i]
 
     def __get_target(self, *indexes):
-        target = self.root
+        target = self.root_node
         for i in indexes:
             target = target[i]
         return target
@@ -61,10 +64,11 @@ class TreeManager(object):
         return o
 
     def save(self):
+        print("save")
         with open(Options.steps_path + "action_root.json", "w") as f:
-            json.dump(self.root, f, default=self.__to_json, indent=2)
+            json.dump(self.root_node, f, default=self.__to_json, indent=2)
 
     def load(self):
         with open(Options.steps_path + "action_root.json", "r") as f:
-            self.root.clear()
-            self.root = json.load(f, object_hook=self.__from_json)
+            self.root_node.clear()
+            self.root_node = json.load(f, object_hook=self.__from_json)

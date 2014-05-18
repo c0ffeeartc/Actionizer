@@ -1,4 +1,5 @@
 from actionTree.TreeModelProxy import TreeModelProxy
+from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator
@@ -13,6 +14,7 @@ class StartupCommand(SimpleCommand):
         print("hello, StartupCommand")
 
         # registerCommands
+        self.facade.registerCommand(NewTreeElementCommand.NAME, NewTreeElementCommand)
         # ...
 
         # registerProxies

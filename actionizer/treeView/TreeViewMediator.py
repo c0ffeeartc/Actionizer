@@ -26,17 +26,10 @@ class TreeViewMediator(Mediator):
         tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
 
         if note.name == Notes.TREE_MODEL_CHANGED:
+            self.__tree_view.clear()
             self.__tree_view.update(note.body["root"])
         elif note.name == Notes.TREE_MODEL_SAVE:
             tree_model_proxy.save()
-        elif note.name == Notes.TREE_MODEL_ADD:
-            child = []
-            if "child" in note.body.keys():
-                child = note.body["child"]
-            indexes = []
-            if "indexes" in note.body.keys():
-                indexes = note.body["indexes"]
-            tree_model_proxy.add(child, *indexes)
         elif note.name == Notes.TREE_MODEL_REMOVE:
             if "indexes" in note.body.keys():
                 indexes = note.body["indexes"]
