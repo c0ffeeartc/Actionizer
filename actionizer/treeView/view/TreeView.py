@@ -12,6 +12,7 @@ class TreeView(QTreeWidget):
     def __init__(self):
         super(TreeView, self).__init__()
         self.setContextMenuPolicy(Qt.CustomContextMenu)
+        # noinspection PyUnresolvedReferences
         self.customContextMenuRequested.connect(self.show_menu)
 
         self.setHeaderItem(QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
@@ -39,6 +40,20 @@ class TreeView(QTreeWidget):
         for i in indexes:
             target = target.child(i)
         return target
+
+    def get_indexes(self, tree_item):
+        """
+        :rtype :list of int
+        """
+        indexes = []
+        parent = tree_item.parent()
+        while parent:
+            indexes.insert(0, parent.indexOfChild(tree_item))
+            tree_item = parent
+            parent = tree_item.parent()
+        i_at_root = self.invisibleRootItem().indexOfChild(tree_item)
+        indexes.insert(0, i_at_root)
+        return indexes
 
     def __make_item(self, name, type_name):
         item = QTreeWidgetItem(None, [name, type_name])

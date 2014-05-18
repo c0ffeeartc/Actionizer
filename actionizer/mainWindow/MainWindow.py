@@ -47,19 +47,23 @@ class MainWindow(QtGui.QWidget):
 
         self.btn_save = QtGui.QPushButton(
             QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
+        # noinspection PyUnresolvedReferences
         self.btn_save.clicked.connect(self.on_save_clicked)
         self.btn_layout.addWidget(self.btn_save)
         self.btn_layout.addStretch(2)
         self.btn_play = QtGui.QPushButton(
             QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
+        # noinspection PyUnresolvedReferences
         self.btn_play.clicked.connect(self.play_action)
         self.btn_new = QtGui.QPushButton(
             QtGui.QIcon(Options.assets_path + "new_file_16x16.png"), "")
+        # noinspection PyUnresolvedReferences
         self.btn_new.clicked.connect(self.on_new_btn_clicked)
         self.btn_layout.addWidget(self.btn_new)
         self.btn_remove = QtGui.QPushButton(
             QtGui.QIcon(Options.assets_path + "trash_16x16.png"), "")
+        # noinspection PyUnresolvedReferences
         self.btn_remove.clicked.connect(self.remove_selected)
         self.btn_layout.addWidget(self.btn_remove)
 
@@ -116,6 +120,9 @@ class MainWindow(QtGui.QWidget):
             cur_item.addChild(new_action)
 
     def add_step(self, step_uid=StepUids.NULL_STEP, parent=None, index=0):
+        """
+        :type parent:QTreeWidgetItem
+        """
         step_item = QTreeWidgetItem(None, ["Step", UI.STEP, step_uid])
         if parent:
             if parent.text(1) != UI.ACTION:
@@ -135,6 +142,8 @@ class MainWindow(QtGui.QWidget):
 
     def remove_selected(self):
         cur_item = self.tree.currentItem()
+        if not cur_item:
+            return
         cur_item_type = cur_item.text(1)
         if cur_item_type == UI.ACTION or cur_item_type == UI.STEP:
             cur_item.parent().removeChild(cur_item)

@@ -9,7 +9,7 @@ class Action(object):
     NAME = "Action"
 
     def __init__(self):
-        self.name = ""
+        self.name = "Action"
         self.results = []
 
     def play(self, step_items, start_i=0):

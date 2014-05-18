@@ -34,3 +34,12 @@ class TreeViewMediator(Mediator):
             if "indexes" in note.body.keys():
                 indexes = note.body["indexes"]
                 tree_model_proxy.remove(*indexes)
+
+    def get_indexes(self, tree_item):
+        """:rtype :list of int"""
+        return self.__tree_view.get_indexes(tree_item)
+
+    def get_cur_item(self):
+        """:rtype :PySide.QtGui.QTreeWidgetItem.QTreeWidgetItem"""
+        return self.__tree_view.currentItem()
+

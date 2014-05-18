@@ -13,14 +13,14 @@ class TreeModelProxy(Proxy):
         self.__tree = TreeManager()
         self.setData(self.__tree)
 
-    def add(self, child, *i_list):
-        self.__tree.add(child, *i_list)
+    def add(self, child, *indexes):
+        self.__tree.add(child, *indexes)
         self.sendNotification(
             Notes.TREE_MODEL_CHANGED,
             {
                 "command": "add",
                 "child": child,
-                "indexes": i_list,
+                "indexes": indexes,
                 "root": self.__tree.root_node
             }
         )

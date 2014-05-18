@@ -22,6 +22,7 @@ class TreeNode(object):
     def add(self, child, i=None):
         """
         Insert child within container bounds
+        :type child:TreeNode
         """
         if child.leaf.NAME in self.children_type_names:
             # fix i
@@ -41,6 +42,7 @@ class TreeNode(object):
     def remove(self, i):
         """
         Pop child for valid i
+        :rtype :TreeNode
         """
         if len(self.children) > i >= 0:
             return self.children.pop(i)
