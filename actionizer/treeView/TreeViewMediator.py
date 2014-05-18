@@ -17,19 +17,28 @@ class TreeViewMediator(Mediator):
         return [
             Notes.TREE_MODEL_CHANGED,
             Notes.TREE_MODEL_SAVE,
+            Notes.TREE_MODEL_LOAD,
+            Notes.TREE_MODEL_SAVED,
+            Notes.TREE_MODEL_LOADED,
             Notes.TREE_MODEL_ADD,
             Notes.TREE_MODEL_REMOVE,
         ]
 
     def handleNotification(self, note):
-
         tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
-
+        """:type :TreeModelProxy"""
         if note.name == Notes.TREE_MODEL_CHANGED:
-            self.__tree_view.clear()
-            self.__tree_view.update(note.body["root"])
+            self.handleModelChanged(note)
         elif note.name == Notes.TREE_MODEL_SAVE:
             tree_model_proxy.save()
+        elif note.name == Notes.TREE_MODEL_LOAD:
+            tree_model_proxy.load()
+        elif note.name == Notes.TREE_MODEL_SAVED:
+            print("saved")
+        elif note.name == Notes.TREE_MODEL_LOADED:
+            print("updating on loaded")
+            self.__tree_view.clear()
+            self.__tree_view.update(note.body["root"])
         elif note.name == Notes.TREE_MODEL_REMOVE:
             if "indexes" in note.body.keys():
                 indexes = note.body["indexes"]
@@ -43,3 +52,12 @@ class TreeViewMediator(Mediator):
         """:rtype :PySide.QtGui.QTreeWidgetItem.QTreeWidgetItem"""
         return self.__tree_view.currentItem()
 
+    def handleModelChanged(self, note):
+        self.__tree_view.clear()
+        root_node = note.body["root"]
+        """:type :TreeNode"""
+        command = note.body["command"]
+        """:type :str"""
+        child = note.body["child"]
+        """:type :TreeNode"""
+        self.__tree_view.update(root_node)

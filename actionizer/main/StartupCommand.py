@@ -1,5 +1,6 @@
 from actionTree.TreeModelProxy import TreeModelProxy
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
+from notifications import Notes
 from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator
@@ -30,4 +31,4 @@ class StartupCommand(SimpleCommand):
         # ...
 
         # post children
-        tree_model_proxy.load()
+        self.sendNotification(Notes.TREE_MODEL_LOAD)

@@ -26,6 +26,7 @@ class TreeView(QTreeWidget):
     def update(self, parent_node, *indexes):
         """
         Recursively updates treeView item branch
+        @param actionTree.model.TreeNode.TreeNode parent_node
         """
         print("update")
         for child_node in parent_node.children:

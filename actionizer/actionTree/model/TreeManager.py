@@ -15,7 +15,6 @@ class TreeManager(object):
     """
     def __init__(self):
         self.root_node = TreeNode(ActionRoot(), ActionGroup.NAME)
-        self.save()
 
     def play(self, *indexes):
         self.__get_target(*indexes).play()
@@ -54,12 +53,14 @@ class TreeManager(object):
     def __from_json(self, o):
         if '__class__' in o:
             if o['__class__'] == TreeNode.NAME:
-                return TreeNode.dejsonify(o)
-            if o['__class__'] == ActionRoot.NAME:
+                return TreeNode.dejsonify(o, self.__from_json)
+            elif o['__class__'] == ActionRoot.NAME:
                 return ActionRoot.dejsonify(o)
-            if o['__class__'] == Action.NAME:
+            elif o['__class__'] == ActionGroup.NAME:
+                return ActionGroup.dejsonify(o)
+            elif o['__class__'] == Action.NAME:
                 return Action.dejsonify(o)
-            if o['__class__'] == StepItem.NAME:
+            elif o['__class__'] == StepItem.NAME:
                 return StepItem.dejsonify(o)
         return o
 
@@ -72,3 +73,4 @@ class TreeManager(object):
         with open(Options.steps_path + "action_root.json", "r") as f:
             self.root_node.clear()
             self.root_node = json.load(f, object_hook=self.__from_json)
+            pass

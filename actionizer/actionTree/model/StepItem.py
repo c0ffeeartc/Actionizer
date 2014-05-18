@@ -34,9 +34,9 @@ class StepItem(object):
 
     @classmethod
     def dejsonify(cls, json_item):
-        if "__class__" == StepItem.NAME:
+        if json_item["__class__"] == StepItem.NAME:
             step_item = StepItem()
-            step_item.step_uid = json_item["value"]["script_path_name"]
-            step_item.args = json_item["value"]["args"]
-            step_item.result_links = json_item["value"]["result_links"]
+            step_item.step_uid = json_item["__value__"]["script_path_name"]
+            step_item.args = json_item["__value__"]["args"]
+            step_item.result_links = json_item["__value__"]["result_links"]
             return step_item

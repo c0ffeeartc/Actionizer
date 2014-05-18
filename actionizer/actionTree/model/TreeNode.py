@@ -95,10 +95,10 @@ class TreeNode(object):
         }
 
     @classmethod
-    def dejsonify(cls, o):
+    def dejsonify(cls, o, obj_hook):
         if o['__class__'] == TreeNode.NAME:
             leaf = o["__value__"]["leaf"]
             cont = TreeNode(leaf)
-            cont.children = o["__value__"]["children"]
+            cont.children = [child_node for child_node in o["__value__"]["children"]]
             cont.children_type_names = o["__value__"]["children_type_names"]
             return cont

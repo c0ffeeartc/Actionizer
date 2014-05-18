@@ -18,7 +18,7 @@ class TreeModelProxy(Proxy):
         self.sendNotification(
             Notes.TREE_MODEL_CHANGED,
             {
-                "command": "add",
+                "command": Notes.TREE_MODEL_ADD,
                 "child": child,
                 "indexes": indexes,
                 "root": self.__tree.root_node
@@ -30,7 +30,7 @@ class TreeModelProxy(Proxy):
         self.sendNotification(
             Notes.TREE_MODEL_CHANGED,
             {
-                "command": "remove",
+                "command": Notes.TREE_MODEL_REMOVE,
                 "indexes": i_list,
                 "root": self.__tree.root_node
             }
@@ -41,13 +41,13 @@ class TreeModelProxy(Proxy):
 
     def save(self):
         self.__tree.save()
+        self.sendNotification(Notes.TREE_MODEL_SAVED)
 
     def load(self):
+        print("loading")
         self.__tree.load()
-        self.sendNotification(
-            Notes.TREE_MODEL_CHANGED,
-            {"root": self.__tree.root_node}
-        )
+        self.sendNotification(Notes.TREE_MODEL_LOADED,
+                              {"root": self.__tree.root_node})
 
     def __getitem__(self, i):
         return self.__tree[i]
