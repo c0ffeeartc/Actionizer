@@ -1,8 +1,10 @@
+from PySide import QtGui
 from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QCursor
 
 from actionTree.model.UI import UI
 from contextMenu.StepContextMenu import StepContextMenu
+from options.OptionsVO import Options
 
 __author__ = 'c0ffee'
 
@@ -58,6 +60,6 @@ class TreeView(QTreeWidget):
         item = QTreeWidgetItem(None, [name, type_name])
         if type_name == UI.ACTION_GROUP:
             item.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
-            # item.setIcon(
-            #     0, QtGui.QIcon(Options.assets_path + "folder_16x16.png"))
+            item.setIcon(
+                0, QtGui.QIcon(Options.assets_path + "folder_16x16.png"))
         return item
