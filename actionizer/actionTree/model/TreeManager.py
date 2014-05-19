@@ -53,7 +53,7 @@ class TreeManager(object):
     def __from_json(self, o):
         if '__class__' in o:
             if o['__class__'] == TreeNode.NAME:
-                return TreeNode.dejsonify(o, self.__from_json)
+                return TreeNode.dejsonify(o)
             elif o['__class__'] == ActionRoot.NAME:
                 return ActionRoot.dejsonify(o)
             elif o['__class__'] == ActionGroup.NAME:
@@ -73,4 +73,3 @@ class TreeManager(object):
         with open(Options.steps_path + "action_root.json", "r") as f:
             self.root_node.clear()
             self.root_node = json.load(f, object_hook=self.__from_json)
-            pass

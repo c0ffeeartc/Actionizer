@@ -7,7 +7,6 @@ from contextMenu.StepContextMenu import StepContextMenu
 __author__ = 'c0ffee'
 
 
-# TODO: create mediator and sync with actionRoot
 class TreeView(QTreeWidget):
     def __init__(self):
         super(TreeView, self).__init__()
@@ -23,12 +22,11 @@ class TreeView(QTreeWidget):
         if tree_item and tree_item.text(1) == UI.STEP:
             StepContextMenu(self).popup(QCursor().pos())
 
-    def update(self, parent_node, *indexes):
+    def update(self, parent_node):
         """
         Recursively updates treeView item branch
-        @param actionTree.model.TreeNode.TreeNode parent_node
+        :type parent_node: actionTree.model.TreeNode.TreeNode
         """
-        print("update")
         for child_node in parent_node.children:
             i_parent = parent_node.get_indexes()
             item = self.__make_item(child_node.leaf.name, child_node.leaf.NAME)
