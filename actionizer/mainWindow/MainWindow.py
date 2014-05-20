@@ -64,7 +64,7 @@ class MainWindow(QtGui.QWidget):
         self.btn_remove = QtGui.QPushButton(
             QtGui.QIcon(Options.assets_path + "trash_16x16.png"), "")
         # noinspection PyUnresolvedReferences
-        self.btn_remove.clicked.connect(self.remove_selected)
+        self.btn_remove.clicked.connect(self.on_remove_clicked)
         self.btn_layout.addWidget(self.btn_remove)
 
         self.setLayout(self.main_layout)
@@ -112,6 +112,9 @@ class MainWindow(QtGui.QWidget):
             {"child": None, "indexes": None},
         )
 
+    def on_remove_clicked(self):
+        Facade.getInstance().sendNotification(Notes.TREE_MODEL_REMOVE)
+
     def add_action_to_group(self):
         cur_item = self.tree.currentItem()
         if cur_item.text(1) == UI.ACTION_GROUP:
@@ -139,14 +142,6 @@ class MainWindow(QtGui.QWidget):
             if cur_item.text(1) == UI.STEP:
                 cur_index = parent.indexOfChild(cur_item)
                 cur_item.parent().insertChild(cur_index + 1, step_item)
-
-    def remove_selected(self):
-        cur_item = self.tree.currentItem()
-        if not cur_item:
-            return
-        cur_item_type = cur_item.text(1)
-        if cur_item_type == UI.ACTION or cur_item_type == UI.STEP:
-            cur_item.parent().removeChild(cur_item)
 
     def add_action_group(self):
         action_group = QTreeWidgetItem(self.tree,

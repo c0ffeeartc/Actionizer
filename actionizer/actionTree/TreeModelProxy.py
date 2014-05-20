@@ -16,22 +16,20 @@ class TreeModelProxy(Proxy):
     def add(self, child, *indexes):
         self.__tree.add(child, *indexes)
         self.sendNotification(
-            Notes.TREE_MODEL_CHANGED,
+            Notes.TREE_MODEL_ADDED,
             {
-                "command": Notes.TREE_MODEL_ADD,
                 "child": child,
                 "indexes": indexes,
                 "root": self.__tree.root_node
             }
         )
 
-    def remove(self, *i_list):
-        self.__tree.remove(*i_list)
+    def remove(self, *i_indexes):
+        self.__tree.remove(*i_indexes)
         self.sendNotification(
-            Notes.TREE_MODEL_CHANGED,
+            Notes.TREE_MODEL_REMOVED,
             {
-                "command": Notes.TREE_MODEL_REMOVE,
-                "indexes": i_list,
+                "indexes": i_indexes,
                 "root": self.__tree.root_node
             }
         )

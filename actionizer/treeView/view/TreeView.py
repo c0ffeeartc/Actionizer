@@ -37,6 +37,9 @@ class TreeView(QTreeWidget):
                 self.update(child_node)
 
     def __get_target(self, *indexes):
+        """
+        :rtype :QTreeWidgetItem
+        """
         target = self.invisibleRootItem()
         for i in indexes:
             target = target.child(i)
@@ -44,10 +47,12 @@ class TreeView(QTreeWidget):
 
     def get_indexes(self, tree_item):
         """
+        :type tree_item:QTreeWidgetItem
         :rtype :list of int
         """
         indexes = []
         parent = tree_item.parent()
+        """:type :QTreeWidgetItem"""
         while parent:
             indexes.insert(0, parent.indexOfChild(tree_item))
             tree_item = parent
@@ -55,6 +60,19 @@ class TreeView(QTreeWidget):
         i_at_root = self.invisibleRootItem().indexOfChild(tree_item)
         indexes.insert(0, i_at_root)
         return indexes
+
+    def add(self, child, *indexes):
+        """
+        :type :QTreeWidgetItem
+        """
+        i_parent = indexes[:-1]
+        i_target = indexes[-1]
+        self.__get_target(*i_parent).insertChild(i_target, child)
+
+    def remove(self, *indexes):
+        i_parent = indexes[:-1]
+        i_target = indexes[-1]
+        self.__get_target(*i_parent).takeChild(i_target)
 
     def __make_item(self, name, type_name):
         item = QTreeWidgetItem(None, [name, type_name])

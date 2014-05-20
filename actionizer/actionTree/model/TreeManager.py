@@ -30,7 +30,7 @@ class TreeManager(object):
     def remove(self, *indexes):
         i_parent = indexes[0:-1]
         i_target = indexes[-1]
-        return self.__get_target(*i_parent).pop(i_target)
+        return self.__get_target(*i_parent).children.pop(i_target)
 
     def get_indexes(self, tree_node):
         return tree_node.get_indexes()
@@ -43,7 +43,6 @@ class TreeManager(object):
         for i in indexes:
             target = target[i]
         return target
-
 
     def __to_json(self, o):
         if isinstance(o, TreeNode):
