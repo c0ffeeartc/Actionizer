@@ -5,6 +5,7 @@ from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator
 from mainWindow.MainWindowMediator import MainWindowMediator
+from textDialog.textDialogMediator import TextDialogMediator
 from treeView.TreeViewMediator import TreeViewMediator
 
 __author__ = 'cfe'
@@ -26,6 +27,7 @@ class StartupCommand(SimpleCommand):
 
         # registerMediator
         self.facade.registerMediator(TreeViewMediator())
+        self.facade.registerMediator(TextDialogMediator())
         self.facade.registerMediator(MainWindowMediator())
         self.facade.registerMediator(HotkeyMediator())
         # ...
