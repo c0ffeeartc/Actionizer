@@ -7,7 +7,7 @@ from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator
 from mainWindow.MainWindowMediator import MainWindowMediator
 from textDialog.textDialogMediator import TextDialogMediator
-from treeView.TreeViewMediator import TreeViewMediator
+from treeView.treeViewMediator import TreeViewMediator
 
 __author__ = 'cfe'
 

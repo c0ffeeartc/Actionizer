@@ -30,9 +30,13 @@ class TreeModelProxy(Proxy):
             Notes.TREE_MODEL_REMOVED,
             {
                 "indexes": i_indexes,
-                "root": self.__tree.root_node
+                "root": self.__tree.root_node,
             }
         )
+
+    def rename(self, new_name, *indexes):
+        renamed_node = self.__tree.rename(new_name, *indexes)
+        Notes.tree_node_renamed(new_name, indexes)
 
     def get_indexes(self, tree_node):
         return self.__tree.get_indexes(tree_node)

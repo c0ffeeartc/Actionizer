@@ -4,7 +4,7 @@ from actionTree.model.ActionGroup import ActionGroup
 from actionTree.model.StepItem import StepItem
 from actionTree.model.TreeNode import TreeNode
 from puremvc.patterns.command import SimpleCommand
-from treeView.TreeViewMediator import TreeViewMediator
+from treeView.treeViewMediator import TreeViewMediator
 
 __author__ = 'cfe'
 

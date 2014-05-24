@@ -1,7 +1,7 @@
 from puremvc.patterns.facade import Facade
 from puremvc.patterns.mediator import Mediator
 from mainWindow.MainWindow import MainWindow
-from treeView.TreeViewMediator import TreeViewMediator
+from treeView.treeViewMediator import TreeViewMediator
 
 __author__ = 'cfe'
 

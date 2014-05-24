@@ -32,13 +32,26 @@ class TreeManager(object):
         i_target = indexes[-1]
         return self.__get_target(*i_parent).children.pop(i_target)
 
+    def rename(self, new_name, *indexes):
+        tree_node = self.__get_target(*indexes)
+        tree_node.leaf.name = new_name
+        return tree_node
+
     def get_indexes(self, tree_node):
+        """
+        :type tree_node:TreeNode
+        :rtype :list of int
+        """
         return tree_node.get_indexes()
 
     def __getitem__(self, i):
         return self.root_node[i]
 
     def __get_target(self, *indexes):
+        """
+        :type indexes:list of int
+        :rtype :TreeNode
+        """
         target = self.root_node
         for i in indexes:
             target = target[i]

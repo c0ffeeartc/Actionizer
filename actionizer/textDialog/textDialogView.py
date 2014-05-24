@@ -43,7 +43,6 @@ class TextDialog(QDialog):
             TextDialog.TEXT_DIALOG_OK,
             {"text": self.edit_line.text()},
         )
-        print("accepted")
 
     def on_reject(self):
         Facade.getInstance().sendNotification(
