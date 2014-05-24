@@ -1,5 +1,5 @@
 from actionTree.TreeModelProxy import TreeModelProxy
-from notifications import Notes
+from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
 from puremvc.patterns.mediator import Mediator
 from mainWindow.MainWindow import MainWindow

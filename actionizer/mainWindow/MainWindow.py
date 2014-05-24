@@ -6,10 +6,10 @@ from PySide.QtGui import QTreeWidgetItem
 from actionTree.model.UI import UI
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from options.OptionsVO import Options
-from stepPool.model.StepFactory import StepUids
 from actionTree.model.Action import Action
-from notifications import Notes
+from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
+from stepPool.model.StepFactory import StepUids
 
 
 __author__ = 'cfe'

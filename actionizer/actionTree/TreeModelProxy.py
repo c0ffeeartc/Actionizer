@@ -1,5 +1,5 @@
 from actionTree.model.TreeManager import TreeManager
-from notifications import Notes
+from notifications.notes import Notes
 from puremvc.patterns.proxy import Proxy
 
 __author__ = 'cfe'

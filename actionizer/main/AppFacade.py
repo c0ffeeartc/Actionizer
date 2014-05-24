@@ -1,5 +1,5 @@
 from main.StartupCommand import StartupCommand
-from notifications import Notes
+from notifications.notes import Notes
 
 __author__ = 'cfe'
 

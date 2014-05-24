@@ -1,4 +1,4 @@
-from notifications import Notes
+from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
 from textDialog.textDialogView import TextDialog
 

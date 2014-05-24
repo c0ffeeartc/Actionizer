@@ -4,7 +4,7 @@ from actionTree.TreeModelProxy import TreeModelProxy
 from actionTree.model.ActionGroup import ActionGroup
 from options.OptionsVO import Options
 from treeView.view.TreeView import TreeView
-from notifications import Notes
+from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
 
 __author__ = 'cfe'
@@ -52,11 +52,11 @@ class TreeViewMediator(Mediator):
                 None,
                 [child_node.leaf.name, child_node.leaf.NAME]
             )
+            self.__tree_view.add(child, *indexes)
             if child.text(1) == ActionGroup.NAME:
                 child.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
                 child.setIcon(0, QtGui.QIcon(
                     Options.assets_path + "folder_16x16.png"))
-            self.__tree_view.add(child, *indexes)
         elif note.name == Notes.TREE_MODEL_REMOVE:
             cur = self.get_cur_item()
             indexes = self.__tree_view.get_indexes(cur)
@@ -73,20 +73,3 @@ class TreeViewMediator(Mediator):
     def get_cur_item(self):
         """:rtype :PySide.QtGui.QTreeWidgetItem.QTreeWidgetItem"""
         return self.__tree_view.currentItem()
-
-    def handleRemoved(self, note):
-        self.__tree_view.clear()
-        indexes = note.body["indexes"]
-        """:type :list"""
-        root_node = note.body["root"]
-        """:type :TreeNode"""
-        self.__tree_view.remove(*indexes)
-
-    def handleAdded(self, note):
-        self.__tree_view.clear()
-        indexes = note.body["indexes"]
-        """:type :list"""
-        root_node = note.body["root"]
-        """:type :TreeNode"""
-        child = note.body["child"]
-        """:type :TreeNode"""

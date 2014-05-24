@@ -1,6 +1,6 @@
 from actionTree.TreeModelProxy import TreeModelProxy
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
-from notifications import Notes
+from notifications.notes import Notes
 from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator

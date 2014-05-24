@@ -1,7 +1,7 @@
 from PySide.QtGui import QMenu
 
 from stepPool.StepPoolProxy import StepPoolProxy
-from notifications import Notes
+from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
 
 
@@ -19,6 +19,8 @@ class StepContextMenu(QMenu):
 
     def fill(self):
         self.clear()
+        self.addMenu("&Rename")
+        self.addSeparator()
         for step in self.menu_steps:
             self.addAction(step)
 
