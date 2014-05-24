@@ -1,12 +1,11 @@
 from PySide import QtGui
 from PySide.QtCore import Qt
-from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QCursor
+from PySide.QtGui import QTreeWidget, QTreeWidgetItem
 
 from actionTree.model.UI import UI
-from contextMenu.StepContextMenu import StepContextMenu
-from contextMenu.contextMenuMediator import ContextMenuMediator
+from notifications.notes import Notes
 from options.OptionsVO import Options
-from puremvc.patterns.facade import Facade
+
 
 __author__ = 'c0ffee'
 
@@ -22,13 +21,8 @@ class TreeView(QTreeWidget):
         self.setColumnCount(3)
 
     def show_menu(self, point):
-        tree_item = self.itemAt(point)
-        menu_mediator = Facade.getInstance().retrieveMediator(
-            ContextMenuMediator.NAME,)
-        """:type :ContextMenuMediator"""
-        menu_mediator.show_context_menu(self, tree_item)
-
-        StepContextMenu(self).popup(QCursor().pos())
+        selected_item = self.itemAt(point)
+        Notes.show_context_menu(self, selected_item)
 
     def update(self, parent_node):
         """

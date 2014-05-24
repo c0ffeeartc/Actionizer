@@ -1,4 +1,5 @@
 from actionTree.TreeModelProxy import TreeModelProxy
+from contextMenu.contextMenuMediator import ContextMenuMediator
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from notifications.notes import Notes
 from stepPool.StepPoolProxy import StepPoolProxy
@@ -29,6 +30,7 @@ class StartupCommand(SimpleCommand):
         self.facade.registerMediator(TreeViewMediator())
         self.facade.registerMediator(TextDialogMediator())
         self.facade.registerMediator(MainWindowMediator())
+        self.facade.registerMediator(ContextMenuMediator())
         self.facade.registerMediator(HotkeyMediator())
         # ...
 
