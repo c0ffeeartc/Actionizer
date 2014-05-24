@@ -20,6 +20,7 @@ class TreeViewMediator(Mediator):
 
     def listNotificationInterests(self):
         return [
+            Notes.TREE_NODE_RENAMED,
             Notes.TREE_MODEL_CHANGED,
             Notes.TREE_MODEL_SAVE,
             Notes.TREE_MODEL_LOAD,
@@ -44,6 +45,8 @@ class TreeViewMediator(Mediator):
             print("updating on loaded")
             self.__tree_view.clear()
             self.__tree_view.update(note.body["root"])
+        elif note.name == Notes.TREE_NODE_RENAMED:
+            self.get_cur_item().setText(0, note.body["new_name"])
         elif note.name == Notes.TREE_MODEL_ADDED:
             indexes = note.body["indexes"]
             child_node = note.body["child"]
@@ -73,3 +76,13 @@ class TreeViewMediator(Mediator):
     def get_cur_item(self):
         """:rtype :PySide.QtGui.QTreeWidgetItem.QTreeWidgetItem"""
         return self.__tree_view.currentItem()
+
+    # replaces step
+    # step_uid = note.body["txt"]
+    # tree = self.get_main_window().tree
+    # old_item = tree.currentItem()
+    # item_parent = old_item.parent()
+    # old_item_index = old_item.parent().indexOfChild(old_item)
+    # item_parent.removeChild(old_item)
+    # self.get_main_window().add_step(step_uid, item_parent,
+    # old_item_index)
