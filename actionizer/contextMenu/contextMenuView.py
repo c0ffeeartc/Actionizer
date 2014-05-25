@@ -3,6 +3,7 @@ from PySide.QtGui import QMenu, QAction
 from stepPool.StepPoolProxy import StepPoolProxy
 from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
+from treeView.treeViewMediator import TreeViewMediator
 
 
 __author__ = 'c0ffee'
@@ -28,4 +29,7 @@ class ContextMenuView(QMenu):
             self.addAction(step)
 
     def on_rename_menu(self):
-        Notes.show_rename_dialog("name")
+        tree_mediator = Facade.getInstance().retrieveMediator(TreeViewMediator.NAME)
+        """:type :TreeViewMediator"""
+        current_name = tree_mediator.get_cur_item().text(0)
+        Notes.show_rename_dialog(current_name)
