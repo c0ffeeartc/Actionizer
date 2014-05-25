@@ -20,6 +20,7 @@ class TreeView(QTreeWidget):
 
         self.setHeaderItem(QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
         self.setColumnCount(3)
+        self.setColumnWidth(0, 300)
 
     def show_menu(self, point):
         selected_item = self.itemAt(point)

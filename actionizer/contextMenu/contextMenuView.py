@@ -29,9 +29,9 @@ class ContextMenuView(QMenu):
         self.clear()
         self.addAction(self.__rename)
         self.addAction(self.__replace_step)
-        self.addSeparator()
-        for step in self.__menu_steps:
-            self.addAction(step)
+        # self.addSeparator()
+        # for step in self.__menu_steps:
+        #     self.addAction(step)
 
     def on_rename_menu(self):
         Facade.getInstance().sendNotification(Notes.CONTEXT_MENU_RENAME)
