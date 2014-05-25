@@ -35,6 +35,10 @@ class TreeModelProxy(Proxy):
             }
         )
 
+    def replace(self, new_node, *indexes):
+        self.remove(*indexes)
+        self.add(new_node, *indexes)
+
     def rename(self, new_name, *indexes):
         renamed_node = self.__tree.rename(new_name, *indexes)
         Facade.getInstance().sendNotification(

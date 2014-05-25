@@ -79,12 +79,6 @@ class TreeViewMediator(Mediator):
         """:rtype :PySide.QtGui.QTreeWidgetItem.QTreeWidgetItem"""
         return self.__tree_view.currentItem()
 
-    # replaces step
-    # step_uid = note.body["txt"]
-    # tree = self.get_main_window().tree
-    # old_item = tree.currentItem()
-    # item_parent = old_item.parent()
-    # old_item_index = old_item.parent().indexOfChild(old_item)
-    # item_parent.removeChild(old_item)
-    # self.get_main_window().add_step(step_uid, item_parent,
-    # old_item_index)
+    def get_type_name(self, q_tree_item):
+        """:type q_tree_item:PySide.QtGui.QTreeWidgetItem.QTreeWidgetItem"""
+        return q_tree_item.text(1)

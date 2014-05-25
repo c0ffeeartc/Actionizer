@@ -1,5 +1,6 @@
 from actionTree.TreeModelProxy import TreeModelProxy
 from combodialog.combodialogmediator import ComboDialogMediator
+from commands.replacestepcommand import ReplaceStepCommand
 from contextMenu.contextMenuMediator import ContextMenuMediator
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from notifications.notes import Notes
@@ -19,6 +20,7 @@ class StartupCommand(SimpleCommand):
 
         # registerCommands
         self.facade.registerCommand(NewTreeElementCommand.NAME, NewTreeElementCommand)
+        self.facade.registerCommand(Notes.REPLACE_STEP_COMMAND, ReplaceStepCommand)
         # ...
 
         # registerProxies

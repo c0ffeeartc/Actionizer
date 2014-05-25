@@ -21,6 +21,7 @@ class Notes(object):
     SHOW_REPLACE_STEP_DIALOG = "SHOW_REPLACE_STEP_DIALOG"
     CONTEXT_MENU_RENAME = "CONTEXT_MENU_RENAME"
     CONTEXT_MENU_REPLACE_STEP = "CONTEXT_MENU_REPLACE_STEP"
+    REPLACE_STEP_COMMAND = "REPLACE_STEP_COMMAND"
 
 
 class TreeNodeRenamedVO(object):
@@ -45,3 +46,8 @@ class ShowContextMenuVO(object):
         """:type :QTreeWidgetItem"""
         self.selected_item = selected_item
         """:type :QTreeWidgetItem"""
+
+
+class ReplaceStepCommandVO(object):
+    def __init__(self, new_step_uid):
+        self.new_step_uid = new_step_uid
