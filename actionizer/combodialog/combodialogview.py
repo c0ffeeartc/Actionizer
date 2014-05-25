@@ -1,18 +1,18 @@
-from PySide.QtGui import QDialog, QLineEdit, QVBoxLayout, QHBoxLayout, \
-    QPushButton
+from PySide.QtGui import QDialog, QComboBox, QPushButton, QHBoxLayout, \
+    QVBoxLayout
 from puremvc.patterns.facade import Facade
 
 __author__ = 'cfe'
 
 
-class TextDialog(QDialog):
-    NAME = "TextDialog"
-    TEXT_DIALOG_OK = "TEXT_DIALOG_OK"
-    TEXT_DIALOG_CANCEL = "TEXT_DIALOG_CANCEL"
+class ComboDialog(QDialog):
+    COMBO_DIALOG_OK = "COMBO_DIALOG_OK"
+    COMBO_DIALOG_CANCEL = "COMBO_DIALOG_CANCEL"
 
     def __init__(self, *args, **kwargs):
-        super(TextDialog, self).__init__(*args, **kwargs)
-        self.edit_line = QLineEdit()
+        super(ComboDialog, self).__init__(*args, **kwargs)
+
+        self.combo_box = QComboBox()
 
         self.ok_btn = QPushButton("&Ok")
         # noinspection PyUnresolvedReferences
@@ -30,7 +30,7 @@ class TextDialog(QDialog):
         self.h_layout.addWidget(self.ok_btn)
         self.h_layout.addWidget(self.cancel_btn)
 
-        self.v_layout.addWidget(self.edit_line)
+        self.v_layout.addWidget(self.combo_box)
         self.v_layout.addLayout(self.h_layout)
         self.setLayout(self.v_layout)
 
@@ -41,11 +41,10 @@ class TextDialog(QDialog):
 
     def on_accept(self):
         Facade.getInstance().sendNotification(
-            TextDialog.TEXT_DIALOG_OK,
-            {"text": self.edit_line.text()},
+            ComboDialog.COMBO_DIALOG_OK,
         )
 
     def on_reject(self):
         Facade.getInstance().sendNotification(
-            TextDialog.TEXT_DIALOG_CANCEL,
+            ComboDialog.COMBO_DIALOG_CANCEL,
         )

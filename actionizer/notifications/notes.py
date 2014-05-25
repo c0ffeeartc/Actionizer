@@ -20,6 +20,7 @@ class Notes(object):
     TREE_MODEL_LOADED = "TREE_MODEL_LOADED"
     SHOW_RENAME_DIALOG = "SHOW_RENAME_DIALOG"
     SHOW_TEXT_DIALOG = "SHOW_TEXT_DIALOG"
+    SHOW_REPLACE_STEP_DIALOG = "SHOW_REPLACE_STEP_DIALOG"
 
     @classmethod
     def show_context_menu(cls, parent_widget, selected_item):
@@ -40,4 +41,10 @@ class Notes(object):
         Facade.getInstance().sendNotification(
             Notes.TREE_NODE_RENAMED,
             {"new_name": new_name, "indexes": indexes, }
+        )
+
+    @classmethod
+    def show_replace_step(cls):
+        Facade.getInstance().sendNotification(
+            Notes.SHOW_REPLACE_STEP_DIALOG,
         )

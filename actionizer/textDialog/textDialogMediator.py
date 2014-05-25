@@ -1,3 +1,4 @@
+from PySide.QtCore import Qt
 from actionTree.TreeModelProxy import TreeModelProxy
 from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
@@ -13,11 +14,10 @@ class TextDialogMediator(Mediator):
     TEXT_DIALOG = "TEXT_DIALOG"
 
     def __init__(self):
-        self.__dialog = TextDialog()
+        self.__dialog = TextDialog(None, Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         super(TextDialogMediator, self).__init__(TextDialogMediator.NAME,
                                                  self.__dialog)
         self.__dialog_name = ""  # used to distinguish currently showed dialog
-        self.__dialog = self.viewComponent
 
     def listNotificationInterests(self):
         return [
@@ -44,6 +44,7 @@ class TextDialogMediator(Mediator):
             self.__show_text_dialog(note.getBody()["text"])
 
         elif note.getName() == Notes.SHOW_RENAME_DIALOG:
+            self.__dialog.setWindowTitle("Rename")
             self.__dialog_name = TextDialogMediator.RENAME_DIALOG
             self.__show_text_dialog(note.getBody()["text"])
 
