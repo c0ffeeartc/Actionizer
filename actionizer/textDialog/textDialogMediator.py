@@ -1,9 +1,11 @@
 from PySide.QtCore import Qt
+
 from actionTree.TreeModelProxy import TreeModelProxy
 from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
 from textDialog.textDialogView import TextDialog
 from treeView.treeViewMediator import TreeViewMediator
+
 
 __author__ = 'cfe'
 
@@ -44,9 +46,11 @@ class TextDialogMediator(Mediator):
             self.__show_text_dialog(note.getBody()["text"])
 
         elif note.getName() == Notes.SHOW_RENAME_DIALOG:
+            vo = note.body
+            """:type :ShowRenameDialogVO"""
             self.__dialog.setWindowTitle("Rename")
             self.__dialog_name = TextDialogMediator.RENAME_DIALOG
-            self.__show_text_dialog(note.getBody()["text"])
+            self.__show_text_dialog(vo.current_name)
 
     def __show_text_dialog(self, text=""):
         self.__dialog.edit_line.setText(text)

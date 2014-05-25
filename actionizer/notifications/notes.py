@@ -1,5 +1,3 @@
-from puremvc.patterns.facade import Facade
-
 __author__ = 'cfe'
 
 
@@ -21,30 +19,29 @@ class Notes(object):
     SHOW_RENAME_DIALOG = "SHOW_RENAME_DIALOG"
     SHOW_TEXT_DIALOG = "SHOW_TEXT_DIALOG"
     SHOW_REPLACE_STEP_DIALOG = "SHOW_REPLACE_STEP_DIALOG"
+    CONTEXT_MENU_RENAME = "CONTEXT_MENU_RENAME"
+    CONTEXT_MENU_REPLACE_STEP = "CONTEXT_MENU_REPLACE_STEP"
 
-    @classmethod
-    def show_context_menu(cls, parent_widget, selected_item):
-        Facade.getInstance().sendNotification(
-            Notes.SHOW_CONTEXT_MENU,
-            {"parent_widget": parent_widget, "selected_item": selected_item, }
-        )
 
-    @classmethod
-    def show_rename_dialog(cls, current_name):
-        Facade.getInstance().sendNotification(
-            Notes.SHOW_RENAME_DIALOG,
-            {"text": current_name,}
-        )
+class TreeNodeRenamedVO(object):
+    def __init__(self, new_name="", indexes=None):
+        if not indexes:
+            indexes = []
+        self.new_name = new_name
+        """:type :str"""
+        self.indexes = indexes
+        """:type :list of int"""
 
-    @classmethod
-    def tree_node_renamed(cls, new_name, *indexes):
-        Facade.getInstance().sendNotification(
-            Notes.TREE_NODE_RENAMED,
-            {"new_name": new_name, "indexes": indexes, }
-        )
 
-    @classmethod
-    def show_replace_step(cls):
-        Facade.getInstance().sendNotification(
-            Notes.SHOW_REPLACE_STEP_DIALOG,
-        )
+class ShowRenameDialogVO(object):
+    def __init__(self, current_name=""):
+        self.current_name = current_name
+        """:type :str"""
+
+
+class ShowContextMenuVO(object):
+    def __init__(self, parent_widget=None, selected_item=None):
+        self.parent_widget = parent_widget
+        """:type :QTreeWidgetItem"""
+        self.selected_item = selected_item
+        """:type :QTreeWidgetItem"""

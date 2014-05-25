@@ -3,8 +3,9 @@ from PySide.QtCore import Qt
 from PySide.QtGui import QTreeWidget, QTreeWidgetItem
 
 from actionTree.model.UI import UI
-from notifications.notes import Notes
+from notifications.notes import Notes, ShowContextMenuVO
 from options.OptionsVO import Options
+from puremvc.patterns.facade import Facade
 
 
 __author__ = 'c0ffee'
@@ -22,7 +23,7 @@ class TreeView(QTreeWidget):
 
     def show_menu(self, point):
         selected_item = self.itemAt(point)
-        Notes.show_context_menu(self, selected_item)
+        Facade.getInstance().sendNotification(Notes.SHOW_CONTEXT_MENU, ShowContextMenuVO(self, selected_item))
 
     def update(self, parent_node):
         """

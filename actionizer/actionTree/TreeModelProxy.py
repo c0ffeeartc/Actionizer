@@ -1,5 +1,6 @@
 from actionTree.model.TreeManager import TreeManager
-from notifications.notes import Notes
+from notifications.notes import Notes, TreeNodeRenamedVO
+from puremvc.patterns.facade import Facade
 from puremvc.patterns.proxy import Proxy
 
 __author__ = 'cfe'
@@ -36,7 +37,10 @@ class TreeModelProxy(Proxy):
 
     def rename(self, new_name, *indexes):
         renamed_node = self.__tree.rename(new_name, *indexes)
-        Notes.tree_node_renamed(new_name, indexes)
+        Facade.getInstance().sendNotification(
+            Notes.TREE_NODE_RENAMED,
+            TreeNodeRenamedVO(new_name, indexes),
+        )
 
     def get_indexes(self, tree_node):
         return self.__tree.get_indexes(tree_node)

@@ -46,7 +46,9 @@ class TreeViewMediator(Mediator):
             self.__tree_view.clear()
             self.__tree_view.update(note.body["root"])
         elif note.name == Notes.TREE_NODE_RENAMED:
-            self.get_cur_item().setText(0, note.body["new_name"])
+            vo = note.body
+            """:type :TreeNodeRenamedVO"""
+            self.get_cur_item().setText(0, vo.new_name)
         elif note.name == Notes.TREE_MODEL_ADDED:
             indexes = note.body["indexes"]
             child_node = note.body["child"]
