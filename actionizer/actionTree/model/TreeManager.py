@@ -1,4 +1,4 @@
-import json
+import json, errno
 from actionTree.model.Action import Action
 from actionTree.model.ActionGroup import ActionGroup
 from actionTree.model.ActionRoot import ActionRoot
@@ -82,6 +82,12 @@ class TreeManager(object):
             json.dump(self.root_node, f, default=self.__to_json, indent=2)
 
     def load(self):
-        with open(Options.steps_path + "action_root.json", "r") as f:
-            self.root_node.clear()
-            self.root_node = json.load(f, object_hook=self.__from_json)
+        try:
+            with open(Options.steps_path + "action_root.json", "r") as f:
+                self.root_node.clear()
+                self.root_node = json.load(f, object_hook=self.__from_json)
+        except IOError as exc:
+            if exc.errno == errno.ENOENT:
+                self.save()
+            elif exc.errno != errno.ENOENT:
+                raise exc
