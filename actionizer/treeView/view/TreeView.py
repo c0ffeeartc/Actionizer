@@ -1,6 +1,6 @@
 from PySide import QtGui
 from PySide.QtCore import Qt
-from PySide.QtGui import QTreeWidget, QTreeWidgetItem
+from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QAbstractItemView
 
 from actionTree.model.UI import UI
 from notifications.notes import Notes, ShowContextMenuVO
@@ -21,6 +21,12 @@ class TreeView(QTreeWidget):
         self.setHeaderItem(QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
         self.setColumnCount(3)
         self.setColumnWidth(0, 300)
+
+        self.setAcceptDrops(True)
+        self.setDragEnabled(True)
+        self.setDragDropMode(QAbstractItemView.InternalMove)
+
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     def show_menu(self, point):
         selected_item = self.itemAt(point)
