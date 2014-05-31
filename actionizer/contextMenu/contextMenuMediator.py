@@ -1,6 +1,6 @@
 from PySide.QtGui import QCursor
 from contextMenu.contextMenuView import ContextMenuView
-from notifications.notes import Notes, ShowRenameDialogVO
+from notifications.notes import Notes, ShowRenameDialogVO, ShowHotkeyDialogVO
 from puremvc.patterns.mediator import Mediator
 from treeView.treeViewMediator import TreeViewMediator
 
@@ -20,10 +20,16 @@ class ContextMenuMediator(Mediator):
             Notes.SHOW_CONTEXT_MENU,
             Notes.CONTEXT_MENU_RENAME,
             Notes.CONTEXT_MENU_REPLACE_STEP,
+            Notes.CONTEXT_MENU_SET_HOTKEY,
         ]
 
     def handleNotification(self, note):
-        if Notes.SHOW_CONTEXT_MENU == note.getName():
+
+        if note.name == Notes.SHOW_CONTEXT_MENU:
+            tree_mediator = self.facade.retrieveMediator(TreeViewMediator.NAME)
+            """:type :TreeViewMediator"""
+            item_type = tree_mediator.get_type_name(tree_mediator.get_cur_item())
+            self.__menu.fill(item_type)
             self.__menu.popup(QCursor().pos())
 
         elif note.name == Notes.CONTEXT_MENU_RENAME:
@@ -34,3 +40,6 @@ class ContextMenuMediator(Mediator):
 
         elif note.name == Notes.CONTEXT_MENU_REPLACE_STEP:
             self.sendNotification(Notes.SHOW_REPLACE_STEP_DIALOG)
+
+        elif note.name == Notes.CONTEXT_MENU_SET_HOTKEY:
+            self.sendNotification(Notes.SHOW_HOTKEY_DIALOG, ShowHotkeyDialogVO(""))

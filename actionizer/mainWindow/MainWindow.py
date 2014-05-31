@@ -46,7 +46,7 @@ class MainWindow(QtGui.QWidget):
         self.setWindowTitle('Actionizer')
 
         self.btn_save = QtGui.QPushButton(
-            QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
+            QtGui.QIcon(Options.assets_path + "save_16x16.png"), "")
         # noinspection PyUnresolvedReferences
         self.btn_save.clicked.connect(self.on_save_clicked)
         self.btn_layout.addWidget(self.btn_save)

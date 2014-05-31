@@ -22,9 +22,17 @@ class Notes(object):
     SHOW_TEXT_DIALOG = "SHOW_TEXT_DIALOG"
     TREE_MODEL_EXPANDED = "TREE_MODEL_EXPANDED"
     SHOW_REPLACE_STEP_DIALOG = "SHOW_REPLACE_STEP_DIALOG"
+    SHOW_HOTKEY_DIALOG = "SHOW_HOTKEY_DIALOG"
     CONTEXT_MENU_RENAME = "CONTEXT_MENU_RENAME"
+    CONTEXT_MENU_SET_HOTKEY = "CONTEXT_MENU_SET_HOTKEY"
     CONTEXT_MENU_REPLACE_STEP = "CONTEXT_MENU_REPLACE_STEP"
     REPLACE_STEP_COMMAND = "REPLACE_STEP_COMMAND"
+
+
+class ShowHotkeyDialogVO(object):
+    def __init__(self, hotkey):
+        """@type hotkey:str"""
+        self.hotkey = hotkey
 
 
 class TreeModelExpandedVO(object):

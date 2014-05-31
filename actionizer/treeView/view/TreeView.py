@@ -21,6 +21,7 @@ class TreeView(QTreeWidget):
 
     def __init__(self):
         super(TreeView, self).__init__()
+        self.setIndentation(10)
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         # noinspection PyUnresolvedReferences
         self.customContextMenuRequested.connect(self.show_menu)
@@ -52,10 +53,14 @@ class TreeView(QTreeWidget):
         if event.type() == QEvent.Drop:
             print("filter drop")
             return True
-        if event.type() == QEvent.ChildAdded and source is self:
+        elif event.type() == QEvent.WindowActivate:
+            Facade.instance.sendNotification(Notes.STOP_LISTEN_GLOBAL_HOTKEYS)
+        elif event.type() == QEvent.WindowDeactivate:
+            Facade.instance.sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
+        elif event.type() == QEvent.ChildAdded and source is self:
             print("filter added")
             return True
-        if event.type() == QEvent.ChildRemoved and source is self:
+        elif event.type() == QEvent.ChildRemoved and source is self:
             print("filter removed")
             return True
         return QtGui.QTreeWidget.eventFilter(self, source, event)

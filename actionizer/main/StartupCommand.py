@@ -2,6 +2,7 @@ from actionTree.TreeModelProxy import TreeModelProxy
 from combodialog.combodialogmediator import ComboDialogMediator
 from commands.replacestepcommand import ReplaceStepCommand
 from contextMenu.contextMenuMediator import ContextMenuMediator
+from hotkeydialog.hotkeydialogmediator import HotkeyDialogMediator
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from notifications.notes import Notes
 from stepPool.StepPoolProxy import StepPoolProxy
@@ -33,6 +34,7 @@ class StartupCommand(SimpleCommand):
         self.facade.registerMediator(TreeViewMediator())
         self.facade.registerMediator(TextDialogMediator())
         self.facade.registerMediator(ComboDialogMediator())
+        self.facade.registerMediator(HotkeyDialogMediator())
         self.facade.registerMediator(MainWindowMediator())
         self.facade.registerMediator(ContextMenuMediator())
         self.facade.registerMediator(HotkeyMediator())

@@ -1,4 +1,4 @@
-from PySide.QtCore import QEvent, Qt, QTimer
+from PySide.QtCore import QTimer
 import pyHook
 
 __author__ = 'c0ffee'
@@ -16,11 +16,12 @@ class Hotkey(object):
         self.hotkey_manager.HookKeyboard()
         self.hotkey_manager.KeyUp = self.on_key
         self.hotkey_manager.KeyDown = self.on_key
-        self.is_listening = True
+        self.is_listening = False
 
         self.main_window = main_window
 
         self.timer = QTimer()
+        # noinspection PyUnresolvedReferences
         self.timer.timeout.connect(self.process_key_events)
         self.timer.start(1000)
 

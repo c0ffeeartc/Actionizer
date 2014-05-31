@@ -11,6 +11,7 @@ class Action(object):
     def __init__(self):
         self.name = "Action"
         self.results = []
+        self.hotkey = ""
 
     def play(self, step_items, start_i=0):
         """
