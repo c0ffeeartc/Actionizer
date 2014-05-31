@@ -12,6 +12,8 @@ class Notes(object):
     TREE_MODEL_ADDED = "TREE_MODEL_ADDED"
     TREE_MODEL_REMOVE = "TREE_MODEL_REMOVE"
     TREE_MODEL_REMOVED = "TREE_MODEL_REMOVED"
+    TREE_MODEL_MOVE = "TREE_MODEL_MOVE"
+    TREE_MODEL_MOVED = "TREE_MODEL_MOVED"
     TREE_MODEL_SAVE = "TREE_MODEL_SAVE"
     TREE_MODEL_LOAD = "TREE_MODEL_LOAD"
     TREE_MODEL_SAVED = "TREE_MODEL_SAVED"
@@ -22,6 +24,25 @@ class Notes(object):
     CONTEXT_MENU_RENAME = "CONTEXT_MENU_RENAME"
     CONTEXT_MENU_REPLACE_STEP = "CONTEXT_MENU_REPLACE_STEP"
     REPLACE_STEP_COMMAND = "REPLACE_STEP_COMMAND"
+
+
+class TreeModelMoveVO(object):
+    def __init__(self, drag_indexes, target_indexes):
+        """
+        :type drag_indexes: list of int
+        :type target_indexes: list of int
+        """
+        self.drag_indexes = drag_indexes
+        self.target_indexes = target_indexes
+
+
+class TreeModelMovedVO(TreeModelMoveVO):
+    def __init__(self, drag_indexes, target_indexes):
+        """
+            :type drag_indexes: list of int
+            :type target_indexes: list of int
+            """
+        super(TreeModelMovedVO, self).__init__(drag_indexes, target_indexes)
 
 
 class TreeNodeRenamedVO(object):

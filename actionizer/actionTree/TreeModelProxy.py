@@ -1,5 +1,5 @@
 from actionTree.model.TreeManager import TreeManager
-from notifications.notes import Notes, TreeNodeRenamedVO
+from notifications.notes import Notes, TreeNodeRenamedVO, TreeModelMovedVO
 from puremvc.patterns.facade import Facade
 from puremvc.patterns.proxy import Proxy
 
@@ -26,14 +26,21 @@ class TreeModelProxy(Proxy):
         )
 
     def remove(self, *i_indexes):
-        self.__tree.remove(*i_indexes)
+        removed_child = self.__tree.remove(*i_indexes)
         self.sendNotification(
             Notes.TREE_MODEL_REMOVED,
             {
                 "indexes": i_indexes,
                 "root": self.__tree.root_node,
+                "child": removed_child,
             }
         )
+        return removed_child
+
+    def move(self, from_indexes, to_indexes):
+        from_indexes, to_indexes = self.__tree.move(from_indexes, to_indexes)
+        if from_indexes and to_indexes:
+            self.facade.sendNotification(Notes.TREE_MODEL_MOVED, TreeModelMovedVO(from_indexes, to_indexes))
 
     def replace(self, new_node, *indexes):
         self.remove(*indexes)
@@ -45,6 +52,9 @@ class TreeModelProxy(Proxy):
             Notes.TREE_NODE_RENAMED,
             TreeNodeRenamedVO(new_name, indexes),
         )
+
+    def get_type(self, *indexes):
+        self.__tree.get_type(*indexes)
 
     def get_indexes(self, tree_node):
         return self.__tree.get_indexes(tree_node)

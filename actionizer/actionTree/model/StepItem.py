@@ -12,7 +12,7 @@ class StepItem(object):
 
     def __init__(self):
         self.step_uid = None
-        self.name = ""
+        self.name = "Step"
         self.args = {}
         self.result_links = {}  # i:[key1, key2, etc]
 

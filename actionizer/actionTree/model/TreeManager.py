@@ -44,6 +44,43 @@ class TreeManager(object):
         """
         return tree_node.get_indexes()
 
+    def move(self, from_indexes, to_indexes):
+        """
+        @param :type from_indexes: list of int
+        @param :type to_indexes: list of int
+        @return:
+        """
+
+        drag_type = self.get_type(*from_indexes)
+        target_type = self.get_type(*to_indexes)
+
+        is_step = drag_type == StepItem.NAME
+        is_action = drag_type == Action.NAME
+        is_group = drag_type == ActionGroup.NAME
+
+        to_step = target_type == StepItem.NAME
+        to_action = target_type == Action.NAME
+        to_group = target_type == ActionGroup.NAME
+
+        if is_action and to_group or \
+                is_step and to_action:
+            to_indexes.append(0)
+            removed_node = self.remove(*from_indexes)
+            self.add(removed_node, *to_indexes)
+            return from_indexes, to_indexes
+
+        elif is_group and to_group or \
+                is_action and to_action or \
+                is_step and to_step:
+            removed_node = self.remove(*from_indexes)
+            self.add(removed_node, *to_indexes)
+            return from_indexes, to_indexes
+
+        return None, None
+
+    def get_type(self, *indexes):
+        return self.__get_target(*indexes).get_type()
+
     def __getitem__(self, i):
         return self.root_node[i]
 

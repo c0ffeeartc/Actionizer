@@ -1,9 +1,9 @@
-from PySide import QtGui
-from PySide.QtCore import Qt
+from PySide import QtGui, QtCore
+from PySide.QtCore import Qt, QEvent
 from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QAbstractItemView
 
 from actionTree.model.UI import UI
-from notifications.notes import Notes, ShowContextMenuVO
+from notifications.notes import Notes, ShowContextMenuVO, TreeModelMoveVO
 from options.OptionsVO import Options
 from puremvc.patterns.facade import Facade
 
@@ -27,10 +27,27 @@ class TreeView(QTreeWidget):
         self.setDragDropMode(QAbstractItemView.InternalMove)
 
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.installEventFilter(self)
+
+        self.__drag_item = "None"
+        self.dragSignal = QtCore.Signal(dict)
 
     def show_menu(self, point):
         selected_item = self.itemAt(point)
         Facade.getInstance().sendNotification(Notes.SHOW_CONTEXT_MENU, ShowContextMenuVO(self, selected_item))
+
+    def eventFilter(self, source, event):
+        # print(event.type())
+        if event.type() == QEvent.Drop:
+            print("filter drop")
+            return True
+        if event.type() == QEvent.ChildAdded and source is self:
+            print("filter added")
+            return True
+        if event.type() == QEvent.ChildRemoved and source is self:
+            print("filter removed")
+            return True
+        return QtGui.QTreeWidget.eventFilter(self, source, event)
 
     def update(self, parent_node):
         """
@@ -43,6 +60,34 @@ class TreeView(QTreeWidget):
             self.__get_target(*i_parent).addChild(item)
             if len(child_node.children):
                 self.update(child_node)
+
+    def move_item(self, from_indexes, to_indexes):
+        child = self.remove(*from_indexes)
+        self.add(child, *to_indexes)
+
+    def mousePressEvent(self, e):
+        """:type e: QMouseEvent.QMouseEvent"""
+        pressed_item = self.itemAt(e.pos())
+        if pressed_item:
+            self.__drag_item = pressed_item
+        QTreeWidget.mousePressEvent(self, e)
+
+    def mouseMoveEvent(self, e):
+        pass
+
+    def mouseReleaseEvent(self, e):
+        """:type e: QMouseEvent.QMouseEvent"""
+        if self.__drag_item:
+            released_item = self.itemAt(e.pos())
+            if released_item and released_item is not self.__drag_item:
+                drag_indexes = self.get_indexes(self.__drag_item)
+                released_indexes = self.get_indexes(released_item)
+                Facade.getInstance().sendNotification(Notes.TREE_MODEL_MOVE, TreeModelMoveVO(drag_indexes, released_indexes))
+        QTreeWidget.mouseReleaseEvent(self, e)
+        self.__drag_item = None
+
+    def get_type(self, item):
+        return item.text(1)
 
     def __get_target(self, *indexes):
         """
@@ -80,7 +125,7 @@ class TreeView(QTreeWidget):
     def remove(self, *indexes):
         i_parent = indexes[:-1]
         i_target = indexes[-1]
-        self.__get_target(*i_parent).takeChild(i_target)
+        return self.__get_target(*i_parent).takeChild(i_target)
 
     def __make_item(self, name, type_name):
         item = QTreeWidgetItem(None, [name, type_name])

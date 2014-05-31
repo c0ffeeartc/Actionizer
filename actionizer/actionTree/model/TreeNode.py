@@ -73,6 +73,9 @@ class TreeNode(object):
         else:
             return None  # root node
 
+    def get_type(self):
+        return self.leaf.NAME
+
     def get_indexes(self):
         target = self
         indexes = []

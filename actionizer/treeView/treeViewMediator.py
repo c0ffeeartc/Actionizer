@@ -30,25 +30,33 @@ class TreeViewMediator(Mediator):
             Notes.TREE_MODEL_ADDED,
             Notes.TREE_MODEL_REMOVE,
             Notes.TREE_MODEL_REMOVED,
+            Notes.TREE_MODEL_MOVE,
+            Notes.TREE_MODEL_MOVED,
         ]
 
     def handleNotification(self, note):
         tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
         """:type :TreeModelProxy"""
+
         if note.name == Notes.TREE_MODEL_SAVE:
             tree_model_proxy.save()
+
         elif note.name == Notes.TREE_MODEL_LOAD:
             tree_model_proxy.load()
+
         elif note.name == Notes.TREE_MODEL_SAVED:
             print("saved")
+
         elif note.name == Notes.TREE_MODEL_LOADED:
             print("updating on loaded")
             self.__tree_view.clear()
             self.__tree_view.update(note.body["root"])
+
         elif note.name == Notes.TREE_NODE_RENAMED:
             vo = note.body
             """:type :TreeNodeRenamedVO"""
             self.get_cur_item().setText(0, vo.new_name)
+
         elif note.name == Notes.TREE_MODEL_ADDED:
             indexes = note.body["indexes"]
             child_node = note.body["child"]
@@ -62,14 +70,26 @@ class TreeViewMediator(Mediator):
                 child.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
                 child.setIcon(0, QtGui.QIcon(
                     Options.assets_path + "folder_16x16.png"))
+
         elif note.name == Notes.TREE_MODEL_REMOVE:
             cur = self.get_cur_item()
             indexes = self.__tree_view.get_indexes(cur)
             tree_model_proxy.remove(*indexes)
+
         elif note.name == Notes.TREE_MODEL_REMOVED:
             indexes = note.body["indexes"]
             """:type :list"""
             self.__tree_view.remove(*indexes)
+
+        elif note.name == Notes.TREE_MODEL_MOVE:
+            vo = note.body
+            """@type :TreeModelMoveVO"""
+            tree_model_proxy.move(vo.drag_indexes, vo.target_indexes)
+
+        elif note.name == Notes.TREE_MODEL_MOVED:
+            vo = note.body
+            """@type :TreeModelMovedVO"""
+            self.__tree_view.move_item(vo.drag_indexes, vo.target_indexes)
 
     def get_indexes(self, tree_item):
         """:rtype :list of int"""
