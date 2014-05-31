@@ -147,6 +147,6 @@ class MainWindow(QtGui.QWidget):
         action_group = QTreeWidgetItem(self.tree,
                                        ["ActionGroup", UI.ACTION_GROUP])
         self.tree.invisibleRootItem().addChild(action_group)
-        action_group.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
+        action_group.setChildIndicatorPolicy(QTreeWidgetItem.DontShowIndicatorWhenChildless)
         action_group.setIcon(0, QtGui.QIcon(
             Options.assets_path + "folder_16x16.png"))

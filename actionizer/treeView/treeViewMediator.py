@@ -1,8 +1,5 @@
-from PySide import QtGui
 from PySide.QtGui import QTreeWidgetItem
 from actionTree.TreeModelProxy import TreeModelProxy
-from actionTree.model.ActionGroup import ActionGroup
-from options.OptionsVO import Options
 from treeView.view.TreeView import TreeView
 from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
@@ -32,13 +29,19 @@ class TreeViewMediator(Mediator):
             Notes.TREE_MODEL_REMOVED,
             Notes.TREE_MODEL_MOVE,
             Notes.TREE_MODEL_MOVED,
+            Notes.TREE_MODEL_EXPANDED,
         ]
 
     def handleNotification(self, note):
         tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
         """:type :TreeModelProxy"""
 
-        if note.name == Notes.TREE_MODEL_SAVE:
+        if note.name == Notes.TREE_MODEL_EXPANDED:
+            vo = note.body
+            """:type :TreeModelExpandedVO"""
+            tree_model_proxy.set_expanded(vo.has_expanded, *vo.indexes)
+
+        elif note.name == Notes.TREE_MODEL_SAVE:
             tree_model_proxy.save()
 
         elif note.name == Notes.TREE_MODEL_LOAD:
@@ -66,10 +69,6 @@ class TreeViewMediator(Mediator):
                 [child_node.leaf.name, child_node.leaf.NAME]
             )
             self.__tree_view.add(child, *indexes)
-            if child.text(1) == ActionGroup.NAME:
-                child.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
-                child.setIcon(0, QtGui.QIcon(
-                    Options.assets_path + "folder_16x16.png"))
 
         elif note.name == Notes.TREE_MODEL_REMOVE:
             cur = self.get_cur_item()

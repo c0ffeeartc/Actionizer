@@ -56,6 +56,9 @@ class TreeModelProxy(Proxy):
     def get_type(self, *indexes):
         self.__tree.get_type(*indexes)
 
+    def set_expanded(self, has_expanded, *indexes):
+        self.__tree.set_expanded(has_expanded, *indexes)
+
     def get_indexes(self, tree_node):
         return self.__tree.get_indexes(tree_node)
 

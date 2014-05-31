@@ -1,9 +1,12 @@
-from PySide import QtGui, QtCore
+from PySide import QtGui
 from PySide.QtCore import Qt, QEvent
 from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QAbstractItemView
+from actionTree.model.Action import Action
+from actionTree.model.ActionGroup import ActionGroup
+from actionTree.model.StepItem import StepItem
 
 from actionTree.model.UI import UI
-from notifications.notes import Notes, ShowContextMenuVO, TreeModelMoveVO
+from notifications.notes import Notes, ShowContextMenuVO, TreeModelMoveVO, TreeModelExpandedVO
 from options.OptionsVO import Options
 from puremvc.patterns.facade import Facade
 
@@ -12,6 +15,10 @@ __author__ = 'c0ffee'
 
 
 class TreeView(QTreeWidget):
+    ACTION = Action.NAME
+    ACTION_GROUP = ActionGroup.NAME
+    STEP = StepItem.NAME
+
     def __init__(self):
         super(TreeView, self).__init__()
         self.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -30,7 +37,11 @@ class TreeView(QTreeWidget):
         self.installEventFilter(self)
 
         self.__drag_item = "None"
-        self.dragSignal = QtCore.Signal(dict)
+
+        # noinspection PyUnresolvedReferences
+        self.itemExpanded.connect(self.on_item_expanded)
+        # noinspection PyUnresolvedReferences
+        self.itemCollapsed.connect(self.on_item_collapsed)
 
     def show_menu(self, point):
         selected_item = self.itemAt(point)
@@ -56,14 +67,22 @@ class TreeView(QTreeWidget):
         """
         for child_node in parent_node.children:
             i_parent = parent_node.get_indexes()
+            parent_item = self.__get_target(*i_parent)
+            """@type :QTreeWidgetItem"""
+            indexes = []
+            indexes.extend(i_parent)
+            indexes.append(parent_item.childCount())
             item = self.__make_item(child_node.leaf.name, child_node.leaf.NAME)
-            self.__get_target(*i_parent).addChild(item)
+            self.add(item, *indexes)
+            item.setExpanded(child_node.is_expanded)
+            item.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
             if len(child_node.children):
                 self.update(child_node)
 
     def move_item(self, from_indexes, to_indexes):
         child = self.remove(*from_indexes)
         self.add(child, *to_indexes)
+        self.setCurrentItem(child)
 
     def mousePressEvent(self, e):
         """:type e: QMouseEvent.QMouseEvent"""
@@ -121,6 +140,10 @@ class TreeView(QTreeWidget):
         i_parent = indexes[:-1]
         i_target = indexes[-1]
         self.__get_target(*i_parent).insertChild(i_target, child)
+        child.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
+        if child.text(1) == ActionGroup.NAME:
+            child.setIcon(0, QtGui.QIcon(
+                Options.assets_path + "folder_16x16.png"))
 
     def remove(self, *indexes):
         i_parent = indexes[:-1]
@@ -129,8 +152,14 @@ class TreeView(QTreeWidget):
 
     def __make_item(self, name, type_name):
         item = QTreeWidgetItem(None, [name, type_name])
+        item.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
         if type_name == UI.ACTION_GROUP:
-            item.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
             item.setIcon(
                 0, QtGui.QIcon(Options.assets_path + "folder_16x16.png"))
         return item
+
+    def on_item_expanded(self, item):
+        Facade.instance.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(True, self.get_indexes(item)))
+
+    def on_item_collapsed(self, item):
+        Facade.instance.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(False, self.get_indexes(item)))

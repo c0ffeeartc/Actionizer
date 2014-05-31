@@ -20,11 +20,22 @@ class Notes(object):
     TREE_MODEL_LOADED = "TREE_MODEL_LOADED"
     SHOW_RENAME_DIALOG = "SHOW_RENAME_DIALOG"
     SHOW_TEXT_DIALOG = "SHOW_TEXT_DIALOG"
+    TREE_MODEL_EXPANDED = "TREE_MODEL_EXPANDED"
     SHOW_REPLACE_STEP_DIALOG = "SHOW_REPLACE_STEP_DIALOG"
     CONTEXT_MENU_RENAME = "CONTEXT_MENU_RENAME"
     CONTEXT_MENU_REPLACE_STEP = "CONTEXT_MENU_REPLACE_STEP"
     REPLACE_STEP_COMMAND = "REPLACE_STEP_COMMAND"
 
+
+class TreeModelExpandedVO(object):
+    def __init__(self, has_expanded, indexes):
+        """
+        @type has_expanded: bool
+        @type indexes: list of int
+        @return:
+        """
+        self.has_expanded = has_expanded
+        self.indexes = indexes
 
 class TreeModelMoveVO(object):
     def __init__(self, drag_indexes, target_indexes):

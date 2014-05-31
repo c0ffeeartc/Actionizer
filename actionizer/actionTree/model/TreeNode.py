@@ -16,6 +16,7 @@ class TreeNode(object):
         self.parent = None
         self.children = []
         self.children_type_names = []
+        self.is_expanded = False
         if children_type_name:
             self.children_type_names.append(children_type_name)
 
@@ -94,6 +95,7 @@ class TreeNode(object):
                 "leaf": self.leaf.jsonify(),
                 "children": self.children,
                 "children_type_names": self.children_type_names,
+                "is_expanded": self.is_expanded,
             }
         }
 
@@ -102,6 +104,8 @@ class TreeNode(object):
         if o['__class__'] == TreeNode.NAME:
             leaf = o["__value__"]["leaf"]
             cont = TreeNode(leaf)
+            """@type :TreeNode"""
+            cont.is_expanded = o["__value__"]["is_expanded"]
             cont.children = [child_node for child_node in o["__value__"]["children"]]
             for child_node in cont.children:
                 child_node.parent = cont

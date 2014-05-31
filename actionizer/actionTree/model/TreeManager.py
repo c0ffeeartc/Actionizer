@@ -81,6 +81,9 @@ class TreeManager(object):
     def get_type(self, *indexes):
         return self.__get_target(*indexes).get_type()
 
+    def set_expanded(self, has_expanded, *indexes):
+        self.__get_target(*indexes).is_expanded = has_expanded
+
     def __getitem__(self, i):
         return self.root_node[i]
 
