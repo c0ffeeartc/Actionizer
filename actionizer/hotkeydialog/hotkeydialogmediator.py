@@ -31,12 +31,12 @@ class HotkeyDialogMediator(Mediator):
         elif note.getName() == HotkeyDialogView.HOTKEY_DIALOG_CANCEL:
             pass
         elif note.getName() == Notes.SHOW_HOTKEY_DIALOG:
-            vo = note.body
-            """:type :ShowHotkeyDialogVO"""
-            self.__show_hotkey_dialog(vo.hotkey)
+            self.__show_hotkey_dialog(note)
 
-    def __show_hotkey_dialog(self, hotkey=""):
-        self.__dialog.edit_line.setText(hotkey)
+    def __show_hotkey_dialog(self, note):
+        vo = note.body
+        """:type :ShowHotkeyDialogVO"""
+        self.__dialog.edit_line.setText(vo.hotkey)
         self.__dialog.exec_()
 
     def handle_set_hotkey(self, note):
@@ -46,4 +46,4 @@ class HotkeyDialogMediator(Mediator):
         indexes = tree_mediator.get_indexes(tree_mediator.get_cur_item())
         tree_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
         """:type :TreeModelProxy"""
-        tree_proxy.rename(new_name, *indexes)
+        # tree_proxy.rename(new_name, *indexes)
