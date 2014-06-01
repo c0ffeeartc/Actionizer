@@ -42,7 +42,10 @@ class Action(object):
     def jsonify(self):
         return {
             "__class__": Action.NAME,
-            "__value__": {"name": self.name}
+            "__value__": {
+                "name": self.name,
+                "hotkey": self.hotkey
+            }
         }
 
     @classmethod
@@ -50,4 +53,5 @@ class Action(object):
         if o['__class__'] == Action.NAME:
             action = Action()
             action.name = o["__value__"]["name"]
+            action.hotkey = o["__value__"]["hotkey"]
             return action

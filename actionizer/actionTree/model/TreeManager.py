@@ -87,6 +87,11 @@ class TreeManager(object):
     def __getitem__(self, i):
         return self.root_node[i]
 
+    def set_hotkey(self, hotkey_str, *indexes):
+        selected_node = self.__get_target(*indexes)
+        if selected_node.leaf.NAME == Action.NAME:
+            selected_node.leaf.hotkey = hotkey_str
+
     def __get_target(self, *indexes):
         """
         :type indexes:list of int

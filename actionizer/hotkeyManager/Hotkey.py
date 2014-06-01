@@ -10,6 +10,7 @@ class Hotkey(object):
     timer = None
     main_window = None
     is_listening = False
+    is_listening_paused = False
 
     def __init__(self, main_window):
         self.hotkey_manager = pyHook.HookManager()
@@ -30,7 +31,7 @@ class Hotkey(object):
             self.main_window.handle_key(self.key_que.pop(0))
 
     def on_key(self, event):
-        if self.is_listening:
+        if self.is_listening and not self.is_listening_paused:
             self.key_que.append(event)
         return True
 

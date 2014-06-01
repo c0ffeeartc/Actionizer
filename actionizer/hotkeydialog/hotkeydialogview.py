@@ -1,4 +1,4 @@
-from PySide.QtCore import Qt, QEvent
+from PySide.QtCore import QEvent
 from PySide.QtGui import QDialog, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QKeySequence
 from puremvc.patterns.facade import Facade
 
@@ -27,6 +27,7 @@ class HotkeyDialogView(QDialog):
         self.alt_check = QCheckBox()
         self.alt_label = QLabel("ALT")
 
+
         self.cancel_btn = QPushButton("&Cancel")
         # noinspection PyUnresolvedReferences
         self.cancel_btn.clicked.connect(self.reject)
@@ -50,6 +51,13 @@ class HotkeyDialogView(QDialog):
         self.v_layout.addLayout(self.h_btn_layout)
         self.setLayout(self.v_layout)
 
+        # noinspection PyUnresolvedReferences
+        self.accepted.connect(self.on_accept)
+        # noinspection PyUnresolvedReferences
+        self.rejected.connect(self.on_reject)
+
+        self.__key = None
+
     def eventFilter(self, source, event):
         """
         @type event: QEvent.QEvent
@@ -58,15 +66,26 @@ class HotkeyDialogView(QDialog):
         if event.type() == QEvent.KeyPress:
             event = event
             """:type :QKeyEvent"""
-            key_seq = QKeySequence(event.key())
-            self.edit_line.setText(key_seq.toString())
+            self.__key = event.key
+            self.edit_line.setText(QKeySequence(event.key()).toString())
             return True
         return QDialog.eventFilter(self, source, event)
 
 
     def on_accept(self):
+        hotkey_str = ""
+        key = self.edit_line.text()
+        if key:
+            if self.control_check.isChecked():
+                hotkey_str += "Ctrl+"
+            if self.alt_check.isChecked():
+                hotkey_str += "Alt+"
+            if self.shift_check.isChecked():
+                hotkey_str += "Shift+"
+            hotkey_str += key
         Facade.getInstance().sendNotification(
             HotkeyDialogView.HOTKEY_DIALOG_OK,
+            {"key_sequence": hotkey_str}
         )
 
     def on_reject(self):

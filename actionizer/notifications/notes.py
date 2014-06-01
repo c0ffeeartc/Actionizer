@@ -5,6 +5,8 @@ class Notes(object):
     STARTUP_COMMAND = "STARTUP_COMMAND"
     START_LISTEN_GLOBAL_HOTKEYS = "START_LISTEN_GLOBAL_HOTKEYS"
     STOP_LISTEN_GLOBAL_HOTKEYS = "STOP_LISTEN_GLOBAL_HOTKEYS"
+    PAUSE_LISTEN_GLOBAL_HOTKEYS = "PAUSE_LISTEN_GLOBAL_HOTKEYS"
+    UNPAUSE_LISTEN_GLOBAL_HOTKEYS = "UNPAUSE_LISTEN_GLOBAL_HOTKEYS"
     SHOW_CONTEXT_MENU = "SHOW_CONTEXT_MENU"
     TREE_MODEL_CHANGED = "TREE_MODEL_CHANGED"
     TREE_NODE_RENAMED = "TREE_NODE_RENAMED"
@@ -27,6 +29,14 @@ class Notes(object):
     CONTEXT_MENU_SET_HOTKEY = "CONTEXT_MENU_SET_HOTKEY"
     CONTEXT_MENU_REPLACE_STEP = "CONTEXT_MENU_REPLACE_STEP"
     REPLACE_STEP_COMMAND = "REPLACE_STEP_COMMAND"
+    HOTKEY_CHANGED = "HOTKEY_CHANGED"
+
+
+class HotkeyChangedVO(object):
+    def __init__(self, hotkey_str, indexes):
+        """@type hotkey_str:str"""
+        self.hotkey_str = hotkey_str
+        self.indexes = indexes
 
 
 class ShowHotkeyDialogVO(object):
@@ -44,6 +54,7 @@ class TreeModelExpandedVO(object):
         """
         self.has_expanded = has_expanded
         self.indexes = indexes
+
 
 class TreeModelMoveVO(object):
     def __init__(self, drag_indexes, target_indexes):

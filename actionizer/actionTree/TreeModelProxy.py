@@ -1,5 +1,5 @@
 from actionTree.model.TreeManager import TreeManager
-from notifications.notes import Notes, TreeNodeRenamedVO, TreeModelMovedVO
+from notifications.notes import Notes, TreeNodeRenamedVO, TreeModelMovedVO, HotkeyChangedVO
 from puremvc.patterns.facade import Facade
 from puremvc.patterns.proxy import Proxy
 
@@ -58,6 +58,13 @@ class TreeModelProxy(Proxy):
 
     def set_expanded(self, has_expanded, *indexes):
         self.__tree.set_expanded(has_expanded, *indexes)
+
+    def set_hotkey(self, hotkey_str, *indexes):
+        self.__tree.set_hotkey(hotkey_str, *indexes)
+        self.facade.sendNotification(
+            Notes.HOTKEY_CHANGED,
+            HotkeyChangedVO(hotkey_str, indexes),
+        )
 
     def get_indexes(self, tree_node):
         return self.__tree.get_indexes(tree_node)

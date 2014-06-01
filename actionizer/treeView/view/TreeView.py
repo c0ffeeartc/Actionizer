@@ -28,7 +28,7 @@ class TreeView(QTreeWidget):
 
         self.setHeaderItem(QTreeWidgetItem(None, ["Name", "TYPE_NAME"]))
         self.setColumnCount(3)
-        self.setColumnWidth(0, 300)
+        self.setColumnWidth(0, 200)
 
         self.setAcceptDrops(True)
         self.setDragEnabled(True)
@@ -78,11 +78,18 @@ class TreeView(QTreeWidget):
             indexes.extend(i_parent)
             indexes.append(parent_item.childCount())
             item = self.__make_item(child_node.leaf.name, child_node.leaf.NAME)
+            if child_node.leaf.NAME == UI.ACTION:
+                item.setText(2, child_node.leaf.hotkey)
             self.add(item, *indexes)
             item.setExpanded(child_node.is_expanded)
             item.setChildIndicatorPolicy(QTreeWidgetItem.ShowIndicator)
             if len(child_node.children):
                 self.update(child_node)
+
+    def set_hotkey(self, hotkey_str, *indexes):
+        cur_item = self.__get_target(*indexes)
+        if self.get_type(cur_item) == UI.ACTION:
+            cur_item.setText(2, hotkey_str)
 
     def move_item(self, from_indexes, to_indexes):
         child = self.remove(*from_indexes)
