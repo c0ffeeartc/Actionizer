@@ -1,4 +1,5 @@
 from actionTree.model.Action import Action
+from actionTree.model.StepItem import StepItem
 
 __author__ = 'cfe'
 
@@ -39,6 +40,9 @@ class TreeNode(object):
     def play(self):
         if self.leaf.NAME == Action.NAME:
             self.leaf.play(self.children)
+        if self.leaf.NAME == StepItem.NAME:
+            start_from_index = self.parent.children.index(self)
+            self.parent.leaf.play(self.parent.children, self.parent.children.index(self))
 
     def remove(self, i):
         """

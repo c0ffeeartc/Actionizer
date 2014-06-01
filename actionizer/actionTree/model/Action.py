@@ -23,7 +23,7 @@ class Action(object):
             if cur_i < start_i:
                 continue
             self.__inject_results(step_items, cur_i)
-            result = step_items[cur_i].play(ps_app)
+            result = step_items[cur_i].leaf.play(ps_app)
             self.results.append(result)
         del self.results[:]
 
@@ -33,7 +33,7 @@ class Action(object):
         step with index
         """
         step_item = step_items[into_step_i]
-        for src_i, result_keys in step_item.result_links.iteritems():
+        for src_i, result_keys in step_item.leaf.result_links.iteritems():
             if src_i > into_step_i:
                 continue
             for key in result_keys:

@@ -53,6 +53,9 @@ class TreeModelProxy(Proxy):
             TreeNodeRenamedVO(new_name, indexes),
         )
 
+    def play(self, *indexes):
+        self.__tree.play(*indexes)
+
     def get_type(self, *indexes):
         self.__tree.get_type(*indexes)
 

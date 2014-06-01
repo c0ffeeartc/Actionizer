@@ -31,6 +31,7 @@ class TreeViewMediator(Mediator):
             Notes.TREE_MODEL_MOVED,
             Notes.TREE_MODEL_EXPANDED,
             Notes.HOTKEY_CHANGED,
+            Notes.TREE_ITEM_PLAY,
         ]
 
     def handleNotification(self, note):
@@ -90,6 +91,10 @@ class TreeViewMediator(Mediator):
             vo = note.body
             """@type :TreeModelMoveVO"""
             tree_model_proxy.move(vo.drag_indexes, vo.target_indexes)
+
+        elif note.name == Notes.TREE_ITEM_PLAY:
+            indexes = self.__tree_view.get_indexes(self.get_cur_item())
+            tree_model_proxy.play(*indexes)
 
         elif note.name == Notes.TREE_MODEL_MOVED:
             vo = note.body

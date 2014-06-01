@@ -1,12 +1,11 @@
 from PySide import QtGui
 
-from PySide.QtCore import Qt
+from PySide.QtCore import Qt, Signal
 from PySide.QtGui import QTreeWidgetItem
 
 from actionTree.model.UI import UI
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from options.OptionsVO import Options
-from actionTree.model.Action import Action
 from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
 from stepPool.model.StepFactory import StepUids
@@ -16,25 +15,19 @@ __author__ = 'cfe'
 
 
 class MainWindow(QtGui.QWidget):
-    main_layout = QtGui.QVBoxLayout()
-    tree = None
-    btn_layout = QtGui.QHBoxLayout()
-    btn_play = None
-    btn_new = None
-    btn_remove = None
-    play_hotkey = None
-    timer = None
-    act = None
+    btn_play_pressed = Signal()
 
-    def __init__(self, treeView):
+    def __init__(self, tree_view):
         super(MainWindow, self).__init__()
+        self.tree = tree_view
+
+        self.main_layout = QtGui.QVBoxLayout()
+        self.btn_layout = QtGui.QHBoxLayout()
 
         self.act = QtGui.QAction(self)
         self.act.setShortcut(QtGui.QKeySequence(Qt.CTRL + Qt.ALT + Qt.Key_L))
         self.act.setShortcutContext(Qt.ApplicationShortcut)
         self.addAction(self.act)
-
-        self.tree = treeView
 
         self.setWindowIcon(QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
         self.tray_icon = QtGui.QSystemTrayIcon()
@@ -55,7 +48,8 @@ class MainWindow(QtGui.QWidget):
             QtGui.QIcon(Options.assets_path + "play_16x16.png"), "")
         self.btn_layout.addWidget(self.btn_play)
         # noinspection PyUnresolvedReferences
-        self.btn_play.clicked.connect(self.play_action)
+        self.btn_play.clicked.connect(self.on_play)
+
         self.btn_new = QtGui.QPushButton(
             QtGui.QIcon(Options.assets_path + "new_file_16x16.png"), "")
         # noinspection PyUnresolvedReferences
@@ -78,7 +72,7 @@ class MainWindow(QtGui.QWidget):
 
     def handle_key(self, key_event):
         if key_event.Key == "P":
-            self.play_action()
+            self.on_play()
         elif key_event.Key == "Q":
             self.disable_global_hotkeys()
         elif key_event.Key == "A":
@@ -91,20 +85,8 @@ class MainWindow(QtGui.QWidget):
     def enable_global_hotkeys(self):
         Facade.getInstance().sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
 
-    def play_action(self, start_index=0):
-        print("playing")
-        cur_item = self.tree.currentItem()
-        if cur_item.text(1) == UI.ACTION or cur_item.text(1) == UI.STEP:
-            gui_action = None
-            if cur_item.text(1) == UI.ACTION:
-                gui_action = cur_item
-            elif cur_item.text(1) == UI.STEP:
-                gui_action = cur_item.parent()
-                start_index = cur_item.parent().indexOfChild(cur_item)
-            action = Action()
-            for i in xrange(gui_action.childCount()):
-                step_uid = gui_action.child(i).text(2)
-                # actionTree.play(start_index)
+    def on_play(self):
+        self.btn_play_pressed.emit()
 
     def on_new_btn_clicked(self):
         Facade.getInstance().sendNotification(
