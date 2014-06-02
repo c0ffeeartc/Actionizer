@@ -64,9 +64,10 @@ class TreeModelProxy(Proxy):
 
     def set_hotkey(self, hotkey_str, *indexes):
         self.__tree.set_hotkey(hotkey_str, *indexes)
+        node = self.__tree.get_node(*indexes)
         self.facade.sendNotification(
             Notes.HOTKEY_CHANGED,
-            HotkeyChangedVO(hotkey_str, indexes),
+            HotkeyChangedVO(hotkey_str, node),
         )
 
     def get_indexes(self, tree_node):

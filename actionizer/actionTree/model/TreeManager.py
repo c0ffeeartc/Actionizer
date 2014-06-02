@@ -17,23 +17,23 @@ class TreeManager(object):
         self.root_node = TreeNode(ActionRoot(), ActionGroup.NAME)
 
     def play(self, *indexes):
-        self.__get_target(*indexes).play()
+        self.get_node(*indexes).play()
 
     def add(self, child, *indexes):
         if indexes:
             i_parent = indexes[0:-1]
             i_child = indexes[-1]
-            self.__get_target(*i_parent).add(child, i_child)
+            self.get_node(*i_parent).add(child, i_child)
         else:
             self.root_node.add(child)
 
     def remove(self, *indexes):
         i_parent = indexes[0:-1]
         i_target = indexes[-1]
-        return self.__get_target(*i_parent).children.pop(i_target)
+        return self.get_node(*i_parent).children.pop(i_target)
 
     def rename(self, new_name, *indexes):
-        tree_node = self.__get_target(*indexes)
+        tree_node = self.get_node(*indexes)
         tree_node.leaf.name = new_name
         return tree_node
 
@@ -79,20 +79,25 @@ class TreeManager(object):
         return None, None
 
     def get_type(self, *indexes):
-        return self.__get_target(*indexes).get_type()
+        return self.get_node(*indexes).get_type()
 
     def set_expanded(self, has_expanded, *indexes):
-        self.__get_target(*indexes).is_expanded = has_expanded
+        self.get_node(*indexes).is_expanded = has_expanded
 
     def __getitem__(self, i):
         return self.root_node[i]
 
+    def get_hotkey(self, *indexes):
+        node = self.get_node(*indexes)
+        if node.leaf.NAME == Action.NAME:
+            return node.leaf.hotkey
+
     def set_hotkey(self, hotkey_str, *indexes):
-        selected_node = self.__get_target(*indexes)
+        selected_node = self.get_node(*indexes)
         if selected_node.leaf.NAME == Action.NAME:
             selected_node.leaf.hotkey = hotkey_str
 
-    def __get_target(self, *indexes):
+    def get_node(self, *indexes):
         """
         :type indexes:list of int
         :rtype :TreeNode

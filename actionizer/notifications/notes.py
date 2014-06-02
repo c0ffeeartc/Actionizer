@@ -34,10 +34,10 @@ class Notes(object):
 
 
 class HotkeyChangedVO(object):
-    def __init__(self, hotkey_str, indexes):
+    def __init__(self, hotkey_str, node):
         """@type hotkey_str:str"""
         self.hotkey_str = hotkey_str
-        self.indexes = indexes
+        self.node = node
 
 
 class ShowHotkeyDialogVO(object):

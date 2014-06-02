@@ -85,7 +85,7 @@ class TreeViewMediator(Mediator):
         elif note.name == Notes.HOTKEY_CHANGED:
             vo = note.body
             """:type :HotkeyChangedVO"""
-            self.__tree_view.set_hotkey(vo.hotkey_str, *vo.indexes)
+            self.__tree_view.set_hotkey(vo.hotkey_str, *vo.node.get_indexes())
 
         elif note.name == Notes.TREE_MODEL_MOVE:
             vo = note.body
