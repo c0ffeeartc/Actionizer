@@ -1,4 +1,3 @@
-from actionTree.TreeModelProxy import TreeModelProxy
 from combodialog.combodialogmediator import ComboDialogMediator
 from commands.replacestepcommand import ReplaceStepCommand
 from contextMenu.contextMenuMediator import ContextMenuMediator
@@ -10,7 +9,8 @@ from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator
 from mainWindow.MainWindowMediator import MainWindowMediator
 from textDialog.textDialogMediator import TextDialogMediator
-from treeView.treeViewMediator import TreeViewMediator
+from treemdl.treemodel2proxy import TreeModel2Proxy
+from treeview2.treeview2mediator import TreeView2Mediator
 
 __author__ = 'cfe'
 
@@ -26,12 +26,14 @@ class StartupCommand(SimpleCommand):
 
         # registerProxies
         self.facade.registerProxy(StepPoolProxy())
-        tree_model_proxy = TreeModelProxy()
+        # tree_model_proxy = TreeModelProxy()
+        tree_model_proxy = TreeModel2Proxy()
         self.facade.registerProxy(tree_model_proxy)
         # ...
 
         # registerMediator
-        self.facade.registerMediator(TreeViewMediator())
+        # self.facade.registerMediator(TreeViewMediator())
+        self.facade.registerMediator(TreeView2Mediator())
         self.facade.registerMediator(TextDialogMediator())
         self.facade.registerMediator(ComboDialogMediator())
         self.facade.registerMediator(HotkeyDialogMediator())

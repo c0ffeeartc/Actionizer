@@ -64,7 +64,7 @@ class MainWindow(QtGui.QWidget):
         self.setLayout(self.main_layout)
         self.main_layout.addWidget(self.tree)
         self.main_layout.addLayout(self.btn_layout)
-        self.add_action_group()
+        # self.add_action_group()
         self.show()
 
     def on_save_clicked(self):

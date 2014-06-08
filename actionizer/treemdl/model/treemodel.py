@@ -5,18 +5,18 @@ from treemdl.model.treenode import TreeNode
 __author__ = 'c0ffee'
 
 
-class TreeModel (QAbstractItemModel):
+class TreeModel(QAbstractItemModel):
     def __init__(self, parent=None):
         super(TreeModel, self).__init__(parent)
 
-        self.rootItem = TreeNode()
-        self.rootItem.leaf = ["Name", "Type"]
+        self.root_node = TreeNode()
+        self.root_node.leaf = ["Name", "Type"]
 
     def get_root_index(self):
-        return self.createIndex(self.rootItem)
+        return self.createIndex(self.root_node)
 
     def __getitem__(self, i):
-        return self.rootItem[i]
+        return self.root_node[i]
 
     # ------------------------------------------------------------
     # required overrides for QAbstractItemModel
@@ -40,7 +40,7 @@ class TreeModel (QAbstractItemModel):
             return QModelIndex()
 
         if not parent_index.isValid():
-                parent_node = self.rootItem
+            parent_node = self.root_node
         else:
             parent_node = parent_index.internalPointer()
 
@@ -69,7 +69,7 @@ class TreeModel (QAbstractItemModel):
             return 0
 
         if not parent_index.isValid():
-            parent_node = self.rootItem
+            parent_node = self.root_node
         else:
             parent_node = parent_index.internalPointer()
 
@@ -79,7 +79,7 @@ class TreeModel (QAbstractItemModel):
         if parent_index.isValid():
             return parent_index.internalPointer().get_column_count()
         else:
-            return self.rootItem.get_column_count()
+            return self.root_node.get_column_count()
 
     def data(self, index, role):
         if not index.isValid():
@@ -100,6 +100,8 @@ class TreeModel (QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return self.rootItem.get_column_data(section)
-
+            if section == 0:
+                return "Name"
+            if section == 1:
+                return "Type"
         return None
