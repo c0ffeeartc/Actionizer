@@ -1,14 +1,14 @@
 from PySide import QtGui
 from PySide.QtCore import Qt, QEvent
 from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QAbstractItemView
-from actionTree.model.Action import Action
-from actionTree.model.ActionGroup import ActionGroup
-from actionTree.model.StepItem import StepItem
 
-from actionTree.model.UI import UI
-from notifications.notes import Notes, ShowContextMenuVO, TreeModelMoveVO, TreeModelExpandedVO
+from notifications.notes import Notes, ShowContextMenuVO, TreeModelMoveVO
 from options.OptionsVO import Options
 from puremvc.patterns.facade import Facade
+from treedataleaf.ui import UI
+from treedataleaf.action import Action
+from treedataleaf.actiongroup import ActionGroup
+from treedataleaf.stepitem import StepItem
 
 
 __author__ = 'c0ffee'
@@ -171,7 +171,9 @@ class TreeView(QTreeWidget):
         return item
 
     def on_item_expanded(self, item):
-        Facade.instance.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(True, self.get_indexes(item)))
+        pass
+        # Facade.instance.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(True, self.get_indexes(item)))
 
     def on_item_collapsed(self, item):
-        Facade.instance.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(False, self.get_indexes(item)))
+        pass
+        # Facade.instance.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(False, self.get_indexes(item)))

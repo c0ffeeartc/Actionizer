@@ -112,7 +112,7 @@ class TreeNode(object):
             tree_node.name = value["name"]
             """@type :TreeNode"""
             if "is_expanded" in value:
-                tree_node.is_expanded = o["__value__"]["is_expanded"]
+                tree_node.set_is_expanded(o["__value__"]["is_expanded"])
             if "child_nodes" in value:
                 loaded_child_nodes = [child_node for child_node in value["child_nodes"]]
                 for child_node in loaded_child_nodes:
@@ -121,3 +121,6 @@ class TreeNode(object):
 
     def get_is_expanded(self):
         return self.__is_expanded
+
+    def set_is_expanded(self, has_expanded):
+        self.__is_expanded = has_expanded

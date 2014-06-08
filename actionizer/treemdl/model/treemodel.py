@@ -55,6 +55,10 @@ class TreeModel(QAbstractItemModel):
             return QModelIndex()
 
     def parent(self, index):
+        """
+        :type index: QModelIndex
+        :rtype :QModelIndex
+        """
         if not index.isValid():
             return QtCore.QModelIndex()
 

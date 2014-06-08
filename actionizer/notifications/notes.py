@@ -47,14 +47,14 @@ class ShowHotkeyDialogVO(object):
 
 
 class TreeModelExpandedVO(object):
-    def __init__(self, has_expanded, indexes):
+    def __init__(self, has_expanded, q_index):
         """
         @type has_expanded: bool
-        @type indexes: list of int
+        @type q_index: QModelIndex
         @return:
         """
         self.has_expanded = has_expanded
-        self.indexes = indexes
+        self.index = q_index
 
 
 class TreeModelMoveVO(object):

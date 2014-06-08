@@ -1,5 +1,5 @@
-from actionTree.model.Action import Action
-from actionTree.model.StepItem import StepItem
+from treedataleaf.action import Action
+from treedataleaf.stepitem import StepItem
 
 __author__ = 'cfe'
 

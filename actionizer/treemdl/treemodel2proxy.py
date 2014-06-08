@@ -8,7 +8,7 @@ __author__ = 'c0ffee'
 
 
 class TreeModel2Proxy(Proxy):
-    NAME = "TreeModelProxy"
+    NAME = "TreeModel2Proxy"
 
     def __init__(self):
         self.__tree = TreeManager()
@@ -25,17 +25,29 @@ class TreeModel2Proxy(Proxy):
             self.get_root().add(child, 0)
             """:type :TreeNode"""
 
-    def remove(self, *indexes):
+    def remove(self, node):
         """
-        :type index: QModelIndex
+        :type node: TreeNode
         """
-        pass
+        parent_node = node.parent_node
+        """:type :TreeNode"""
+        if parent_node:
+            parent_node.remove(node.get_row())
+            """:type :TreeNode"""
 
-    def get_node(self, index):
+    def set_is_expanded(self, has_expanded, q_index):
+        node = q_index.internalPointer()
+        """:type :TreeNode"""
+        node.set_is_expanded(has_expanded)
+
+    def get_node(self, q_index):
         """
-        :type index: QModelIndex
+        :type q_index: QModelIndex
         """
-        pass
+        return q_index.internalPointer()
+
+    def get_parent_q_index(self, child_node_q_index):
+        return self.get_model().parent(child_node_q_index)
 
     def get_root(self):
         return self.__tree.model.root_node
