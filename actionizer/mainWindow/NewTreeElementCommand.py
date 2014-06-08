@@ -2,6 +2,7 @@ from puremvc.patterns.command import SimpleCommand
 from treedataleaf.action import Action
 from treedataleaf.actiongroup import ActionGroup
 from treedataleaf.stepitem import StepItem
+from treedataleaf.ui import UI
 from treemdl.model.treenode import TreeNode
 from treemdl.treemodel2proxy import TreeModel2Proxy
 from treeview2.treeview2mediator import TreeView2Mediator
@@ -21,16 +22,18 @@ class NewTreeElementCommand(SimpleCommand):
         """:type :TreeView2Mediator"""
 
         parent_node = tree_view_mediator.get_cur_item()
+        """:type :TreeNode"""
         indexes = []
 
         if parent_node is None:
-            tree_model_proxy.get_root().add(TreeNode(ActionGroup()), 0)
-            tree_view_mediator.getViewComponent().reset()
+            index = 0
+            tree_model_proxy.get_root().add(TreeNode(ActionGroup()), index)
+            tree_model_proxy.get_model().rowsInserted.emit(parent_node, index, index)
             return
         parent_type = parent_node.get_type()
-        is_action = parent_type == Action.NAME
-        is_group = parent_type == ActionGroup.NAME
-        is_expanded = parent_node.is_expanded
+        is_action = parent_type == UI.ACTION
+        is_group = parent_type == UI.ACTION_GROUP
+        is_expanded = parent_node.get_is_expanded()
 
         child = None
 

@@ -19,6 +19,7 @@ class TreeView2Mediator(Mediator):
 
     def listNotificationInterests(self):
         return [
+            Notes.TREE_MODEL_SAVE,
             Notes.TREE_MODEL_LOAD,
             Notes.TREE_MODEL_LOADED,
         ]
@@ -26,6 +27,11 @@ class TreeView2Mediator(Mediator):
     def handleNotification(self, note):
         if note.name == Notes.TREE_MODEL_LOAD:
             self.model_proxy.load()
+        if note.name == Notes.TREE_MODEL_LOADED:
+            pass
+            # self.__tree_view.reset()
+        if note.name == Notes.TREE_MODEL_SAVE:
+            self.model_proxy.save()
 
     def get_cur_item(self):
         cur_index = self.__tree_view.currentIndex()

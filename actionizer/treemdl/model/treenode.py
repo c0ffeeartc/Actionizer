@@ -15,7 +15,7 @@ class TreeNode(object):
         """
         self.parent_node = None
         self.name = "unnamed"
-        self.is_expanded = False
+        self.__is_expanded = False
         """:type :TreeNode"""
         self.leaf = leaf
         self.child_nodes = []
@@ -99,21 +99,25 @@ class TreeNode(object):
                 "leaf": self.leaf.jsonify(),
                 "child_nodes": self.child_nodes,
                 # "children_type_names": self.children_type_names,
-                # "is_expanded": self.is_expanded,
+                "is_expanded": self.__is_expanded,
             }
         }
 
     @classmethod
     def dejsonify(cls, o):
         if o['__class__'] == TreeNode.NAME:
-            leaf = o["__value__"]["leaf"]
+            value = o["__value__"]
+            leaf = value["leaf"]
             tree_node = TreeNode(leaf)
+            tree_node.name = value["name"]
             """@type :TreeNode"""
-            if hasattr(o["__value__"], "is_expanded"):
+            if "is_expanded" in value:
                 tree_node.is_expanded = o["__value__"]["is_expanded"]
-            if hasattr(o["__value__"], "child_nodes"):
-                tree_node.child_nodes = [child_node for child_node in o["__value__"]["child_nodes"]]
-                for child_node in tree_node.child_nodes:
-                    child_node.parent = tree_node
-            # tree_node.children_type_names = o["__value__"]["children_type_names"]
+            if "child_nodes" in value:
+                loaded_child_nodes = [child_node for child_node in value["child_nodes"]]
+                for child_node in loaded_child_nodes:
+                    tree_node.add(child_node)
             return tree_node
+
+    def get_is_expanded(self):
+        return self.__is_expanded

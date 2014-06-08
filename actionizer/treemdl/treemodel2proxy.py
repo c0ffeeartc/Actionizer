@@ -43,8 +43,11 @@ class TreeModel2Proxy(Proxy):
     def get_model(self):
         return self.__tree.model
 
+    def save(self):
+        self.__tree.save()
+        self.sendNotification(Notes.TREE_MODEL_SAVED)
+
     def load(self):
         print("loading")
         self.__tree.load()
-        root_node = self.__tree.get_root()
-        self.sendNotification(Notes.TREE_MODEL_LOADED, {"root": root_node})
+        self.sendNotification(Notes.TREE_MODEL_LOADED, {"root": self.__tree.get_root()})

@@ -43,7 +43,7 @@ class TreeManager(object):
         return self.get_node(*indexes).get_type()
 
     def set_expanded(self, has_expanded, *indexes):
-        self.get_node(*indexes).is_expanded = has_expanded
+        self.get_node(*indexes).__is_expanded = has_expanded
 
     def __getitem__(self, i):
         return self.get_root()[i]
@@ -98,9 +98,6 @@ class TreeManager(object):
                 loaded_root = json.load(f, object_hook=self.__from_json)
                 """:type :TreeNode"""
                 self.model.root_node = loaded_root
-                pass
-                # for child in loaded_root.children:
-                #     self.model.root_node.add(child)
         except IOError as exc:
             if exc.errno == errno.ENOENT:
                 self.save()
