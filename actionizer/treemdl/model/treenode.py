@@ -1,4 +1,5 @@
-from treedataleaf import stepitem, action
+from treedataleaf.action import Action
+from treedataleaf.stepitem import StepItem
 
 __author__ = 'c0ffee'
 
@@ -49,9 +50,9 @@ class TreeNode(object):
         return self.leaf.NAME
 
     def play(self):
-        if self.leaf.NAME == action.NAME:
+        if self.leaf.NAME == Action.NAME:
             self.leaf.play(self.child_nodes)
-        if self.leaf.NAME == stepitem.NAME:
+        if self.leaf.NAME == StepItem.NAME:
             start_from_index = self.parent_node.child_nodes.index(self)
             self.parent_node.leaf.play(
                 self.parent_node.child_nodes,
@@ -85,10 +86,10 @@ class TreeNode(object):
         @return:
         """
         if i == 0:
-            return self.name
+            return self.leaf.name
         elif i == 1:
-            return self.get_type()
-        return "Error"
+            return self.leaf.NAME
+        return "Error in get_column_data"
 
     def jsonify(self):
         return {

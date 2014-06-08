@@ -35,7 +35,7 @@ class TreeModel(QAbstractItemModel):
 
     def index(self, i, column, parent_index):
         """
-        :param i: in parent table
+        :param i: row in parent table
         :param column: in parent table
         :type parent_index: QModelIndex
         :rtype :QModelIndex
@@ -50,7 +50,7 @@ class TreeModel(QAbstractItemModel):
 
         child_node = parent_node[i]
         if child_node is not None:
-            return self.createIndex(i, 0, child_node)
+            return self.createIndex(i, column, child_node)
         else:
             return QModelIndex()
 
@@ -63,7 +63,7 @@ class TreeModel(QAbstractItemModel):
         parent_node = child_node.parent_node
         """:type :TreeNode"""
 
-        if parent_node is None:
+        if not parent_node:
             return QtCore.QModelIndex()
 
         return self.createIndex(parent_node.get_row(), 0, parent_node)
@@ -94,7 +94,7 @@ class TreeModel(QAbstractItemModel):
         if not index.isValid():
             return None
 
-        if role != QtCore.Qt.DisplayRole:
+        if not role == QtCore.Qt.DisplayRole:
             return None
 
         node = index.internalPointer()

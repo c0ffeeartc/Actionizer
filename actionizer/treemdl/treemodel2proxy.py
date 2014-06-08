@@ -13,11 +13,6 @@ class TreeModel2Proxy(Proxy):
     def __init__(self):
         self.__tree = TreeManager()
         super(TreeModel2Proxy, self).__init__(TreeModel2Proxy.NAME, self.__tree)
-        self.get_root().add(TreeNode(ActionGroup()))
-        self.get_root()[0].name = "asdf"
-        self.get_root().add(TreeNode(ActionGroup()))
-        self.get_root().add(TreeNode(ActionGroup()))
-        self.get_root()[2].name = "3"
 
     def add(self, parent_node, index):
         """
