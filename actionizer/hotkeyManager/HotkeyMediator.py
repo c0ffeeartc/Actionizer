@@ -25,7 +25,7 @@ class HotkeyMediator(Mediator):
             Notes.PAUSE_LISTEN_GLOBAL_HOTKEYS,
             Notes.UNPAUSE_LISTEN_GLOBAL_HOTKEYS,
             Notes.HOTKEY_CHANGED,
-            Notes.TREE_MODEL_LOADED,
+            # Notes.TREE_MODEL_LOADED,
         ]
 
     def handleNotification(self, note):
@@ -47,7 +47,8 @@ class HotkeyMediator(Mediator):
             self.__hotkey_list.add_hotkey(vo.node.leaf.hotkey, vo.node)
 
         elif note.name == Notes.TREE_MODEL_LOADED:
-            self.__hotkey_list.update(note.body["root"])
+            root_node = note.body["root"]
+            self.__hotkey_list.update(root_node)
 
     def __is_listening(self):
         return self.__hotkey.is_listening

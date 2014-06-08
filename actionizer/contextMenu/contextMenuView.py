@@ -1,9 +1,9 @@
 from PySide.QtGui import QMenu, QAction
-from actionTree.model.UI import UI
 
 from stepPool.StepPoolProxy import StepPoolProxy
 from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
+from treedataleaf.ui import UI
 
 
 __author__ = 'c0ffee'

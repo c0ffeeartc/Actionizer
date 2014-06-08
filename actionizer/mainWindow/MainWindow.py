@@ -1,14 +1,13 @@
 from PySide import QtGui
-
 from PySide.QtCore import Qt, Signal
 from PySide.QtGui import QTreeWidgetItem
 
-from actionTree.model.UI import UI
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from options.OptionsVO import Options
 from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
 from stepPool.model.StepFactory import StepUids
+from treedataleaf.ui import UI
 
 
 __author__ = 'cfe'

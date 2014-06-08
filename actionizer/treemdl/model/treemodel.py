@@ -1,16 +1,20 @@
 from PySide import QtCore
 from PySide.QtCore import QAbstractItemModel, QModelIndex
+
+from treedataleaf.actionroot import ActionRoot
 from treemdl.model.treenode import TreeNode
+
 
 __author__ = 'c0ffee'
 
 
 class TreeModel(QAbstractItemModel):
     def __init__(self, parent=None):
+        """
+        :type parent: PySide.QtCore.QObject
+        """
         super(TreeModel, self).__init__(parent)
-
-        self.root_node = TreeNode()
-        self.root_node.leaf = ["Name", "Type"]
+        self.root_node = TreeNode(ActionRoot())
 
     def get_root_index(self):
         return self.createIndex(self.root_node)
@@ -46,7 +50,7 @@ class TreeModel(QAbstractItemModel):
 
         child_node = parent_node[i]
         if child_node is not None:
-            return self.createIndex(i, column, child_node)
+            return self.createIndex(i, 0, child_node)
         else:
             return QModelIndex()
 
@@ -62,7 +66,7 @@ class TreeModel(QAbstractItemModel):
         if parent_node is None:
             return QtCore.QModelIndex()
 
-        return self.createIndex(parent_node.get_index(), 0, parent_node)
+        return self.createIndex(parent_node.get_row(), 0, parent_node)
 
     def rowCount(self, parent_index):
         if parent_index.column() > 0:
@@ -73,7 +77,7 @@ class TreeModel(QAbstractItemModel):
         else:
             parent_node = parent_index.internalPointer()
 
-        return len(parent_node)
+        return len(parent_node.child_nodes)
 
     def columnCount(self, parent_index):
         if parent_index.isValid():
@@ -82,6 +86,11 @@ class TreeModel(QAbstractItemModel):
             return self.root_node.get_column_count()
 
     def data(self, index, role):
+        """
+        @type index: QModelIndex
+        @param role:
+        @return:
+        """
         if not index.isValid():
             return None
 

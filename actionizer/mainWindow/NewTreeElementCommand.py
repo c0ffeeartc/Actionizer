@@ -1,10 +1,8 @@
-from actionTree.TreeModelProxy import TreeModelProxy
-from actionTree.model.Action import Action
-from actionTree.model.ActionGroup import ActionGroup
-from actionTree.model.StepItem import StepItem
-from actionTree.model.TreeNode import TreeNode
 from puremvc.patterns.command import SimpleCommand
-from treeView.treeViewMediator import TreeViewMediator
+from treedataleaf.actiongroup import ActionGroup
+from treemdl.model.treenode import TreeNode
+from treemdl.treemodel2proxy import TreeModel2Proxy
+from treeview2.treeview2mediator import TreeView2Mediator
 
 __author__ = 'cfe'
 
@@ -15,18 +13,19 @@ class NewTreeElementCommand(SimpleCommand):
     NAME = "NewTreeElementCommand"
 
     def execute(self, note):
-        tree_view_mediator = self.facade.retrieveMediator(TreeViewMediator.NAME)
-        """:type :TreeViewMediator"""
-        tree_model_proxy = self.facade.retrieveProxy(TreeModelProxy.NAME)
-        """:type :TreeModelProxy"""
+        tree_model_proxy = self.facade.retrieveProxy(TreeModel2Proxy.NAME)
+        """:type :TreeModel2Proxy"""
+        root = tree_model_proxy.get_root()
+        root.add(TreeNode(ActionGroup()), 0)
+        return
+        tree_view_mediator = self.facade.retrieveMediator(TreeView2Mediator.NAME)
+        """:type :TreeView2Mediator"""
+
         cur_item = tree_view_mediator.get_cur_item()
         indexes = []
 
-        if not cur_item:
-            child = TreeNode(ActionGroup(), Action.NAME)
-            """:type :TreeNode"""
-            indexes.append(0)
-            tree_model_proxy.add(child, *indexes)
+        if cur_item is None:
+            tree_model_proxy.add(cur_item, 0)
             return
 
         is_action = cur_item.text(1) == Action.NAME
@@ -41,17 +40,17 @@ class NewTreeElementCommand(SimpleCommand):
             indexes.append(cur_item.childCount())
 
         elif is_action and not is_expanded:
-            child = TreeNode(Action(), StepItem.NAME)
+            child = TreeNode(Action())
             """:type :TreeNode"""
             indexes.append(indexes.pop()+1)
 
         elif is_group and is_expanded:
-            child = TreeNode(Action(), StepItem.NAME)
+            child = TreeNode(Action())
             """:type :TreeNode"""
             indexes.append(cur_item.childCount())
 
         elif is_group and not is_expanded:
-            child = TreeNode(ActionGroup(), Action.NAME)
+            child = TreeNode(ActionGroup())
             """:type :TreeNode"""
             indexes.append(indexes.pop()+1)
 

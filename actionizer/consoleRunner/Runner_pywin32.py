@@ -1,5 +1,5 @@
-from actionTree.model.Action import Action
+from treedataleaf import action
 
 if __name__ == "__main__":
     print ("hello")
-    action1 = Action()
+    action1 = action()

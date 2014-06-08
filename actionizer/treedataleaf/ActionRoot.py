@@ -7,7 +7,7 @@ class ActionRoot(object):
     NAME = "ActionRoot"
 
     def __init__(self):
-        pass
+        self.name = "root"
 
     def jsonify(self):
         return {
