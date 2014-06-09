@@ -17,5 +17,6 @@ class ReplaceStepCommand(SimpleCommand):
 
         vo = note.body
         """:type :ReplaceStepCommandVO"""
-        current_node.step_uid = vo.new_step_uid
+        current_node.leaf.script_path_name = vo.new_step_uid
+        current_node.leaf.step_uid = vo.new_step_uid
         current_node.rename(vo.new_step_uid)

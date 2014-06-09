@@ -22,7 +22,7 @@ class Step(object):
         self.uid = ""
         self.name = ""
         self.default_args_dict = {}
-        self.script = "alert('def');"
+        self.script = "alert('emptyStep');"
         self.script_path_name = ""
 
     def getUid(self):

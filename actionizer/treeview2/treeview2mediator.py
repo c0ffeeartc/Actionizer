@@ -27,8 +27,10 @@ class TreeView2Mediator(Mediator):
     def listNotificationInterests(self):
         return [
             Notes.TREE_MODEL_SAVE,
+            Notes.TREE_MODEL_SAVED,
             Notes.TREE_MODEL_LOAD,
             Notes.TREE_MODEL_LOADED,
+            Notes.TREE_ITEM_PLAY,
             Notes.TREE_MODEL_EXPANDED,
             Notes.TREE_MODEL_REMOVE,
             Notes.TREE_MODEL_REMOVED,
@@ -54,6 +56,10 @@ class TreeView2Mediator(Mediator):
             vo = note.body
             """:type :TreeModelExpandedVO"""
             self.__model_proxy.set_is_expanded(vo.has_expanded, vo.index)
+
+        elif note.name == Notes.TREE_ITEM_PLAY:
+            cur = self.get_current_node()
+            self.get_current_node().play()
 
         elif note.name == Notes.TREE_MODEL_REMOVE:
             self.__model_proxy.remove(self.get_current_q_index())

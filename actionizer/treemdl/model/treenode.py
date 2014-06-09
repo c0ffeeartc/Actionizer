@@ -52,9 +52,9 @@ class TreeNode(object):
         return self.leaf.NAME
 
     def play(self):
-        if self.leaf.NAME == Action.NAME:
+        if self.get_type() == Action.NAME:
             self.leaf.play(self.child_nodes)
-        if self.leaf.NAME == StepItem.NAME:
+        if self.get_type() == StepItem.NAME:
             start_from_index = self.parent_node.child_nodes.index(self)
             self.parent_node.leaf.play(
                 self.parent_node.child_nodes,

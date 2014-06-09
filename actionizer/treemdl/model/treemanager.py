@@ -50,9 +50,6 @@ class TreeManager(object):
         tree_node.leaf.name = new_name
         return tree_node
 
-    def get_type(self, *indexes):
-        return self.get_node(*indexes).get_type()
-
     def get_model(self):
         return self.__model
 

@@ -22,8 +22,8 @@ class HotkeyList(object):
 
     def update(self, node):
         """:type node:"""
-        for child in node.child_nodes:
-            if child.leaf.NAME == Action.NAME and child.leaf.hotkey:
-                self.hotkey_actions[child.leaf.hotkey] = child
-            if len(child.child_nodes):
-                self.update(child)
+        for child_node in node.child_nodes:
+            if child_node.leaf.NAME == Action.NAME and child_node.leaf.hotkey:
+                self.hotkey_actions[child_node.leaf.hotkey] = child_node
+            if len(child_node.child_nodes):
+                self.update(child_node)

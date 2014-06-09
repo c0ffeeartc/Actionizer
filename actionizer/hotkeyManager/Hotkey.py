@@ -11,7 +11,7 @@ class Hotkey(object):
     def __init__(self, hotkey_list):
         self.hotkey_manager = pyHook.HookManager()
         self.hotkey_manager.HookKeyboard()
-        self.hotkey_manager.KeyUp = self.on_key
+        # self.hotkey_manager.KeyUp = self.on_key
         self.hotkey_manager.KeyDown = self.on_key
         self.is_listening = False
         self.key_que = []
@@ -33,15 +33,29 @@ class Hotkey(object):
         if self.is_listening and not self.is_listening_paused:
             print(event.Key)
             self.key_que.append(event)
-        return True
+        # return True
+
+        is_ctrl = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_CONTROL")))
+        is_alt = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_MENU")))
+
+        key_seq = ""
+        if is_ctrl:
+            key_seq += "Ctrl+"
+        if is_alt:
+            key_seq += "Alt+"
+        key_seq += QKeySequence(event.Key).toString()
+        for hotkey in self.hotkey_actions.keys():
+            if key_seq == hotkey:
+                print("Found hotkey")
+                return True
 
         # is_ctrl = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_CONTROL")))
         # is_alt = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_MENU")))
         # print 'MessageName:', event.MessageName
         # print 'Message:', event.Message
         # print 'Time:', event.Time
-        # print 'Window:', event.Window
-        # print 'WindowName:', event.WindowName
+        print 'Window:', event.Window
+        print 'WindowName:', event.WindowName
         # print 'Ascii:', event.Ascii, chr(event.Ascii)
         # print 'Key:', event.Key
         # print 'KeyID:', event.KeyID
@@ -51,6 +65,7 @@ class Hotkey(object):
         # print 'Alt', event.Alt
         # print 'Transition', event.Transition
         # print '---'
+        return True
 
     def handle_key(self, key_event):
         is_ctrl = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_CONTROL")))
