@@ -93,11 +93,9 @@ class ShowRenameDialogVO(object):
 
 
 class ShowContextMenuVO(object):
-    def __init__(self, parent_widget=None, selected_item=None):
-        self.parent_widget = parent_widget
-        """:type :QTreeWidgetItem"""
-        self.selected_item = selected_item
-        """:type :QTreeWidgetItem"""
+    def __init__(self, selected_node=None):
+        self.selected_item = selected_node
+        """:type :TreeNode"""
 
 
 class ReplaceStepCommandVO(object):

@@ -1,5 +1,5 @@
 from PySide.QtCore import QModelIndex
-from notifications.notes import Notes, TreeModelExpandedVO
+from notifications.notes import Notes, TreeModelExpandedVO, ShowContextMenuVO
 from puremvc.patterns.mediator import Mediator
 from treemdl.model.treenode import TreeNode
 from treemdl.treemodel2proxy import TreeModel2Proxy
@@ -19,7 +19,11 @@ class TreeView2Mediator(Mediator):
         self.__tree_view.setModel(self.__model_proxy.get_model())
         # noinspection PyUnresolvedReferences
         self.__tree_view.expanded.connect(self.on_expanded)
+        # noinspection PyUnresolvedReferences
+        self.__tree_view.collapsed.connect(self.on_collapsed)
         self.setViewComponent(self.__tree_view)
+        # noinspection PyUnresolvedReferences
+        self.__tree_view.customContextMenuRequested.connect(self.show_menu)
 
     def listNotificationInterests(self):
         return [
@@ -78,3 +82,8 @@ class TreeView2Mediator(Mediator):
 
     def get_current_q_index(self):
         return self.__tree_view.currentIndex()
+
+    def show_menu(self, point):
+        selected_node = self.get_current_node()
+        self.facade.sendNotification(Notes.SHOW_CONTEXT_MENU, ShowContextMenuVO(selected_node))
+

@@ -14,7 +14,6 @@ class TreeNode(object):
         @param leaf: data contained in this tree_node
         """
         self.parent_node = None
-        self.name = "unnamed"
         self.__is_expanded = False
         """:type :TreeNode"""
         self.leaf = leaf
@@ -32,6 +31,9 @@ class TreeNode(object):
             i = len(self.child_nodes)
         self.child_nodes.insert(i, node)
         node.parent_node = self
+
+    def get_name(self):
+        return self.leaf.name
 
     def clear(self):
         while self.child_nodes:
@@ -95,7 +97,6 @@ class TreeNode(object):
         return {
             "__class__": TreeNode.NAME,
             "__value__": {
-                "name": self.name,
                 "leaf": self.leaf.jsonify(),
                 "child_nodes": self.child_nodes,
                 # "children_type_names": self.children_type_names,
@@ -124,3 +125,6 @@ class TreeNode(object):
 
     def set_is_expanded(self, has_expanded):
         self.__is_expanded = has_expanded
+
+    def rename(self, new_name):
+        self.leaf.name = new_name
