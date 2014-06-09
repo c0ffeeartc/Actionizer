@@ -26,13 +26,11 @@ class StartupCommand(SimpleCommand):
 
         # registerProxies
         self.facade.registerProxy(StepPoolProxy())
-        # tree_model_proxy = TreeModelProxy()
         tree_model_proxy = TreeModel2Proxy()
         self.facade.registerProxy(tree_model_proxy)
         # ...
 
         # registerMediator
-        # self.facade.registerMediator(TreeViewMediator())
         self.facade.registerMediator(TreeView2Mediator())
         self.facade.registerMediator(TextDialogMediator())
         self.facade.registerMediator(ComboDialogMediator())

@@ -36,15 +36,18 @@ class TreeView2Mediator(Mediator):
         if note.name == Notes.TREE_MODEL_LOAD:
             self.__model_proxy.load()
 
-        if note.name == Notes.TREE_MODEL_LOADED:
+        elif note.name == Notes.TREE_MODEL_LOADED:
             # TODO: expand nodes from loaded is_expanded data
             pass
             # self.__tree_view.reset()
 
-        if note.name == Notes.TREE_MODEL_SAVE:
+        elif note.name == Notes.TREE_MODEL_SAVE:
             self.__model_proxy.save()
 
-        if note.name == Notes.TREE_MODEL_EXPANDED:
+        elif note.name == Notes.TREE_MODEL_SAVED:
+            print("saved")
+
+        elif note.name == Notes.TREE_MODEL_EXPANDED:
             vo = note.body
             """:type :TreeModelExpandedVO"""
             self.__model_proxy.set_is_expanded(vo.has_expanded, vo.index)
@@ -53,19 +56,19 @@ class TreeView2Mediator(Mediator):
             self.__model_proxy.remove(self.get_current_q_index())
 
         elif note.name == Notes.TREE_MODEL_REMOVED:
-            """:type :list"""
+            pass
 
-    def on_expanded(self, index):
+    def on_expanded(self, q_index):
         """
-        :type index: QModelIndex
+        :type q_index: QModelIndex
         """
-        self.facade.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(True, index))
+        self.facade.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(True, q_index))
 
-    def on_collapsed(self, index):
+    def on_collapsed(self, q_index):
         """
-        :type index: QModelIndex
+        :type q_index: QModelIndex
         """
-        self.facade.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(False, index))
+        self.facade.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(False, q_index))
 
     def get_current_node(self):
         """:rtype :TreeNode"""

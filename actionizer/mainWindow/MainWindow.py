@@ -1,20 +1,16 @@
 from PySide import QtGui
 from PySide.QtCore import Qt, Signal
-from PySide.QtGui import QTreeWidgetItem
 
-from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from options.OptionsVO import Options
-from notifications.notes import Notes
-from puremvc.patterns.facade import Facade
-from stepPool.model.StepFactory import StepUids
-from treedataleaf.ui import UI
-
 
 __author__ = 'cfe'
 
 
 class MainWindow(QtGui.QWidget):
     btn_play_pressed = Signal()
+    btn_remove_pressed = Signal()
+    btn_new_pressed = Signal()
+    btn_save_pressed = Signal()
 
     def __init__(self, tree_view):
         super(MainWindow, self).__init__()
@@ -66,68 +62,24 @@ class MainWindow(QtGui.QWidget):
         # self.add_action_group()
         self.show()
 
-    def on_save_clicked(self):
-        Facade.getInstance().sendNotification(Notes.TREE_MODEL_SAVE)
-
+    # todo: move handling keys to mediator
     def handle_key(self, key_event):
         if key_event.Key == "P":
             self.on_play()
         elif key_event.Key == "Q":
-            self.disable_global_hotkeys()
+            pass
         elif key_event.Key == "A":
             self.act.activate(QtGui.QAction.Trigger)
         print(key_event.Key + " " + key_event.MessageName)
-
-    def disable_global_hotkeys(self):
-        Facade.getInstance().sendNotification(Notes.STOP_LISTEN_GLOBAL_HOTKEYS)
-
-    def enable_global_hotkeys(self):
-        Facade.getInstance().sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)
 
     def on_play(self):
         self.btn_play_pressed.emit()
 
     def on_new_btn_clicked(self):
-        Facade.getInstance().sendNotification(
-            NewTreeElementCommand.NAME,
-            {"child": None, "indexes": None},
-        )
+        self.btn_new_pressed.emit()
 
     def on_remove_clicked(self):
-        Facade.getInstance().sendNotification(Notes.TREE_MODEL_REMOVE)
+        self.btn_remove_pressed.emit()
 
-    def add_action_to_group(self):
-        cur_item = self.tree.currentItem()
-        if cur_item.text(1) == UI.ACTION_GROUP:
-            cur_item.setExpanded(True)
-            new_action = QTreeWidgetItem(None, ["New Action", UI.ACTION])
-            cur_item.addChild(new_action)
-
-    def add_step(self, step_uid=StepUids.NULL_STEP, parent=None, index=0):
-        """
-        :type parent:QTreeWidgetItem
-        """
-        step_item = QTreeWidgetItem(None, ["Step", UI.STEP, step_uid])
-        if parent:
-            if parent.text(1) != UI.ACTION:
-                print("Can't add step to not actionTree")
-                return
-            print("index == " + str(index))
-            parent.insertChild(index, step_item)
-        else:
-            cur_item = self.tree.currentItem()
-            parent = cur_item.parent()
-            if cur_item.text(1) == UI.ACTION:
-                cur_item.setExpanded(True)
-                cur_item.insertChild(0, step_item)
-            if cur_item.text(1) == UI.STEP:
-                cur_index = parent.indexOfChild(cur_item)
-                cur_item.parent().insertChild(cur_index + 1, step_item)
-
-    def add_action_group(self):
-        action_group = QTreeWidgetItem(self.tree,
-                                       ["ActionGroup", UI.ACTION_GROUP])
-        self.tree.invisibleRootItem().addChild(action_group)
-        action_group.setChildIndicatorPolicy(QTreeWidgetItem.DontShowIndicatorWhenChildless)
-        action_group.setIcon(0, QtGui.QIcon(
-            Options.assets_path + "folder_16x16.png"))
+    def on_save_clicked(self):
+        self.btn_save_pressed.emit()
