@@ -11,8 +11,8 @@ class TreeModel2Proxy(Proxy):
     NAME = "TreeModel2Proxy"
 
     def __init__(self):
-        self.__tree = TreeManager()
-        super(TreeModel2Proxy, self).__init__(TreeModel2Proxy.NAME, self.__tree)
+        self.__tree_manager = TreeManager()
+        super(TreeModel2Proxy, self).__init__(TreeModel2Proxy.NAME, self.__tree_manager)
 
     def add(self, parent_node, index):
         """
@@ -25,15 +25,12 @@ class TreeModel2Proxy(Proxy):
             self.get_root().add(child, 0)
             """:type :TreeNode"""
 
-    def remove(self, node):
+    def remove(self, q_index):
         """
-        :type node: TreeNode
+        :type q_index: QModelIndex
         """
-        parent_node = node.parent_node
-        """:type :TreeNode"""
-        if parent_node:
-            parent_node.remove(node.get_row())
-            """:type :TreeNode"""
+        self.__tree_manager.remove(q_index)
+
 
     def set_is_expanded(self, has_expanded, q_index):
         node = q_index.internalPointer()
@@ -50,16 +47,16 @@ class TreeModel2Proxy(Proxy):
         return self.get_model().parent(child_node_q_index)
 
     def get_root(self):
-        return self.__tree.model.root_node
+        return self.__tree_manager.get_model().root_node
 
     def get_model(self):
-        return self.__tree.model
+        return self.__tree_manager.get_model()
 
     def save(self):
-        self.__tree.save()
+        self.__tree_manager.save()
         self.sendNotification(Notes.TREE_MODEL_SAVED)
 
     def load(self):
         print("loading")
-        self.__tree.load()
-        self.sendNotification(Notes.TREE_MODEL_LOADED, {"root": self.__tree.get_root()})
+        self.__tree_manager.load()
+        self.sendNotification(Notes.TREE_MODEL_LOADED, {"root": self.__tree_manager.get_root()})

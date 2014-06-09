@@ -16,7 +16,7 @@ class ReplaceStepCommand(SimpleCommand):
         tree_proxy = Facade.getInstance().retrieveProxy(TreeModel2Proxy.NAME)
         """:type :TreeModel2Proxy"""
 
-        cur_item = tree_mediator.get_cur_item()
+        cur_item = tree_mediator.get_current_node()
         if not StepItem.NAME == \
                 tree_mediator.get_type_name(cur_item):
             return

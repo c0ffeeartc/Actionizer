@@ -15,13 +15,13 @@ __author__ = 'c0ffee'
 
 class TreeManager(object):
     def __init__(self):
-        self.model = TreeModel()
+        self.__model = TreeModel()
 
     def get_root(self):
         """
         :rtype :TreeNode
         """
-        return self.model.root_node
+        return self.__model.root_node
 
     def play(self, *indexes):
         self.get_node(*indexes).play()
@@ -29,10 +29,21 @@ class TreeManager(object):
     def add(self, child, i):
         self.get_root().add(child, i)
 
-    def remove(self, *indexes):
-        i_parent = indexes[0:-1]
-        i_target = indexes[-1]
-        return self.get_node(*i_parent).child_nodes.pop(i_target)
+    def remove(self, q_index):
+        """
+        :type q_index: QModelIndex
+        """
+        node_to_remove = q_index.internalPointer()
+        """:type q_index: TreeNode"""
+        if node_to_remove:
+            parent_q_index = self.__model.parent(q_index)
+            parent_node = node_to_remove.parent_node
+            """:type :TreeNode"""
+            index = node_to_remove.get_row()
+            self.__model.beginRemoveRows(parent_q_index, index, index)
+            if parent_node:
+                parent_node.remove(node_to_remove.get_row())
+            self.__model.endRemoveRows()
 
     def rename(self, new_name, *indexes):
         tree_node = self.get_node(*indexes)
@@ -41,6 +52,9 @@ class TreeManager(object):
 
     def get_type(self, *indexes):
         return self.get_node(*indexes).get_type()
+
+    def get_model(self):
+        return self.__model
 
     def set_expanded(self, has_expanded, *indexes):
         self.get_node(*indexes).__is_expanded = has_expanded
@@ -97,7 +111,7 @@ class TreeManager(object):
             with open(Options.steps_path + "action_root.json", "r") as f:
                 loaded_root = json.load(f, object_hook=self.__from_json)
                 """:type :TreeNode"""
-                self.model.root_node = loaded_root
+                self.__model.root_node = loaded_root
         except IOError as exc:
             if exc.errno == errno.ENOENT:
                 self.save()

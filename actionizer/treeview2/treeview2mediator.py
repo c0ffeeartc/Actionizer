@@ -50,12 +50,7 @@ class TreeView2Mediator(Mediator):
             self.__model_proxy.set_is_expanded(vo.has_expanded, vo.index)
 
         elif note.name == Notes.TREE_MODEL_REMOVE:
-            cur_node = self.get_cur_item()
-            parent_q_index = self.__model_proxy.get_model().parent(self.__tree_view.currentIndex())
-            index = cur_node.get_row()
-            self.__model_proxy.remove(cur_node)
-            # self.__model_proxy.get_model().rowsRemoved.emit(parent_q_index, index, index)
-            self.__tree_view.reset()
+            self.__model_proxy.remove(self.get_current_q_index())
 
         elif note.name == Notes.TREE_MODEL_REMOVED:
             """:type :list"""
@@ -72,8 +67,11 @@ class TreeView2Mediator(Mediator):
         """
         self.facade.sendNotification(Notes.TREE_MODEL_EXPANDED, TreeModelExpandedVO(False, index))
 
-    def get_cur_item(self):
+    def get_current_node(self):
         """:rtype :TreeNode"""
         cur_index = self.__tree_view.currentIndex()
         """:type :QModelIndex"""
         return cur_index.internalPointer()
+
+    def get_current_q_index(self):
+        return self.__tree_view.currentIndex()

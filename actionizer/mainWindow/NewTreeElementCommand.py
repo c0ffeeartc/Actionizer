@@ -21,15 +21,20 @@ class NewTreeElementCommand(SimpleCommand):
         tree_view_mediator = self.facade.retrieveMediator(TreeView2Mediator.NAME)
         """:type :TreeView2Mediator"""
 
-        parent_node = tree_view_mediator.get_cur_item()
+        parent_node = tree_view_mediator.get_current_node()
         """:type :TreeNode"""
-        indexes = []
+        cur_q_index = tree_view_mediator.get_current_q_index()
+        """:type :QModelIndex"""
 
         if parent_node is None:
+            parent_node = tree_model_proxy.get_root()
+            child = TreeNode(ActionGroup())
             index = 0
-            tree_model_proxy.get_root().add(TreeNode(ActionGroup()), index)
-            tree_model_proxy.get_model().rowsInserted.emit(parent_node, index, index)
+            tree_model_proxy.get_model().beginInsertRows(cur_q_index, index, index)
+            parent_node.add(child, index)
+            tree_model_proxy.get_model().endInsertRows()
             return
+
         parent_type = parent_node.get_type()
         is_action = parent_type == UI.ACTION
         is_group = parent_type == UI.ACTION_GROUP
@@ -55,5 +60,7 @@ class NewTreeElementCommand(SimpleCommand):
             """:type :TreeNode"""
 
         if child:
+            tree_model_proxy.get_model().beginInsertRows(cur_q_index, index, index)
             parent_node.add(child, index)
-            tree_model_proxy.get_model().rowsInserted.emit(parent_node, index, index)
+            tree_model_proxy.get_model().endInsertRows()
+            # tree_model_proxy.get_model().rowsInserted.emit(parent_node, index, index)
