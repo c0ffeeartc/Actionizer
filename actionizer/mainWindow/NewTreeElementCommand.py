@@ -35,6 +35,7 @@ class NewTreeElementCommand(SimpleCommand):
             tree_model_proxy.get_model().endInsertRows()
             return
 
+        tree_view_mediator.viewComponent.setExpanded(cur_q_index, True)
         parent_type = parent_node.get_type()
         is_action = parent_type == UI.ACTION
         is_group = parent_type == UI.ACTION_GROUP
@@ -63,4 +64,3 @@ class NewTreeElementCommand(SimpleCommand):
             tree_model_proxy.get_model().beginInsertRows(cur_q_index, index, index)
             parent_node.add(child, index)
             tree_model_proxy.get_model().endInsertRows()
-            # tree_model_proxy.get_model().rowsInserted.emit(parent_node, index, index)

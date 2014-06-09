@@ -22,7 +22,7 @@ class Hotkey(object):
         self.timer = QTimer()
         # noinspection PyUnresolvedReferences
         self.timer.timeout.connect(self.process_key_events)
-        self.timer.start(1000)
+        self.timer.start(100)
 
     def process_key_events(self):
         while self.key_que:

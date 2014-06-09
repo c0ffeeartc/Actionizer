@@ -15,8 +15,7 @@ class TreeView2Mediator(Mediator):
         super(TreeView2Mediator, self).__init__(TreeView2Mediator.NAME)
         self.__model_proxy = self.facade.retrieveProxy(TreeModel2Proxy.NAME)
         """:type :TreeModel2Proxy"""
-        self.__tree_view = TreeView()
-        self.__tree_view.setModel(self.__model_proxy.get_model())
+        self.__tree_view = TreeView(self.__model_proxy.get_model())
         # noinspection PyUnresolvedReferences
         self.__tree_view.expanded.connect(self.on_expanded)
         # noinspection PyUnresolvedReferences
