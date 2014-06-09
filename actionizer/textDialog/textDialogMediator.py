@@ -39,9 +39,11 @@ class TextDialogMediator(Mediator):
                 """:type :TreeView2Mediator"""
                 tree_mediator.get_current_node().rename(new_name)
             self.__dialog_name = ""
+            self.facade.sendNotification(Notes.UNPAUSE_LISTEN_GLOBAL_HOTKEYS)
 
         elif note.getName() == TextDialog.TEXT_DIALOG_CANCEL:
             self.__dialog_name = ""
+            self.facade.sendNotification(Notes.UNPAUSE_LISTEN_GLOBAL_HOTKEYS)
 
         elif note.getName() == Notes.SHOW_TEXT_DIALOG:
             self.__dialog_name = TextDialogMediator.TEXT_DIALOG
@@ -50,6 +52,7 @@ class TextDialogMediator(Mediator):
         elif note.getName() == Notes.SHOW_RENAME_DIALOG:
             vo = note.body
             """:type :ShowRenameDialogVO"""
+            self.facade.sendNotification(Notes.PAUSE_LISTEN_GLOBAL_HOTKEYS)
             self.__dialog.setWindowTitle("Rename")
             self.__dialog_name = TextDialogMediator.RENAME_DIALOG
             self.__show_text_dialog(vo.current_name)

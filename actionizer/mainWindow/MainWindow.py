@@ -1,5 +1,5 @@
 from PySide import QtGui
-from PySide.QtCore import Qt, Signal
+from PySide.QtCore import Qt, Signal, QEvent, QObject
 
 from options.OptionsVO import Options
 
@@ -11,6 +11,8 @@ class MainWindow(QtGui.QWidget):
     btn_remove_pressed = Signal()
     btn_new_pressed = Signal()
     btn_save_pressed = Signal()
+    activated = Signal()
+    deactivated = Signal()
 
     def __init__(self, tree_view):
         super(MainWindow, self).__init__()
@@ -59,18 +61,9 @@ class MainWindow(QtGui.QWidget):
         self.setLayout(self.main_layout)
         self.main_layout.addWidget(self.tree)
         self.main_layout.addLayout(self.btn_layout)
-        # self.add_action_group()
         self.show()
 
-    # todo: move handling keys to mediator
-    def handle_key(self, key_event):
-        if key_event.Key == "P":
-            self.on_play()
-        elif key_event.Key == "Q":
-            pass
-        elif key_event.Key == "A":
-            self.act.activate(QtGui.QAction.Trigger)
-        print(key_event.Key + " " + key_event.MessageName)
+        self.installEventFilter(self)
 
     def on_play(self):
         self.btn_play_pressed.emit()
@@ -83,3 +76,14 @@ class MainWindow(QtGui.QWidget):
 
     def on_save_clicked(self):
         self.btn_save_pressed.emit()
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.WindowActivate:
+            self.activated.emit()
+            return True
+        elif event.type() == QEvent.WindowDeactivate:
+            self.deactivated.emit()
+            return True
+        else:
+            # standard event processing
+            return QObject.eventFilter(self, obj, event)

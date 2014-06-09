@@ -8,22 +8,16 @@ __author__ = 'c0ffee'
 
 
 class Hotkey(object):
-    hotkey_manager = None
-    key_que = []
-    timer = None
-    main_window = None
-    is_listening = False
-    is_listening_paused = False
-
-    def __init__(self, main_window, hotkey_list):
+    def __init__(self, hotkey_list):
         self.hotkey_manager = pyHook.HookManager()
         self.hotkey_manager.HookKeyboard()
         self.hotkey_manager.KeyUp = self.on_key
         self.hotkey_manager.KeyDown = self.on_key
         self.is_listening = False
+        self.key_que = []
         self.hotkey_actions = hotkey_list
 
-        self.main_window = main_window
+        self.is_listening_paused = False
 
         self.timer = QTimer()
         # noinspection PyUnresolvedReferences
@@ -37,6 +31,7 @@ class Hotkey(object):
 
     def on_key(self, event):
         if self.is_listening and not self.is_listening_paused:
+            print(event.Key)
             self.key_que.append(event)
         return True
 

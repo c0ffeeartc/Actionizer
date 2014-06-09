@@ -2,7 +2,6 @@ from hotkeyManager.hotkeylist import HotkeyList
 from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
 from hotkeyManager import Hotkey
-from mainWindow.MainWindowMediator import MainWindowMediator
 
 __author__ = 'c0ffee'
 
@@ -14,8 +13,7 @@ class HotkeyMediator(Mediator):
         """:type :Hotkey"""
         super(HotkeyMediator, self).__init__(HotkeyMediator.NAME, None)
         self.__hotkey_list = HotkeyList()
-        main_window = self.facade.retrieveMediator(MainWindowMediator.NAME).getViewComponent()
-        self.__hotkey = Hotkey(main_window, self.__hotkey_list.hotkey_actions)
+        self.__hotkey = Hotkey(self.__hotkey_list.hotkey_actions)
         self.setViewComponent(self.__hotkey)
 
     def listNotificationInterests(self):
@@ -25,7 +23,7 @@ class HotkeyMediator(Mediator):
             Notes.PAUSE_LISTEN_GLOBAL_HOTKEYS,
             Notes.UNPAUSE_LISTEN_GLOBAL_HOTKEYS,
             Notes.HOTKEY_CHANGED,
-            # Notes.TREE_MODEL_LOADED,
+            Notes.TREE_MODEL_LOADED,
         ]
 
     def handleNotification(self, note):

@@ -22,15 +22,23 @@ class MainWindowMediator(Mediator):
         self.__main.btn_remove_pressed.connect(self.on_remove_pressed)
         self.__main.btn_new_pressed.connect(self.on_new_pressed)
         self.__main.btn_save_pressed.connect(self.on_save_pressed)
+        self.__main.activated.connect(self.on_activated)
+        self.__main.deactivated.connect(self.on_deactivated)
 
     def on_play_pressed(self):
         self.facade.sendNotification(Notes.TREE_ITEM_PLAY)
 
     def on_remove_pressed(self):
-        Facade.getInstance().sendNotification(Notes.TREE_MODEL_REMOVE)
+        self.facade.sendNotification(Notes.TREE_MODEL_REMOVE)
 
     def on_new_pressed(self):
-        Facade.getInstance().sendNotification(NewTreeElementCommand.NAME)
+        self.facade.sendNotification(NewTreeElementCommand.NAME)
 
     def on_save_pressed(self):
-        Facade.getInstance().sendNotification(Notes.TREE_MODEL_SAVE)
+        self.facade.sendNotification(Notes.TREE_MODEL_SAVE)
+
+    def on_activated(self):
+        self.facade.sendNotification(Notes.STOP_LISTEN_GLOBAL_HOTKEYS)
+
+    def on_deactivated(self):
+        self.facade.sendNotification(Notes.START_LISTEN_GLOBAL_HOTKEYS)

@@ -79,7 +79,7 @@ class TreeNode(object):
         Used by qAbstractModel and qTreeView
         @return:
         """
-        return 2
+        return 3
 
     def get_column_data(self, i):
         """
@@ -91,6 +91,11 @@ class TreeNode(object):
             return self.leaf.name
         elif i == 1:
             return self.leaf.NAME
+        elif i == 2:
+            if self.get_type() == Action.NAME:
+                return self.leaf.hotkey
+            else:
+                return ""
         return "Error in get_column_data"
 
     def jsonify(self):
@@ -104,13 +109,16 @@ class TreeNode(object):
             }
         }
 
+    def set_hotkey(self, new_hotkey):
+        if self.get_type() == Action.NAME:
+            self.leaf.hotkey = new_hotkey
+
     @classmethod
     def dejsonify(cls, o):
         if o['__class__'] == TreeNode.NAME:
             value = o["__value__"]
             leaf = value["leaf"]
             tree_node = TreeNode(leaf)
-            tree_node.name = value["name"]
             """@type :TreeNode"""
             if "is_expanded" in value:
                 tree_node.set_is_expanded(o["__value__"]["is_expanded"])

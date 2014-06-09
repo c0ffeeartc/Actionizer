@@ -21,8 +21,9 @@ class HotkeyList(object):
                 self.remove_hotkey(hotkey)
 
     def update(self, node):
-        for child in node:
+        """:type node:"""
+        for child in node.child_nodes:
             if child.leaf.NAME == Action.NAME and child.leaf.hotkey:
                 self.hotkey_actions[child.leaf.hotkey] = child
-            if len(child.children):
+            if len(child.child_nodes):
                 self.update(child)
