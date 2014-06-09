@@ -64,10 +64,9 @@ class TreeManager(object):
         if node.leaf.NAME == Action.NAME:
             return node.leaf.hotkey
 
-    def set_hotkey(self, hotkey_str, *indexes):
-        selected_node = self.get_node(*indexes)
-        if selected_node.leaf.NAME == Action.NAME:
-            selected_node.leaf.hotkey = hotkey_str
+    def set_hotkey(self, hotkey_str, node):
+        if node.leaf.NAME == Action.NAME:
+            node.leaf.hotkey = hotkey_str
 
     def get_node(self, *indexes):
         """

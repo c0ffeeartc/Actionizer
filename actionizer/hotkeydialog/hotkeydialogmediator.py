@@ -3,6 +3,7 @@ from PySide.QtCore import Qt
 from notifications.notes import Notes
 from puremvc.patterns.mediator import Mediator
 from hotkeydialog.hotkeydialogview import HotkeyDialogView
+from treemdl.treemodel2proxy import TreeModel2Proxy
 from treeview2.treeview2mediator import TreeView2Mediator
 
 
@@ -45,7 +46,10 @@ class HotkeyDialogMediator(Mediator):
         self.__dialog.exec_()
 
     def handle_set_hotkey(self, note):
-        hotkey_str = note.body["key_sequence"]
         tree_mediator = self.facade.retrieveMediator(TreeView2Mediator.NAME)
         """:type :TreeView2Mediator"""
-        tree_mediator.get_current_node().set_hotkey(hotkey_str)
+        tree_proxy = self.facade.retrieveProxy(TreeModel2Proxy.NAME)
+        """:type :TreeModel2Proxy"""
+        hotkey_str = note.body["key_sequence"]
+        cur_node = tree_mediator.get_current_node()
+        tree_proxy.set_hotkey(hotkey_str, cur_node)

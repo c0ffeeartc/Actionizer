@@ -1,4 +1,4 @@
-from notifications.notes import Notes
+from notifications.notes import Notes, HotkeyChangedVO
 from puremvc.patterns.proxy import Proxy
 from treedataleaf.actiongroup import ActionGroup
 from treemdl.model.treemanager import TreeManager
@@ -31,6 +31,12 @@ class TreeModel2Proxy(Proxy):
         """
         self.__tree_manager.remove(q_index)
 
+    def set_hotkey(self, hotkey_str, node):
+        self.__tree_manager.set_hotkey(hotkey_str, node)
+        self.facade.sendNotification(
+            Notes.HOTKEY_CHANGED,
+            HotkeyChangedVO(hotkey_str, node),
+        )
 
     def set_is_expanded(self, has_expanded, q_index):
         node = q_index.internalPointer()
