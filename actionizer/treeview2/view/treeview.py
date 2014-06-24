@@ -12,3 +12,12 @@ class TreeView(QTreeView):
         self.setIndentation(15)
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.setDragEnabled(True)
+        self.setAcceptDrops(True)
+        self.setDropIndicatorShown(True)
+
+    def startDrag(self, supportedActions):
+        selected_indexes = self.selectedIndexes()
+        selection = [q_index for q_index in selected_indexes if q_index.column() == 0]
+        self.model().drag_q_indexes = selection
+        super(TreeView, self).startDrag(supportedActions)

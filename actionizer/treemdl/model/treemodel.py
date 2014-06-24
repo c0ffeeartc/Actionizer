@@ -15,6 +15,14 @@ class TreeModel(QAbstractItemModel):
         """
         super(TreeModel, self).__init__(parent)
         self.root_node = TreeNode(ActionRoot())
+        # TODO: allow dragging more than one item
+        self.drag_q_indexes = None
+        """:type :list of QModelIndex"""
+        self.target_q_index = None
+        """:type :QModelIndex"""
+        self.target_node = None
+        """:type :TreeNode"""
+        self.target_i = None
 
     def get_root_index(self):
         return self.createIndex(self.root_node)
@@ -105,6 +113,58 @@ class TreeModel(QAbstractItemModel):
 
         return node.get_column_data(index.column())
 
+    def dropMimeData(self, data, action, row, column, parent):
+        """
+        :type data:QMimeData
+        :type action:DropAction
+        :type row:QtCore.int
+        :type column:QtCore.int
+        :type parent:QModelIndex
+        :rtype :QtCore.bool
+        """
+        parent_node = parent.internalPointer()
+        """:type :TreeNode"""
+        self.target_q_index = parent
+        self.target_node = parent_node
+        if row == -1:
+            self.target_i = 0
+        else:
+            self.target_i = row
+        return bool(self.target_node)
+
+    def supportedDropActions(self, *args, **kwargs):
+        return QtCore.Qt.MoveAction
+
+    def removeRows(self, row, count, parent):
+        """
+        :type row: QtCore.int
+        :type count: QtCore.int
+        :type parent: QModelIndex
+        :rtype :PySide.QtCore.bool
+        """
+        if self.target_node is not None and self.target_i is not None:
+            if not self.beginMoveRows(parent, row, row + count-1, self.target_q_index, self.target_i):
+                return False
+            parent_node = parent.internalPointer()
+            """:type :TreeNode"""
+            node_to_move = parent_node.remove(row)
+            """:type :TreeNode"""
+            self.target_node.add(node_to_move, self.target_i)
+            self.endMoveRows()
+
+            self.target_q_index = None
+            self.target_node = None
+            self.target_i = None
+            return True
+        else:
+            self.target_q_index = None
+            self.target_node = None
+            self.target_i = None
+            return False
+
+    def insertRows(self, *args, **kwargs):
+        super(TreeModel, self).insertRows(self, *args, **kwargs)
+
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         """
         @type index:QModelIndex
@@ -124,9 +184,11 @@ class TreeModel(QAbstractItemModel):
             return QtCore.Qt.NoItemFlags
 
         if index.column() != 0:
-            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | \
+                QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
         else:
-            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable |\
+                QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
 
     def headerData(self, section, orientation, role):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
