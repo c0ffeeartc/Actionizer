@@ -126,9 +126,13 @@ class TreeModel(QAbstractItemModel):
         """:type :TreeNode"""
         self.target_q_index = parent
         self.target_node = parent_node
+        drag_node = self.drag_q_indexes[0].internalPointer()
         if row == -1:
             self.target_i = 0
         else:
+            if drag_node.parent_node is parent_node and\
+                    drag_node.get_row() < row:
+                row -= 1
             self.target_i = row
         return bool(self.target_node)
 
@@ -147,8 +151,15 @@ class TreeModel(QAbstractItemModel):
                 return False
             parent_node = parent.internalPointer()
             """:type :TreeNode"""
-            node_to_move = parent_node.remove(row)
+            node_to_move = parent_node[row]
             """:type :TreeNode"""
+            is_move_allowed = self.target_node.is_allowed_child(node_to_move.get_type())
+            if not is_move_allowed:
+                self.target_q_index = None
+                self.target_node = None
+                self.target_i = None
+                return False
+            node_to_move = parent_node.remove(row)
             self.target_node.add(node_to_move, self.target_i)
             self.endMoveRows()
 

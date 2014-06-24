@@ -1,5 +1,6 @@
 from treedataleaf.action import Action
 from treedataleaf.stepitem import StepItem
+from treedataleaf.ui import UI
 
 __author__ = 'c0ffee'
 
@@ -112,6 +113,15 @@ class TreeNode(object):
     def set_hotkey(self, new_hotkey):
         if self.get_type() == Action.NAME:
             self.leaf.hotkey = new_hotkey
+
+    def is_allowed_child(self, child_type_name):
+        if child_type_name == UI.ACTION_GROUP and self.get_type() == UI.ROOT:
+            return True
+        if child_type_name == UI.ACTION and self.get_type() == UI.ACTION_GROUP:
+            return True
+        elif child_type_name == UI.STEP and self.get_type() == UI.ACTION:
+            return True
+        return False
 
     @classmethod
     def dejsonify(cls, o):
