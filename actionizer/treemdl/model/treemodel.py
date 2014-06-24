@@ -105,11 +105,28 @@ class TreeModel(QAbstractItemModel):
 
         return node.get_column_data(index.column())
 
+    def setData(self, index, value, role=QtCore.Qt.EditRole):
+        """
+        @type index:QModelIndex
+        @param value: object
+        @param role: PySide.QtCore.int
+        @return:
+        """
+        # TODO: don't accept rename on click outside of edit field
+        if value == "":
+            return False
+        cur_node = index.internalPointer()
+        cur_node.rename(value)
+        return True
+
     def flags(self, index):
         if not index.isValid():
             return QtCore.Qt.NoItemFlags
 
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        if index.column() != 0:
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        else:
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
 
     def headerData(self, section, orientation, role):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
