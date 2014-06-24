@@ -104,4 +104,4 @@ class TreeView2Mediator(Mediator):
         cur_node = q_index.internalPointer()
         """:type :TreeNode"""
         if cur_node.get_type() == UI.ACTION and q_index.column() == 2:
-            Facade.getInstance().sendNotification(Notes.SHOW_HOTKEY_DIALOG, ShowHotkeyDialogVO(cur_node.leaf.hotkey))
+            self.sendNotification(Notes.SHOW_HOTKEY_DIALOG, ShowHotkeyDialogVO(cur_node.leaf.hotkey))

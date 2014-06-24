@@ -42,7 +42,11 @@ class HotkeyDialogMediator(Mediator):
     def __show_hotkey_dialog(self, note):
         vo = note.body
         """:type :ShowHotkeyDialogVO"""
-        self.__dialog.edit_line.setText(vo.hotkey)
+        buttons = vo.hotkey.split("+")
+        self.__dialog.edit_line.setText(buttons[-1])
+        self.__dialog.control_check.setChecked("Ctrl" in buttons)
+        self.__dialog.alt_check.setChecked("Alt" in buttons)
+        self.__dialog.shift_check.setChecked("Shift" in buttons)
         self.__dialog.exec_()
 
     def handle_set_hotkey(self, note):

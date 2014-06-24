@@ -35,7 +35,6 @@ class ContextMenuMediator(Mediator):
             self.__menu.popup(QCursor().pos())
 
         elif note.name == Notes.CONTEXT_MENU_RENAME:
-            """:type :TreeViewMediator"""
             current_name = tree_mediator.get_current_node().get_name()
             self.sendNotification(Notes.SHOW_RENAME_DIALOG, ShowRenameDialogVO(current_name))
 
@@ -43,4 +42,5 @@ class ContextMenuMediator(Mediator):
             self.sendNotification(Notes.SHOW_REPLACE_STEP_DIALOG)
 
         elif note.name == Notes.CONTEXT_MENU_SET_HOTKEY:
-            self.sendNotification(Notes.SHOW_HOTKEY_DIALOG, ShowHotkeyDialogVO(""))
+            cur_node_hotkey = tree_mediator.get_current_node().leaf.hotkey
+            self.sendNotification(Notes.SHOW_HOTKEY_DIALOG, ShowHotkeyDialogVO(cur_node_hotkey))
