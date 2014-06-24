@@ -9,6 +9,6 @@ class TreeView(QTreeView):
         super(TreeView, self).__init__(*args, **kwargs)
         self.setModel(model)
         self.setColumnWidth(0, 200)
-        self.setIndentation(10)
+        self.setIndentation(15)
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)

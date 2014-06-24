@@ -1,6 +1,8 @@
 from PySide.QtCore import QModelIndex
-from notifications.notes import Notes, TreeModelExpandedVO, ShowContextMenuVO
+from notifications.notes import Notes, TreeModelExpandedVO, ShowContextMenuVO, ShowHotkeyDialogVO
+from puremvc.patterns.facade import Facade
 from puremvc.patterns.mediator import Mediator
+from treedataleaf.ui import UI
 from treemdl.model.treenode import TreeNode
 from treemdl.treemodel2proxy import TreeModel2Proxy
 from treeview2.view.treeview import TreeView
@@ -23,6 +25,8 @@ class TreeView2Mediator(Mediator):
         self.setViewComponent(self.__tree_view)
         # noinspection PyUnresolvedReferences
         self.__tree_view.customContextMenuRequested.connect(self.show_menu)
+        # noinspection PyUnresolvedReferences
+        self.__tree_view.doubleClicked.connect(self.on_double_click)
 
     def listNotificationInterests(self):
         return [
@@ -92,3 +96,12 @@ class TreeView2Mediator(Mediator):
         selected_node = self.get_current_node()
         self.facade.sendNotification(Notes.SHOW_CONTEXT_MENU, ShowContextMenuVO(selected_node))
 
+    def on_double_click(self, q_index):
+        """
+        @type q_index:QModelIndex
+        @return:
+        """
+        cur_node = q_index.internalPointer()
+        """:type :TreeNode"""
+        if cur_node.get_type() == UI.ACTION and q_index.column() == 2:
+            Facade.getInstance().sendNotification(Notes.SHOW_HOTKEY_DIALOG, ShowHotkeyDialogVO(cur_node.leaf.hotkey))
