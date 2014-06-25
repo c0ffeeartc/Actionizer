@@ -62,8 +62,9 @@ class TreeView2Mediator(Mediator):
             self.__model_proxy.set_is_expanded(vo.has_expanded, vo.index)
 
         elif note.name == Notes.TREE_ITEM_PLAY:
-            cur = self.get_current_node()
-            self.get_current_node().play()
+            current_node = self.get_current_node()
+            if current_node:
+                current_node.play()
 
         elif note.name == Notes.TREE_MODEL_REMOVE:
             self.__model_proxy.remove(self.get_current_q_index())
