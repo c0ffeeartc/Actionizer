@@ -67,7 +67,11 @@ class HotkeyDialogView(QDialog):
             event = event
             """:type :QKeyEvent"""
             self.__key = event.key
-            self.edit_line.setText(QKeySequence(event.key()).toString())
+            key_str = QKeySequence(event.key()).toString()
+            if key_str == "Esc":
+                self.edit_line.setText("")
+                return True
+            self.edit_line.setText(key_str)
             return True
         return QDialog.eventFilter(self, source, event)
 
@@ -83,6 +87,8 @@ class HotkeyDialogView(QDialog):
             if self.shift_check.isChecked():
                 hotkey_str += "Shift+"
             hotkey_str += key
+        if key == "":
+            hotkey_str = ""
         Facade.getInstance().sendNotification(
             HotkeyDialogView.HOTKEY_DIALOG_OK,
             {"key_sequence": hotkey_str}
