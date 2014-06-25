@@ -5,6 +5,9 @@ __author__ = 'c0ffee'
 
 
 class HotkeyList(object):
+    """
+    Keeps in sync list of elements with hotkeys.
+    """
     def __init__(self):
         self.hotkey_actions = {}
 

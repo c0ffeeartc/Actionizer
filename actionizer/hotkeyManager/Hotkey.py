@@ -1,20 +1,21 @@
 from PySide.QtCore import QTimer
 from PySide.QtGui import QKeySequence
-import pyHook
+# import pyHook
+from pyHook.HookManager import *
 
 __author__ = 'c0ffee'
 
 
 class Hotkey(object):
     def __init__(self, hotkey_list):
-        self.hotkey_manager = pyHook.HookManager()
+        self.hotkey_manager = HookManager()
         self.hotkey_manager.HookKeyboard()
         self.hotkey_manager.KeyUp = self.on_key
         self.hotkey_manager.KeyDown = self.on_key
         self.is_listening = False
         self.pressed = {}
         self.key_que = []
-        self.hotkey_actions = hotkey_list
+        self.hotkey_list = hotkey_list
 
         self.is_listening_paused = False
 
@@ -26,19 +27,20 @@ class Hotkey(object):
     def process_key_events(self):
         while self.key_que:
             key_seq = self.key_que.pop(0)
-            self.hotkey_actions[key_seq].play()
+            if key_seq in self.hotkey_list.keys():
+                self.hotkey_list[key_seq].play()
 
     def on_key(self, event):
         """
-        @type event: KeyboardEvent
+        @type event: pyHook.HookManager.KeyboardEvent
         @return:
         """
         if self.is_listening and not self.is_listening_paused:
             # print(event.Key)
 
-            is_ctrl = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_CONTROL")))
-            is_alt = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_MENU")))
-            is_shift = bool(pyHook.GetKeyState(pyHook.HookConstants.VKeyToID("VK_SHIFT")))
+            is_ctrl = bool(GetKeyState(HookConstants.VKeyToID("VK_CONTROL")))
+            is_alt = bool(GetKeyState(HookConstants.VKeyToID("VK_MENU")))
+            is_shift = bool(GetKeyState(HookConstants.VKeyToID("VK_SHIFT")))
 
             key_seq = ""
             if is_ctrl:
@@ -48,10 +50,9 @@ class Hotkey(object):
             if is_shift:
                 key_seq += "Shift+"
             key_seq += QKeySequence(event.Key).toString()
-
-            if key_seq in self.hotkey_actions.keys():
-                if event.Message == pyHook.HookConstants.WM_KEYDOWN or\
-                        event.Message == pyHook.HookConstants.WM_SYSKEYDOWN:
+            if not event.IsInjected() and key_seq in self.hotkey_list.keys():
+                if event.Message == HookConstants.WM_KEYDOWN or\
+                        event.Message == HookConstants.WM_SYSKEYDOWN:
                     if key_seq not in self.pressed.keys():
                         print("Hotkey: " + key_seq)
                         self.key_que.append(key_seq)
@@ -77,3 +78,8 @@ class Hotkey(object):
         # print 'Transition', event.Transition
         # print '---'
         return True
+
+    # todo: generate hotkey action
+    def generate_press(self, msg, vk_code, scan_code, ascii, flags, time, hwnd, window_name):
+        key_event = KeyboardEvent(msg, vk_code, scan_code, ascii, flags, time, hwnd, window_name)
+        key_event = KeyboardEvent(msg, vk_code, scan_code, ascii, flags, time, hwnd, window_name)
