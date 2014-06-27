@@ -2,6 +2,7 @@ from PySide.QtCore import QTimer
 from PySide.QtGui import QKeySequence
 # import pyHook
 from pyHook.HookManager import *
+from activeappinfo.activeappinfo import ActiveAppInfo
 
 __author__ = 'c0ffee'
 
@@ -15,6 +16,7 @@ class Hotkey(object):
         self.is_listening = False
         self.pressed = {}
         self.key_que = []
+        self.app_info = ActiveAppInfo()
         self.hotkey_list = hotkey_list
 
         self.is_listening_paused = False
@@ -27,7 +29,7 @@ class Hotkey(object):
     def process_key_events(self):
         while self.key_que:
             key_seq = self.key_que.pop(0)
-            if key_seq in self.hotkey_list.keys():
+            if key_seq in self.hotkey_list.keys() and self.app_info.is_photoshop():
                 self.hotkey_list[key_seq].play()
 
     def on_key(self, event):

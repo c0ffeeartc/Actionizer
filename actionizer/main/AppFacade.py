@@ -8,10 +8,14 @@ import puremvc.patterns.facade
 
 class AppFacade(puremvc.patterns.facade.Facade):
     __started = False
+    __instance = None
 
-    @staticmethod
-    def getInstance():
-        return AppFacade()
+    # noinspection PyMethodOverriding
+    @classmethod
+    def getInstance(cls):
+        if not cls.__instance:
+            cls.__instance = AppFacade()
+        return cls.__instance
 
     def initializeFacade(self):
         super(AppFacade, self).initializeFacade()
