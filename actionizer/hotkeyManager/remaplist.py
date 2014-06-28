@@ -10,7 +10,7 @@ class RemapList(object):
         self.remap_list = {}
         self.remap_list["Alt+1"] = "%{[}"
         self.remap_list["A"] = "%{[}"
-        self.remap_list["S"] = "%{[}"
+        self.remap_list["S"] = "%{]}"
         self.remap_list["Alt+2"] = "%{]}"
 
     def add_remap(self, from_key, to_key):
