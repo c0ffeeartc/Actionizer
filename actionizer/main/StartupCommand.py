@@ -4,6 +4,7 @@ from contextMenu.contextMenuMediator import ContextMenuMediator
 from hotkeydialog.hotkeydialogmediator import HotkeyDialogMediator
 from mainWindow.NewTreeElementCommand import NewTreeElementCommand
 from notifications.notes import Notes
+from optionswindow.optionswindowmediator import OptionsWindowMediator
 from stepPool.StepPoolProxy import StepPoolProxy
 from puremvc.patterns.command import SimpleCommand
 from hotkeyManager.HotkeyMediator import HotkeyMediator
@@ -38,6 +39,7 @@ class StartupCommand(SimpleCommand):
         self.facade.registerMediator(MainWindowMediator())
         self.facade.registerMediator(ContextMenuMediator())
         self.facade.registerMediator(HotkeyMediator())
+        self.facade.registerMediator(OptionsWindowMediator())
         # ...
 
         # post children

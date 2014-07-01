@@ -24,6 +24,10 @@ class MainWindowMediator(Mediator):
         self.__main.btn_save_pressed.connect(self.on_save_pressed)
         self.__main.activated.connect(self.on_activated)
         self.__main.deactivated.connect(self.on_deactivated)
+        self.__main.btn_menu_pressed.connect(self.on_btn_menu_pressed)
+
+    def on_btn_menu_pressed(self):
+        self.facade.sendNotification(Notes.SHOW_OPTIONS_WINDOW)
 
     def on_play_pressed(self):
         self.facade.sendNotification(Notes.TREE_ITEM_PLAY)
