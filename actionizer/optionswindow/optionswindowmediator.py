@@ -9,7 +9,8 @@ class OptionsWindowMediator(Mediator):
     NAME = "OptionsWindowMediator"
 
     def __init__(self):
-        super(OptionsWindowMediator, self).__init__(OptionsWindowMediator.NAME, OptionsWindow())
+        self.__options_window = OptionsWindow()
+        super(OptionsWindowMediator, self).__init__(OptionsWindowMediator.NAME, self.__options_window)
 
     def listNotificationInterests(self):
         return [
@@ -22,3 +23,4 @@ class OptionsWindowMediator(Mediator):
         """
         if note.name == Notes.SHOW_OPTIONS_WINDOW:
             print(Notes.SHOW_OPTIONS_WINDOW)
+            self.__options_window.exec_()
