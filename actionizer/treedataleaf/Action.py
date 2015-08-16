@@ -1,7 +1,7 @@
 import win32com.client
-from puremvc.patterns.facade import Facade
-from stepPool.StepPoolProxy import StepPoolProxy
-from stepPool.model.Step import Step
+from   puremvc.patterns.facade import Facade
+from   stepPool.StepPoolProxy  import StepPoolProxy
+from   stepPool.model.Step     import Step
 
 __author__ = 'cfe'
 
@@ -13,9 +13,9 @@ class Action(object):
     NAME = "Action"
 
     def __init__(self):
-        self.name = "Action"
+        self.name    = "Action"
         self.results = []
-        self.hotkey = ""
+        self.hotkey  = ""
 
     def play(self, step_items, start_i=0):
         """

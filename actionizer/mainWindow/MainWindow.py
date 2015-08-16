@@ -1,27 +1,26 @@
-from PySide import QtGui
-from PySide.QtCore import Signal, QEvent, QObject
-
+from PySide            import QtGui
+from PySide.QtCore     import Signal, QEvent, QObject
 from options.OptionsVO import Options
 
 __author__ = 'cfe'
 
 
 class MainWindow(QtGui.QWidget):
-    btn_play_pressed = Signal()
+    btn_play_pressed   = Signal()
     btn_remove_pressed = Signal()
-    btn_new_pressed = Signal()
-    btn_menu_pressed = Signal()
-    btn_save_pressed = Signal()
-    activated = Signal()
-    deactivated = Signal()
+    btn_new_pressed    = Signal()
+    btn_menu_pressed   = Signal()
+    btn_save_pressed   = Signal()
+    activated          = Signal()
+    deactivated        = Signal()
 
     def __init__(self, tree_view):
         super(MainWindow, self).__init__()
         self.tree = tree_view
 
         self.menu_btn_layout = QtGui.QHBoxLayout()
-        self.main_layout = QtGui.QVBoxLayout()
-        self.btn_layout = QtGui.QHBoxLayout()
+        self.main_layout     = QtGui.QVBoxLayout()
+        self.btn_layout      = QtGui.QHBoxLayout()
 
         self.setWindowIcon(QtGui.QIcon(Options.assets_path + "flash_16x16.png"))
         self.tray_icon = QtGui.QSystemTrayIcon()
