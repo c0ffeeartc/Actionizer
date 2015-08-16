@@ -1,7 +1,7 @@
 from PySide import QtCore
 from PySide.QtCore import QAbstractItemModel, QModelIndex
 
-from treedataleaf.actionroot import ActionRoot
+from treedataleaf.ActionRoot import ActionRoot
 from treemdl.model.treenode import TreeNode
 
 

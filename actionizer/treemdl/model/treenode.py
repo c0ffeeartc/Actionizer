@@ -1,6 +1,6 @@
-from treedataleaf.action import Action
-from treedataleaf.stepitem import StepItem
-from treedataleaf.ui import UI
+from treedataleaf.Action import Action
+from treedataleaf.StepItem import StepItem
+from treedataleaf.UI import UI
 
 __author__ = 'c0ffee'
 

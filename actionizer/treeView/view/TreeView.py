@@ -5,10 +5,10 @@ from PySide.QtGui import QTreeWidget, QTreeWidgetItem, QAbstractItemView
 from notifications.notes import Notes, ShowContextMenuVO, TreeModelMoveVO
 from options.OptionsVO import Options
 from puremvc.patterns.facade import Facade
-from treedataleaf.ui import UI
-from treedataleaf.action import Action
-from treedataleaf.actiongroup import ActionGroup
-from treedataleaf.stepitem import StepItem
+from treedataleaf.UI import UI
+from treedataleaf.Action import Action
+from treedataleaf.ActionGroup import ActionGroup
+from treedataleaf.StepItem import StepItem
 
 
 __author__ = 'c0ffee'

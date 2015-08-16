@@ -3,7 +3,7 @@ from PySide.QtGui import QMenu, QAction
 from stepPool.StepPoolProxy import StepPoolProxy
 from notifications.notes import Notes
 from puremvc.patterns.facade import Facade
-from treedataleaf.ui import UI
+from treedataleaf.UI import UI
 
 
 __author__ = 'c0ffee'

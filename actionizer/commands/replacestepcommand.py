@@ -1,5 +1,5 @@
 from puremvc.patterns.command import SimpleCommand
-from treedataleaf.stepitem import StepItem
+from treedataleaf.StepItem import StepItem
 from treeview2.treeview2mediator import TreeView2Mediator
 
 __author__ = 'cfe'

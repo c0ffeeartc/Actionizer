@@ -1,6 +1,6 @@
 from notifications.notes import Notes, HotkeyChangedVO
 from puremvc.patterns.proxy import Proxy
-from treedataleaf.actiongroup import ActionGroup
+from treedataleaf.ActionGroup import ActionGroup
 from treemdl.model.treemanager import TreeManager
 from treemdl.model.treenode import TreeNode
 

@@ -2,7 +2,7 @@ from PySide.QtCore import QModelIndex
 from notifications.notes import Notes, TreeModelExpandedVO, ShowContextMenuVO, ShowHotkeyDialogVO
 from puremvc.patterns.facade import Facade
 from puremvc.patterns.mediator import Mediator
-from treedataleaf.ui import UI
+from treedataleaf.UI import UI
 from treemdl.model.treenode import TreeNode
 from treemdl.treemodel2proxy import TreeModel2Proxy
 from treeview2.view.treeview import TreeView

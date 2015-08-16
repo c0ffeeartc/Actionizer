@@ -1,4 +1,4 @@
-from treedataleaf.action import Action
+from treedataleaf.Action import Action
 from treemdl.model.treenode import TreeNode
 
 __author__ = 'c0ffee'
